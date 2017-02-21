@@ -2,6 +2,7 @@
   "name": "sonical-client",
   "version": "0.0.1",
   "description": "Sonical Client",
+  "private": true,
   "keywords": [
     "elm",
     "webpack"
