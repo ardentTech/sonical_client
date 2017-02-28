@@ -1,9 +1,11 @@
 module Main exposing (main)
 
-import Html exposing (Html, div, text)
+import Html exposing (Html, div, table, tbody, td, text, thead, th, tr)
+import Html.Attributes exposing (id)
 import Http
 import Json.Decode exposing (Decoder, at, list, string)
 import Json.Decode.Pipeline exposing (decode, required)
+import List exposing (map)
 
 
 type alias Driver = { model : String }
@@ -14,7 +16,26 @@ type Msg = Fail Http.Error | FetchDriversDone (Result Http.Error (List Driver)) 
 -- View.elm
 
 view : Model -> Html Msg
-view model = div [] [ text "Howdy!" ]
+view model = 
+  div [ id "drivers" ] [
+    table [] [
+      thead [] [ tableHeaderRow ],
+      tbody [] (map tableBodyRow model.drivers)
+    ]
+  ]
+
+tableBodyRow : Driver -> Html Msg
+tableBodyRow driver =
+  tr [] [ 
+    td [] [ text <| driver.model ]
+  ]
+
+
+tableHeaderRow : Html Msg
+tableHeaderRow =
+  tr [] [
+    th [] [ text "Model" ]
+  ]
 
 
 -- Update.elm
