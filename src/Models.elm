@@ -1,11 +1,20 @@
-module Models exposing (Driver, Manufacturer, Model)
+module Models exposing (Driver, FrequencyResponse, Manufacturer, Model)
 
 
 type alias Driver = {
+  frequency_response : FrequencyResponse,
   id : Int,
   manufacturer : Manufacturer,
   model : String,
-  nominal_impedance : Maybe Int
+  nominal_impedance : Maybe Int,
+  resonant_frequency : Maybe Float,
+  sensitivity : Maybe Float
+}
+
+
+type alias FrequencyResponse = {
+  lower : Maybe Int,
+  upper : Maybe Int
 }
 
 
