@@ -8,8 +8,6 @@ import Messages exposing (Msg)
 import Models exposing (Driver, Model)
 
 
--- View.elm
-
 view : Model -> Html Msg
 view model = 
   div [ id "drivers" ] [
@@ -19,15 +17,31 @@ view model =
     ]
   ]
 
+
+-- PRIVATE
+
+justNum : Maybe number -> number
+justNum n =
+  case n of
+    Nothing -> 0
+    Just m -> m
+
+
 tableBodyRow : Driver -> Html Msg
 tableBodyRow driver =
   tr [] [ 
-    td [] [ text <| driver.model ]
+    td [] [ text <| toString <| driver.id ],
+    td [] [ text <| driver.manufacturer.name ],
+    td [] [ text <| driver.model ],
+    td [] [ text <| (\v -> v ++ "Ω") <| toString <| justNum <| driver.nominal_impedance ]
   ]
 
 
 tableHeaderRow : Html Msg
 tableHeaderRow =
   tr [] [
-    th [] [ text "Model" ]
+    th [] [ text "ID" ],
+    th [] [ text "Manufacturer" ],
+    th [] [ text "Model" ],
+    th [] [ text "Z" ]
   ]
