@@ -1,7 +1,7 @@
 module Views exposing (view)
 
 import Html exposing (Html, div, table, tbody, td, text, thead, th, tr)
-import Html.Attributes exposing (id)
+import Html.Attributes exposing (class, id)
 import List exposing (map)
 
 import Messages exposing (Msg)
@@ -11,7 +11,7 @@ import Models exposing (Driver, FrequencyResponse, Model)
 view : Model -> Html Msg
 view model = 
   div [ id "drivers" ] [
-    table [] [
+    table [ class "table table-responsive table-sm table-striped" ] [
       thead [] [ tableHeaderRow ],
       tbody [] (map tableBodyRow model.drivers)
     ]
