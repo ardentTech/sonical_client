@@ -1,4 +1,4 @@
-module Models exposing (Driver, FrequencyResponse, Manufacturer, Model)
+module Models exposing (..)
 
 
 type alias Driver = {
@@ -18,10 +18,23 @@ type alias FrequencyResponse = {
 }
 
 
+type alias HttpResponse = {
+  count : Int,
+  next : Maybe String,
+  previous : Maybe String,
+  results : List Driver
+}
+
+
 type alias Manufacturer = {
   name : String,
   website : Maybe String
 }
 
 
-type alias Model = { drivers: List Driver }
+type alias Model = {
+  drivers : List Driver,
+  driversCount : Int,
+  driversNextPage : String,
+  driversPreviousPage : String
+}

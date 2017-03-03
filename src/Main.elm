@@ -13,7 +13,7 @@ import Views exposing (view)
 -- Main.elm
 
 init : ( Model, Cmd Msg )
-init = ( { drivers = [] }, fetchDrivers )
+init = ( Model  [] 0 "" "", fetchDrivers )
 
 
 main : Program Never Model Msg

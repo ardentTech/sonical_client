@@ -29,6 +29,7 @@ frequencyResponseCell fr =
     lower ++ "-" ++ upper ++ "Hz"
 
 
+-- @todo move to lib
 justNum : Maybe number -> number
 justNum n =
   case n of

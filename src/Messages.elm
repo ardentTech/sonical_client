@@ -2,7 +2,7 @@ module Messages exposing (..)
 
 import Http
 
-import Models exposing (Driver)
+import Models exposing (HttpResponse)
 
 
-type Msg = Fail Http.Error | FetchDriversDone (Result Http.Error (List Driver)) | NoOp
+type Msg = Fail Http.Error | FetchDriversDone (Result Http.Error HttpResponse) | NoOp
