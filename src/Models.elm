@@ -37,6 +37,11 @@ type alias Manufacturer = {
 type alias Model = {
   drivers : List Driver,
   driversCount : Int,
-  driversNextPage : String,
-  driversPreviousPage : String
+  driversNextPage : Maybe String,
+  driversPreviousPage : Maybe String
 }
+
+
+defaultModel : Model
+defaultModel =
+  Model [] 0 Nothing Nothing

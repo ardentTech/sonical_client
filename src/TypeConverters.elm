@@ -8,13 +8,6 @@ maybeNumToNum n =
     Just m -> m
 
 
-maybeNumToString : Maybe number -> String
-maybeNumToString n =
+maybeNumToStr : Maybe number -> String
+maybeNumToStr n =
   toString <| maybeNumToNum <| n
-
-
-maybeStringToString : Maybe String -> String
-maybeStringToString s =
-  case s of
-    Nothing -> ""
-    Just m -> m
