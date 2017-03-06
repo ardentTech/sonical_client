@@ -12,9 +12,11 @@ driverDecoder = decode Driver
   |> requiredAt [ "frequency_response" ] frequencyResponseDecoder
   |> required "id" int
   |> requiredAt [ "manufacturer" ] manufacturerDecoder
+  |> required "max_power" (nullable int)
   |> required "model" string
   |> required "nominal_impedance" (nullable int)
   |> required "resonant_frequency" (nullable stringToFloat)
+  |> required "rms_power" (nullable int)
   |> required "sensitivity" (nullable stringToFloat)
 
 

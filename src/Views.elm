@@ -14,7 +14,8 @@ view model =
     table [ class "table table-responsive table-sm table-striped" ] [
       thead [] [ tableHeaderRow ],
       tbody [] (map tableBodyRow model.drivers)
-    ]
+    ],
+    pagination model
   ]
 
 
@@ -37,6 +38,13 @@ justNum n =
     Just m -> m
 
 
+pagination : Model -> Html Msg
+pagination model =
+  case (String.isEmpty model.driversNextPage) of
+    True -> div [] []
+    False -> div [] []
+
+
 tableBodyRow : Driver -> Html Msg
 tableBodyRow driver =
   tr [] [ 
@@ -46,7 +54,9 @@ tableBodyRow driver =
     td [] [ text <| (\v -> v ++ "Ω") <| toString <| justNum <| driver.nominal_impedance ],
     td [] [ text <| (\v -> v ++ "Hz") <| toString <| justNum <| driver.resonant_frequency ],
     td [] [ text <| (\v -> v ++ " dB 1W/1m") <| toString <| justNum <| driver.sensitivity ],
-    td [] [ text <| frequencyResponseCell <| driver.frequency_response ]
+    td [] [ text <| frequencyResponseCell <| driver.frequency_response ],
+    td [] [ text <| (\v -> (toString v) ++ "W") <| justNum <| driver.max_power ],
+    td [] [ text <| (\v -> (toString v) ++ "W") <| justNum <| driver.rms_power ]
   ]
 
 
@@ -59,5 +69,7 @@ tableHeaderRow =
     th [] [ text "Z" ],
     th [] [ text "Fs" ],
     th [] [ text "Sensitivity" ],
-    th [] [ text "Fr" ]
+    th [] [ text "Fr" ],
+    th [] [ text "Max Power"],
+    th [] [ text "RMS Power"]
   ]

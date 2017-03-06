@@ -5,9 +5,11 @@ type alias Driver = {
   frequency_response : FrequencyResponse,
   id : Int,
   manufacturer : Manufacturer,
+  max_power : Maybe Int,
   model : String,
   nominal_impedance : Maybe Int,
   resonant_frequency : Maybe Float,
+  rms_power : Maybe Int,
   sensitivity : Maybe Float
 }
 
