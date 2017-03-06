@@ -2,6 +2,7 @@ module Update exposing (update)
 
 import Messages exposing (Msg(..))
 import Models exposing (Model)
+import TypeConverters exposing (maybeStringToString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -13,19 +14,11 @@ update msg model =
         ({ model |
           drivers = response.results,
           driversCount = response.count,
-          driversNextPage = (justString <| response.next),
-          driversPreviousPage = (justString <| response.previous)
+          -- @todo do not convert maybe to empty string
+          driversNextPage = maybeStringToString response.next,
+          driversPreviousPage = maybeStringToString response.previous
         }, Cmd.none )
       FetchDriversDone (Err _) ->
         ( model, Cmd.none )
       NoOp ->
         ( model, Cmd.none )
-
-
--- PRIVATE
-
-justString : Maybe String -> String
-justString s =
-  case s of
-    Nothing -> ""
-    Just m -> m

@@ -1,12 +1,14 @@
 module Views exposing (view)
 
-import Html exposing (Html, div, table, tbody, td, text, thead, th, tr)
+import Html exposing (Html, button, div, table, tbody, td, text, thead, th, tr)
 import Html.Attributes exposing (class, id, title)
+import Html.Events exposing (onClick)
 import List exposing (map)
 
-import Messages exposing (Msg)
+import Messages exposing (Msg (NoOp))
 import Models exposing (Driver, FrequencyResponse, Model)
 import TypeConverters exposing (maybeNumToString)
+import Units exposing (decibels, hertz, ohms, watts)
 
 
 view : Model -> Html Msg
@@ -27,7 +29,7 @@ frequencyResponseCell driver =
   let
     lower = maybeNumToString <| driver.frequency_response.lower
     upper = maybeNumToString <| driver.frequency_response.upper
-    str = lower ++ "-" ++ upper ++ "Hz"
+    str = lower ++ "-" ++ upper ++ hertz
   in
     td [] [ text str ] 
 
@@ -42,25 +44,37 @@ modelCell driver =
   td [] [ text driver.model ]
 
 
+nextPage : Model -> Html Msg
+nextPage model =
+  case (String.isEmpty model.driversNextPage) of
+    -- @todo have a function for this empty Html Msg
+    True -> text ""
+    False -> button [ class "btn btn-secondary", onClick NoOp ] [ text "»" ]    
+
+
 nominalImpedanceCell : Driver -> Html Msg
 nominalImpedanceCell driver =
   let
-    str = (maybeNumToString driver.nominal_impedance) ++ "Ω"
+    str = (maybeNumToString driver.nominal_impedance) ++ ohms
   in
     td [] [ text str ]
 
 
 pagination : Model -> Html Msg
 pagination model =
+  let
+    prev = previousPage model
+    next = nextPage model
+  in
   case (String.isEmpty model.driversNextPage) of
-    True -> div [] []
-    False -> div [] []
+    True -> text ""
+    False ->
+      div [ class "btn-group" ] [ prev, next ]
 
 
 powerCell : Driver -> Html Msg
 powerCell driver =
   let
-    watts = "W"
     max_power = (maybeNumToString driver.max_power) ++ watts
     rms_power = (maybeNumToString driver.rms_power) ++ watts
     str = max_power ++ ", " ++ rms_power
@@ -68,10 +82,17 @@ powerCell driver =
     td [ ] [ text str ]
 
 
+previousPage : Model -> Html Msg
+previousPage model =
+  case (String.isEmpty model.driversPreviousPage) of
+    True -> text ""
+    False -> button [ class "btn btn-secondary", onClick NoOp ] [ text "«" ]    
+
+
 resonantFrequencyCell : Driver -> Html Msg
 resonantFrequencyCell driver =
   let
-    str = (maybeNumToString driver.resonant_frequency) ++ "Hz"
+    str = (maybeNumToString driver.resonant_frequency) ++ hertz
   in
     td [] [ text str ]
 
@@ -79,7 +100,7 @@ resonantFrequencyCell driver =
 sensitivityCell : Driver -> Html Msg
 sensitivityCell driver =
   let
-    str = (maybeNumToString driver.sensitivity) ++ "db 1W\1m"
+    str = (maybeNumToString driver.sensitivity) ++ decibels
   in
     td [] [ text str ]
 

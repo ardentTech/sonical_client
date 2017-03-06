@@ -1,4 +1,4 @@
-module Constants exposing (apiUrl)
+module Constants exposing (..)
 
 
 apiUrl : String

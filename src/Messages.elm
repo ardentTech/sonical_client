@@ -5,4 +5,7 @@ import Http
 import Models exposing (HttpResponse)
 
 
-type Msg = Fail Http.Error | FetchDriversDone (Result Http.Error HttpResponse) | NoOp
+type Msg =
+  Fail Http.Error |
+  FetchDriversDone (Result Http.Error HttpResponse) |
+  NoOp

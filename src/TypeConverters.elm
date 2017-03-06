@@ -1,4 +1,4 @@
-module TypeConverters exposing (maybeNumToNum, maybeNumToString)
+module TypeConverters exposing (..)
 
 
 maybeNumToNum : Maybe number -> number
@@ -11,3 +11,10 @@ maybeNumToNum n =
 maybeNumToString : Maybe number -> String
 maybeNumToString n =
   toString <| maybeNumToNum <| n
+
+
+maybeStringToString : Maybe String -> String
+maybeStringToString s =
+  case s of
+    Nothing -> ""
+    Just m -> m
