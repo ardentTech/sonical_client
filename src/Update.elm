@@ -1,5 +1,6 @@
 module Update exposing (update)
 
+import Commands exposing (fetchDrivers)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 
@@ -18,5 +19,9 @@ update msg model =
         }, Cmd.none )
       FetchDriversDone (Err _) ->
         ( model, Cmd.none )
+      NextPageClicked ->
+        ( model, fetchDrivers model.driversNextPage )
       NoOp ->
         ( model, Cmd.none )
+      PrevPageClicked ->
+        ( model, fetchDrivers model.driversPreviousPage )

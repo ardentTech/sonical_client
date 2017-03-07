@@ -13,7 +13,7 @@ import Views exposing (view)
 -- Main.elm
 
 init : ( Model, Cmd Msg )
-init = ( defaultModel, fetchDrivers )
+init = ( defaultModel, fetchDrivers Nothing )
 
 
 main : Program Never Model Msg

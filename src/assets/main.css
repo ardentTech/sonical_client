@@ -1,2 +1,4 @@
 body { font-size: .85rem; padding-top: 5rem; }
 .navbar-brand { font-size: 1rem; padding: 0; text-transform: uppercase; }
+#pagination button { cursor: pointer; }
+#pagination button:disabled { cursor: default; }

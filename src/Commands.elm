@@ -7,6 +7,12 @@ import Decoders exposing (httpResponseDecoder)
 import Messages exposing (Msg(FetchDriversDone))
 
 
-fetchDrivers : Cmd Msg
-fetchDrivers =
-  Http.send FetchDriversDone <| Http.get (apiUrl ++ "/drivers/") httpResponseDecoder
+fetchDrivers : Maybe String -> Cmd Msg
+fetchDrivers url =
+  let
+    endpoint =
+      case url of
+        Nothing -> apiUrl ++ "/drivers/"
+        Just s -> s
+  in
+    Http.send FetchDriversDone <| Http.get endpoint httpResponseDecoder

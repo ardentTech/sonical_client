@@ -1,11 +1,11 @@
 module Views exposing (view)
 
 import Html exposing (Html, button, div, table, tbody, td, text, thead, th, tr)
-import Html.Attributes exposing (class, id, title)
+import Html.Attributes exposing (class, disabled, id, title)
 import Html.Events exposing (onClick)
 import List exposing (map)
 
-import Messages exposing (Msg (NoOp))
+import Messages exposing (Msg (NextPageClicked, PrevPageClicked))
 import Models exposing (Driver, FrequencyResponse, Model)
 import TypeConverters exposing (maybeNumToStr)
 import Units exposing (decibels, hertz, ohms, watts)
@@ -50,9 +50,7 @@ modelCell driver =
 
 nextPage : Model -> Html Msg
 nextPage model =
-  case model.driversNextPage of
-    Nothing -> emptyHtml
-    Just t -> button [ class "btn btn-secondary", onClick NoOp ] [ text "»" ]    
+  page model.driversNextPage NextPageClicked "»"
 
 
 nominalImpedanceCell : Driver -> Html Msg
@@ -63,30 +61,46 @@ nominalImpedanceCell driver =
     td [] [ text str ]
 
 
+page : Maybe String -> Msg -> String -> Html Msg
+page endpoint msg txt =
+  let
+    disabledVal =
+      case endpoint of
+        Nothing -> True
+        Just v -> False
+  in
+    button [
+      class "btn btn-secondary",
+      disabled disabledVal,
+      onClick msg
+    ] [ text txt ]
+
+
 pagination : Model -> Html Msg
 pagination model =
   let
-    prev = previousPage model
+    prev = prevPage model
     next = nextPage model
   in
-    div [ class "btn-group" ] [ prev, next ]
+    div [ class "btn-group", id "pagination" ] [ prev, next ]
+
+
+power : Maybe number -> String
+power n =
+  maybeNumToStr n ++ watts
 
 
 powerCell : Driver -> Html Msg
 powerCell driver =
   let
-    max_power = (maybeNumToStr driver.max_power) ++ watts
-    rms_power = (maybeNumToStr driver.rms_power) ++ watts
-    str = max_power ++ ", " ++ rms_power
+    str = (power driver.max_power) ++ ", " ++ (power driver.rms_power)
   in
     td [ ] [ text str ]
 
 
-previousPage : Model -> Html Msg
-previousPage model =
-  case model.driversPreviousPage of
-    Nothing -> emptyHtml
-    Just t -> button [ class "btn btn-secondary", onClick NoOp ] [ text "«" ]    
+prevPage : Model -> Html Msg
+prevPage model =
+  page model.driversPreviousPage PrevPageClicked "«"
 
 
 resonantFrequencyCell : Driver -> Html Msg

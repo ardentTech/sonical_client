@@ -8,4 +8,6 @@ import Models exposing (HttpResponse)
 type Msg =
   Fail Http.Error |
   FetchDriversDone (Result Http.Error HttpResponse) |
-  NoOp
+  NextPageClicked |
+  NoOp |
+  PrevPageClicked
