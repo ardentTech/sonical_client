@@ -16,3 +16,6 @@ fetchDrivers url =
         Just s -> s
   in
     Http.send FetchDriversDone <| Http.get endpoint httpResponseDecoder
+
+
+-- @todo sortDrivers

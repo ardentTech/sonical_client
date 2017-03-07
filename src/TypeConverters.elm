@@ -11,3 +11,10 @@ maybeNumToNum n =
 maybeNumToStr : Maybe number -> String
 maybeNumToStr n =
   toString <| maybeNumToNum <| n
+
+
+maybeStrToStr : Maybe String -> String
+maybeStrToStr s =
+  case s of
+    Nothing -> ""
+    Just st -> st

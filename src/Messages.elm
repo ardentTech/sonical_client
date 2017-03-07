@@ -11,4 +11,4 @@ type Msg =
   NextPageClicked |
   NoOp |
   PrevPageClicked |
-  TableHeaderClicked
+  TableHeaderClicked String

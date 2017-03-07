@@ -1,13 +1,14 @@
 module Views exposing (view)
 
-import Html exposing (Html, button, div, table, tbody, td, text, thead, th, tr)
+import Html exposing (Html, button, div, h3, table, tbody, td, text, thead, th, tr)
 import Html.Attributes exposing (class, disabled, id, title)
 import Html.Events exposing (onClick)
 import List exposing (map, length)
+import String exposing (toLower)
 
 import Messages exposing (Msg (NextPageClicked, PrevPageClicked, TableHeaderClicked))
 import Models exposing (Driver, FrequencyResponse, Model)
-import TypeConverters exposing (maybeNumToStr)
+import TypeConverters exposing (maybeNumToStr, maybeStrToStr)
 import Units exposing (decibels, hertz, ohms, watts)
 
 
@@ -15,12 +16,13 @@ view : Model -> Html Msg
 view model = 
   div [ class "row" ] [
     div [ class "col-12", id "drivers" ] [
-      table [ class "table table-responsive table-sm table-striped" ] [
-        thead [] [ tableHeaderRow ],
-        tbody [] (map tableBodyRow model.drivers)
+      h3 [] [ text "Drivers" ],
+      table [ class "table table-sm table-striped" ] [
+        tableHeader,
+        tableBody model
       ]
     ],
-    div [ class "col-6", id "pagination-info" ] [
+    div [ class "col-6 text-muted", id "pagination-info" ] [
       paginationInfo model
     ],
     div [ class "col-6", id "pagination-controls" ] [
@@ -31,9 +33,8 @@ view model =
 
 -- PRIVATE
 
-emptyHtml : Html Msg
-emptyHtml =
-  text ""
+type alias TableHeaderCell = { text : String, title : Maybe String }
+
 
 frequencyResponseCell : Driver -> Html Msg
 frequencyResponseCell driver =
@@ -77,7 +78,7 @@ page endpoint msg txt =
         Just v -> False
   in
     button [
-      class "btn btn-secondary btn-sm",
+      class "btn btn-secondary btn-sm text-muted",
       disabled disabledVal,
       onClick msg
     ] [ text txt ]
@@ -106,12 +107,14 @@ power n =
   maybeNumToStr n ++ watts
 
 
-powerCell : Driver -> Html Msg
-powerCell driver =
-  let
-    str = (power driver.max_power) ++ ", " ++ (power driver.rms_power)
-  in
-    td [ ] [ text str ]
+maxPowerCell : Driver -> Html Msg
+maxPowerCell driver =
+  td [] [ text <| power driver.max_power ]
+
+
+rmsPowerCell : Driver -> Html Msg
+rmsPowerCell driver =
+  td [] [ text <| power driver.rms_power ]
 
 
 prevPage : Model -> Html Msg
@@ -135,6 +138,11 @@ sensitivityCell driver =
     td [] [ text str ]
 
 
+tableBody : Model -> Html Msg
+tableBody model =
+  tbody [] (map tableBodyRow model.drivers)
+
+
 tableBodyRow : Driver -> Html Msg
 tableBodyRow driver =
   let
@@ -145,20 +153,43 @@ tableBodyRow driver =
       resonantFrequencyCell,
       frequencyResponseCell,
       sensitivityCell,
-      powerCell
+      maxPowerCell,
+      rmsPowerCell
     ]
   in
     tr [] (map (\c -> c driver) cells)
 
 
-tableHeaderRow : Html Msg
-tableHeaderRow =
-  tr [] [
-    th [ onClick TableHeaderClicked ] [ text "Manufacturer" ],
-    th [ onClick TableHeaderClicked ] [ text "Model" ],
-    th [ onClick TableHeaderClicked, title "Nominal Impedance" ] [ text "Z" ],
-    th [ onClick TableHeaderClicked, title "Resonant Frequency" ] [ text "Fs" ],
-    th [ onClick TableHeaderClicked ] [ text "Sensitivity" ],
-    th [ onClick TableHeaderClicked, title "Frequency Response" ] [ text "Fr" ],
-    th [ onClick TableHeaderClicked, title "Max, RMS" ] [ text "Power"]
-  ]
+tableHeader : Html Msg
+tableHeader =
+  thead [] [ tr [] tableHeaderCells ]
+
+
+tableHeaderCells : List (Html Msg)
+tableHeaderCells =
+  let
+    cells = [
+      TableHeaderCell "Manufacturer" Nothing,
+      TableHeaderCell "Model" Nothing,
+      TableHeaderCell "Z" (Just "Nominal Impedance"),
+      TableHeaderCell "Fs" (Just "Resonant Frequency"),
+      TableHeaderCell "Sensitivity" Nothing,
+      TableHeaderCell "Fr" (Just "Frequency Response"),
+      TableHeaderCell "Max" (Just "Power"),
+      TableHeaderCell "RMS" (Just "Power")
+    ]
+  in
+    map tableHeaderCell cells
+
+
+tableHeaderCell : TableHeaderCell -> Html Msg
+tableHeaderCell cell =
+  let
+    columnId = toLower cell.text
+    attrs = [
+      id <| columnId,
+      onClick (TableHeaderClicked columnId),
+      title <| maybeStrToStr cell.title
+    ]
+  in
+    th attrs [ text cell.text ]
