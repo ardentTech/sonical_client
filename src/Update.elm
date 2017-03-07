@@ -25,3 +25,5 @@ update msg model =
         ( model, Cmd.none )
       PrevPageClicked ->
         ( model, fetchDrivers model.driversPreviousPage )
+      TableHeaderClicked ->
+        ( model, Cmd.none )

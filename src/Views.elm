@@ -5,7 +5,7 @@ import Html.Attributes exposing (class, disabled, id, title)
 import Html.Events exposing (onClick)
 import List exposing (map, length)
 
-import Messages exposing (Msg (NextPageClicked, PrevPageClicked))
+import Messages exposing (Msg (NextPageClicked, PrevPageClicked, TableHeaderClicked))
 import Models exposing (Driver, FrequencyResponse, Model)
 import TypeConverters exposing (maybeNumToStr)
 import Units exposing (decibels, hertz, ohms, watts)
@@ -154,11 +154,11 @@ tableBodyRow driver =
 tableHeaderRow : Html Msg
 tableHeaderRow =
   tr [] [
-    th [] [ text "Manufacturer" ],
-    th [] [ text "Model" ],
-    th [ title "Nominal Impedance" ] [ text "Z" ],
-    th [ title "Resonant Frequency" ] [ text "Fs" ],
-    th [] [ text "Sensitivity" ],
-    th [ title "Frequency Response" ] [ text "Fr" ],
-    th [ title "Max, RMS" ] [ text "Power"]
+    th [ onClick TableHeaderClicked ] [ text "Manufacturer" ],
+    th [ onClick TableHeaderClicked ] [ text "Model" ],
+    th [ onClick TableHeaderClicked, title "Nominal Impedance" ] [ text "Z" ],
+    th [ onClick TableHeaderClicked, title "Resonant Frequency" ] [ text "Fs" ],
+    th [ onClick TableHeaderClicked ] [ text "Sensitivity" ],
+    th [ onClick TableHeaderClicked, title "Frequency Response" ] [ text "Fr" ],
+    th [ onClick TableHeaderClicked, title "Max, RMS" ] [ text "Power"]
   ]

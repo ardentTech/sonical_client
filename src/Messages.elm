@@ -10,4 +10,5 @@ type Msg =
   FetchDriversDone (Result Http.Error HttpResponse) |
   NextPageClicked |
   NoOp |
-  PrevPageClicked
+  PrevPageClicked |
+  TableHeaderClicked
