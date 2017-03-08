@@ -48,4 +48,4 @@ type alias Model = {
 
 defaultModel : Model
 defaultModel =
-  Model [] 0 Nothing Nothing "manufacturer" (Table.initialSort "model")
+  Model [] 0 Nothing Nothing "manufacturer" (Table.initialSort "Manufacturer")

@@ -12,5 +12,4 @@ type Msg =
   NextPageClicked |
   NoOp |
   PrevPageClicked |
-  SetTableState Table.State |
-  TableHeaderClicked String
+  SetTableState Table.State
