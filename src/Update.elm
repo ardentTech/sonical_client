@@ -25,6 +25,8 @@ update msg model =
         ( model, Cmd.none )
       PrevPageClicked ->
         ( model, fetchDrivers model.driversPreviousPage )
+      SetTableState newState ->
+        ({ model | tableState = newState }, Cmd.none )
       TableHeaderClicked columnId ->
         -- @todo handle inverting the sort direction
         ({ model | driversSortBy = columnId }, Cmd.none )

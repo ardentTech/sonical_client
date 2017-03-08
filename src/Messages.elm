@@ -1,6 +1,7 @@
 module Messages exposing (..)
 
 import Http
+import Table
 
 import Models exposing (HttpResponse)
 
@@ -11,4 +12,5 @@ type Msg =
   NextPageClicked |
   NoOp |
   PrevPageClicked |
+  SetTableState Table.State |
   TableHeaderClicked String

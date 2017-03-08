@@ -1,5 +1,7 @@
 module Models exposing (..)
 
+import Table
+
 
 type alias Driver = {
   frequency_response : FrequencyResponse,
@@ -39,10 +41,11 @@ type alias Model = {
   driversCount : Int,
   driversNextPage : Maybe String,
   driversPreviousPage : Maybe String,
-  driversSortBy : String
+  driversSortBy : String,
+  tableState : Table.State
 }
 
 
 defaultModel : Model
 defaultModel =
-  Model [] 0 Nothing Nothing "manufacturer"
+  Model [] 0 Nothing Nothing "manufacturer" (Table.initialSort "model")
