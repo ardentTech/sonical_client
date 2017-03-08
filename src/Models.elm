@@ -41,11 +41,10 @@ type alias Model = {
   driversCount : Int,
   driversNextPage : Maybe String,
   driversPreviousPage : Maybe String,
-  driversSortBy : String,
   tableState : Table.State
 }
 
 
 defaultModel : Model
 defaultModel =
-  Model [] 0 Nothing Nothing "manufacturer" (Table.initialSort "Manufacturer")
+  Model [] 0 Nothing Nothing (Table.initialSort "Manufacturer")

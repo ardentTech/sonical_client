@@ -5,3 +5,5 @@ body { font-size: .85rem; padding-top: 5rem; }
 #pagination-info { font-size: .7rem; }
 .text-muted { color: #ccc!important; }
 h1, h2, h3, h4, h5, h6 { margin-bottom: 1rem; }
+h1 { font-size: 1.75rem; }
+th span { cursor: pointer; }

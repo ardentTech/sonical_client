@@ -1,18 +1,30 @@
 module Views exposing (view)
 
-import Html exposing (Html, div)
-import Table
+import Html exposing (Html, button, div, h1, text)
+import Html.Attributes exposing (class, disabled, id)
+import Html.Events exposing (onClick)
+import List exposing (length)
+import Table exposing (defaultCustomizations)
 
 import Messages exposing (
   Msg (NextPageClicked, PrevPageClicked, SetTableState))
 import Models exposing (Driver, Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
---import Units exposing (decibels, hertz, ohms, watts)
+import Units exposing (decibels, hertz, ohms, watts)
+
+
+-- @todo rethink model.currentCount
 
 
 view : Model -> Html Msg
 view model =
-  div [] [ Table.view tableConfig model.tableState model.drivers ]
+  div [ class "row" ] [
+    div [ class "col-12" ] [
+      h1 [] [ text "Drivers" ],
+      Table.view tableConfig model.tableState model.drivers ], 
+    div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
+    div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
+  ]
 
 
 -- PRIVATE
@@ -20,51 +32,68 @@ view model =
 
 manufacturerColumn : Table.Column Driver Msg
 manufacturerColumn =
+  Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
+
+
+maybeFloatColumn : String -> (a -> Maybe Float) -> Table.Column a Msg
+maybeFloatColumn name a =
+  Table.floatColumn name (maybeFloatToFloat << a)
+
+
+maybeIntColumn : String -> (a -> Maybe Int) -> Table.Column a Msg
+maybeIntColumn name a =
+  Table.intColumn name (maybeIntToInt << a)
+
+
+paginationControl : Maybe String -> Msg -> String -> Html Msg
+paginationControl endpoint msg txt =
   let
-    val = (\m -> m.name) << .manufacturer
+    disabledVal =
+      case endpoint of
+        Nothing -> True
+        Just e -> False
   in
-    Table.customColumn {
-      name = "Manufacturer",
-      viewData = val,
-      sorter = Table.increasingOrDecreasingBy val
-    }
+    button [
+      class "btn btn-secondary btn-sm text-muted",
+      disabled disabledVal,
+      onClick msg
+    ] [ text txt ]
 
 
-maybeFloatColumn : String -> (data -> Maybe Float) -> Table.Column data Msg
-maybeFloatColumn name data =
+paginationControls : Model -> Html Msg
+paginationControls model =
   let
-    val = maybeFloatToFloat << data
+    prev = paginationControl model.driversPreviousPage PrevPageClicked "«"
+    next = paginationControl model.driversNextPage NextPageClicked "»"
   in
-    Table.customColumn {
-      name = name,
-      viewData = toString << val,
-      sorter = Table.increasingOrDecreasingBy val
-    }
+    div [ class "btn-group float-right" ] [ prev, next ]
 
 
-maybeIntColumn : String -> (data -> Maybe Int) -> Table.Column data Msg
-maybeIntColumn name data =
+paginationInfo : Model -> Html Msg
+paginationInfo model =
   let
-    val = maybeIntToInt << data
+    currentCount = (toString <| length model.drivers)
+    totalCount = (toString model.driversCount)
   in
-    Table.customColumn {
-      name = name,
-      viewData = toString << val,
-      sorter = Table.increasingOrDecreasingBy val
-    }
+    div [ class "text-muted" ] [
+      text <| "Showing " ++ currentCount ++ " of " ++ totalCount ++ " items"
+    ]
 
 
 tableConfig : Table.Config Driver Msg
 tableConfig =
-  Table.config {
+  Table.customConfig {
     toId = .model,
     toMsg = SetTableState,
     columns = [
       manufacturerColumn,
       Table.stringColumn "Model" .model,
-      maybeFloatColumn "Fs" .resonant_frequency,
-      maybeIntColumn "Z" .nominal_impedance,
-      maybeIntColumn "Max" .max_power,
-      maybeIntColumn "RMS" .rms_power
-    ]
+      maybeFloatColumn ("Fs (" ++ hertz ++ ")") .resonant_frequency,
+      maybeFloatColumn ("SPL (" ++ decibels ++ ")") .sensitivity,
+      maybeIntColumn ("Z (" ++ ohms ++ ")")  .nominal_impedance,
+      maybeIntColumn ("Max (" ++ watts ++ ")") .max_power,
+      maybeIntColumn ("RMS (" ++ watts ++ ")") .rms_power ],
+    customizations = {
+      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
+    }
   }
