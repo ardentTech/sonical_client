@@ -13,9 +13,6 @@ import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, ohms, watts)
 
 
--- @todo rethink model.currentCount
-
-
 view : Model -> Html Msg
 view model =
   div [ class "row" ] [

@@ -8,8 +8,9 @@ import Models exposing (HttpResponse)
 
 type Msg =
   Fail Http.Error |
-  FetchDriversDone (Result Http.Error HttpResponse) |
+  GetDriversDone (Result Http.Error HttpResponse) |
   NextPageClicked |
   NoOp |
   PrevPageClicked |
+  SetDriversQuery String |
   SetTableState Table.State

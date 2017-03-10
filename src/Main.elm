@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Html exposing (Html)
 
-import Commands exposing (fetchDrivers)
+import Commands exposing (getDrivers)
 import Messages exposing (Msg(..))
 import Models exposing (Driver, Model, defaultModel)
 import Subscriptions exposing (subscriptions)
@@ -13,7 +13,7 @@ import Views exposing (view)
 -- Main.elm
 
 init : ( Model, Cmd Msg )
-init = ( defaultModel, fetchDrivers Nothing )
+init = ( defaultModel, getDrivers Nothing )
 
 
 main : Program Never Model Msg
