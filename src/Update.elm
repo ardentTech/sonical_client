@@ -1,6 +1,6 @@
 module Update exposing (update)
 
-import Commands exposing (getDrivers)
+import Commands exposing (getDrivers, searchDrivers)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 
@@ -26,6 +26,6 @@ update msg model =
       PrevPageClicked ->
         ( model, getDrivers model.driversPreviousPage )
       SetDriversQuery query ->
-        ({ model | driversQuery = query }, Cmd.none )
+        ({ model | driversQuery = query }, searchDrivers query )
       SetTableState newState ->
         ({ model | tableState = newState }, Cmd.none )

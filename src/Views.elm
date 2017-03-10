@@ -1,13 +1,13 @@
 module Views exposing (view)
 
-import Html exposing (Html, button, div, h1, text)
-import Html.Attributes exposing (class, disabled, id)
-import Html.Events exposing (onClick)
+import Html exposing (Html, button, div, form, h1, input, text)
+import Html.Attributes exposing (class, disabled, id, placeholder, type_)
+import Html.Events exposing (onClick, onInput)
 import List exposing (length)
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (
-  Msg (NextPageClicked, PrevPageClicked, SetTableState))
+  Msg (NextPageClicked, PrevPageClicked, SetDriversQuery, SetTableState))
 import Models exposing (Driver, Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, ohms, watts)
@@ -18,10 +18,20 @@ view model =
   div [ class "row" ] [
     div [ class "col-12" ] [
       h1 [] [ text "Drivers" ],
-      Table.view tableConfig model.tableState model.drivers ], 
+      form [] [
+        div [ class "form-group" ] [
+          input [
+              class "form-control",
+              placeholder "Search by Model",
+              onInput SetDriversQuery,
+              type_ "text" ] []
+        ]
+      ],
+      Table.view tableConfig model.tableState model.drivers
+    ], 
     div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
     div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
-  ]
+    ]
 
 
 -- PRIVATE

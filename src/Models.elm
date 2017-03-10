@@ -47,5 +47,10 @@ type alias Model = {
 
 
 defaultModel : Model
-defaultModel =
-  Model [] 0 Nothing Nothing "" (Table.initialSort "Manufacturer")
+defaultModel = {
+  drivers = [],
+  driversCount = 0,
+  driversNextPage = Nothing,
+  driversPreviousPage = Nothing,
+  driversQuery = "",
+  tableState = (Table.initialSort "Manufacturer")}
