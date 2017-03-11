@@ -1,7 +1,7 @@
 module Views exposing (view)
 
 import Html exposing (Html, button, div, form, h1, input, text)
-import Html.Attributes exposing (class, disabled, id, placeholder, type_)
+import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
 import List exposing (length)
 import Table exposing (defaultCustomizations)
@@ -21,10 +21,12 @@ view model =
       form [] [
         div [ class "form-group" ] [
           input [
+              -- @todo do not refresh on enter press
               class "form-control",
               placeholder "Search by Model",
               onInput SetDriversQuery,
-              type_ "text" ] []
+              type_ "text",
+              value model.driversQuery ] []
         ]
       ],
       Table.view tableConfig model.tableState model.drivers

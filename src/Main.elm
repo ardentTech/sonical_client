@@ -10,8 +10,6 @@ import Update exposing (update)
 import Views exposing (view)
 
 
--- Main.elm
-
 init : ( Model, Cmd Msg )
 init = ( defaultModel, getDrivers Nothing )
 

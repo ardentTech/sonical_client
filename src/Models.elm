@@ -1,5 +1,6 @@
 module Models exposing (..)
 
+import Debounce exposing (Debounce)
 import Table
 
 
@@ -37,6 +38,7 @@ type alias Manufacturer = {
 
 
 type alias Model = {
+  debounce : Debounce String,
   drivers : List Driver,
   driversCount : Int,
   driversNextPage : Maybe String,
@@ -48,6 +50,7 @@ type alias Model = {
 
 defaultModel : Model
 defaultModel = {
+  debounce = Debounce.init,
   drivers = [],
   driversCount = 0,
   driversNextPage = Nothing,
