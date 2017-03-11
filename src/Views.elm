@@ -7,7 +7,7 @@ import List exposing (length)
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (
-  Msg (NextPageClicked, PrevPageClicked, SetDriversQuery, SetTableState))
+  Msg (NextPageClicked, PrevPageClicked, QueryInput, SetTableState))
 import Models exposing (Driver, Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, ohms, watts)
@@ -24,7 +24,7 @@ view model =
               -- @todo do not refresh on enter press
               class "form-control",
               placeholder "Search by Model",
-              onInput SetDriversQuery,
+              onInput QueryInput,
               type_ "text",
               value model.driversQuery ] []
         ]

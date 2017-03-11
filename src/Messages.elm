@@ -14,6 +14,5 @@ type Msg =
   NextPageClicked |
   NoOp |
   PrevPageClicked |
-  SetDriversQuery String |
-  SetIt String |
+  QueryInput String |
   SetTableState Table.State

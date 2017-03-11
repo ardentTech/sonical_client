@@ -1,10 +1,9 @@
 module Update exposing (update)
 
 import Debounce exposing (Debounce)
-import Task exposing (Task)
-import Time exposing (second)
 
 import Commands exposing (getDrivers, searchDrivers)
+import Config exposing (debounceConfig)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 
@@ -16,7 +15,7 @@ update msg model =
         let
           (debounce, cmd) = Debounce.update
             debounceConfig
-            (Debounce.takeLast save)
+            (Debounce.takeLast searchDrivers)
             msg
             model.debounce
         in
@@ -38,26 +37,10 @@ update msg model =
         ( model, Cmd.none )
       PrevPageClicked ->
         ( model, getDrivers model.driversPreviousPage )
-      SetDriversQuery q ->
+      QueryInput q ->
         let
           (debounce, cmd) = Debounce.push debounceConfig q model.debounce
         in
           ({ model | debounce = debounce, driversQuery = q }, cmd)
-      SetIt q ->
-        ( model, searchDrivers q)
       SetTableState newState ->
         ({ model | tableState = newState }, Cmd.none )
-
-
--- PRIVATE
-
-debounceConfig : Debounce.Config Msg
-debounceConfig = {
-  strategy = Debounce.later (1 * second),
-  transform = DebounceMsg }
-
-
--- @TODO rename this
-save : String -> Cmd Msg
-save s =
-  Task.perform SetIt (Task.succeed s)
