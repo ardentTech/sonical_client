@@ -2,12 +2,11 @@ module Views exposing (view)
 
 import Html exposing (Html, button, div, form, h1, input, text)
 import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (onClick, onInput, onSubmit)
 import List exposing (length)
 import Table exposing (defaultCustomizations)
 
-import Messages exposing (
-  Msg (NextPageClicked, PrevPageClicked, QueryInput, SetTableState))
+import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, ohms, watts)
@@ -18,12 +17,11 @@ view model =
   div [ class "row" ] [
     div [ class "col-12" ] [
       h1 [] [ text "Drivers" ],
-      form [] [
+      form [ onSubmit NoOp ] [
         div [ class "form-group" ] [
           input [
-              -- @todo do not refresh on enter press
               class "form-control",
-              placeholder "Search by Model",
+              placeholder "Model",
               onInput QueryInput,
               type_ "text",
               value model.driversQuery ] []
