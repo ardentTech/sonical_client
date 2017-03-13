@@ -12,3 +12,4 @@ th span { cursor: pointer; }
 .form-control:-moz-placeholder { color: #aaa; }
 .form-control::-moz-placeholder { color: #aaa; }
 .form-control:-ms-input-placeholder { color: #aaa; }
+#pagination-info div { padding-top: 7px; }
