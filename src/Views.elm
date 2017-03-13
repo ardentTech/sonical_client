@@ -42,14 +42,14 @@ manufacturerColumn =
   Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
 
 
-maybeFloatColumn : String -> (a -> Maybe Float) -> Table.Column a Msg
-maybeFloatColumn name a =
-  Table.floatColumn name (maybeFloatToFloat << a)
+--maybeFloatColumn : String -> (a -> Maybe Float) -> Table.Column a Msg
+--maybeFloatColumn name a =
+--  Table.floatColumn name (maybeFloatToFloat << a)
 
 
-maybeIntColumn : String -> (a -> Maybe Int) -> Table.Column a Msg
-maybeIntColumn name a =
-  Table.intColumn name (maybeIntToInt << a)
+--maybeIntColumn : String -> (a -> Maybe Int) -> Table.Column a Msg
+--maybeIntColumn name a =
+--  Table.intColumn name (maybeIntToInt << a)
 
 
 paginationControl : Maybe String -> Msg -> String -> Html Msg
@@ -95,12 +95,41 @@ tableConfig =
     columns = [
       manufacturerColumn,
       Table.stringColumn "Model" .model,
-      maybeFloatColumn ("Fs (" ++ hertz ++ ")") .resonant_frequency,
-      maybeFloatColumn ("SPL (" ++ decibels ++ ")") .sensitivity,
-      maybeIntColumn ("Z (" ++ ohms ++ ")")  .nominal_impedance,
-      maybeIntColumn ("Max (" ++ watts ++ ")") .max_power,
-      maybeIntColumn ("RMS (" ++ watts ++ ")") .rms_power ],
+      maybeFloatColumn "Fs" .resonant_frequency hertz,
+      maybeFloatColumn "SPL" .sensitivity decibels,
+      maybeIntColumn "Z"  .nominal_impedance ohms,
+      maybeIntColumn "Max P" .max_power watts,
+      maybeIntColumn "RMS P" .rms_power watts ],
     customizations = {
       defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
     }
   }
+
+
+maybeFloatColumn : String -> (Driver -> Maybe Float) -> String -> Table.Column Driver Msg
+maybeFloatColumn name toData unit=
+  let
+    data = maybeFloatToFloat << toData
+  in
+    Table.customColumn {
+      name = name,
+      viewData = (\v -> appendUnit (data v) unit),
+      sorter = Table.increasingOrDecreasingBy data 
+    }
+
+
+maybeIntColumn : String -> (Driver -> Maybe Int) -> String -> Table.Column Driver Msg
+maybeIntColumn name toData unit=
+  let
+    data = maybeIntToInt << toData
+  in
+    Table.customColumn {
+      name = name,
+      viewData = (\v -> appendUnit (data v) unit),
+      sorter = Table.increasingOrDecreasingBy data 
+    }
+
+
+appendUnit : number -> String -> String
+appendUnit n unit =
+  (toString n) ++ " " ++ unit
