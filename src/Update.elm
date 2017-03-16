@@ -15,7 +15,7 @@ update msg model =
         let
           (debounce, cmd) = Debounce.update
             debounceConfig
-            (Debounce.takeLast searchDrivers)
+            (Debounce.takeLast (searchDrivers model))
             msg
             model.debounce
         in
@@ -32,11 +32,11 @@ update msg model =
       GetDriversDone (Err _) ->
         ( model, Cmd.none )
       NextPageClicked ->
-        ( model, getDrivers model.driversNextPage )
+        ( model, getDrivers model model.driversNextPage )
       NoOp ->
         ( model, Cmd.none )
       PrevPageClicked ->
-        ( model, getDrivers model.driversPreviousPage )
+        ( model, getDrivers model model.driversPreviousPage )
       QueryInput q ->
         let
           (debounce, cmd) = Debounce.push debounceConfig q model.debounce

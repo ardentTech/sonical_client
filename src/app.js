@@ -3,5 +3,5 @@
 
     // inject elm
     var Elm = require('./Main');
-    Elm.Main.embed(document.getElementById('app'));
+    Elm.Main.embed(document.getElementById('app'), { apiUrl: process.env.API_URL });
 })();

@@ -10,12 +10,19 @@ import Update exposing (update)
 import Views exposing (view)
 
 
-init : ( Model, Cmd Msg )
-init = ( defaultModel, getDrivers Nothing )
+type alias Flags = { apiUrl: String }
 
 
-main : Program Never Model Msg
-main = Html.program {
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+  let
+    model = { defaultModel | apiUrl = flags.apiUrl }
+  in
+    (model, getDrivers model Nothing )
+
+
+main : Program Flags Model Msg
+main = Html.programWithFlags {
     init = init,
     view = view,
     update = update,
