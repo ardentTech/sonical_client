@@ -1,9 +1,8 @@
 module Views exposing (view)
 
-import Html exposing (Html, button, div, form, h1, input, text)
-import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
+import Html exposing (Html, button, div, form, h1, input, span, text)
+import Html.Attributes exposing (class, disabled, id, placeholder, title, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
-import List exposing (length)
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))
@@ -37,9 +36,24 @@ view model =
 -- PRIVATE
 
 
+appendUnit : number -> String -> String
+appendUnit n unit =
+  (toString n) ++ " " ++ unit
+
+
 manufacturerColumn : Table.Column Driver Msg
 manufacturerColumn =
   Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
+
+
+modelColumn : Table.Column Driver Msg
+modelColumn =
+--  Table.stringColumn "Model" .model
+  Table.veryCustomColumn {
+    name = "Model",
+    viewData = viewModel,
+    sorter = Table.unsortable
+  }
 
 
 paginationControl : Maybe String -> Msg -> String -> Html Msg
@@ -69,32 +83,12 @@ paginationControls model =
 paginationInfo : Model -> Html Msg
 paginationInfo model =
   let
-    currentCount = (toString <| length model.drivers)
+    currentCount = (toString <| List.length model.drivers)
     totalCount = (toString model.driversCount)
   in
     div [ class "text-muted" ] [
       text <| "Showing " ++ currentCount ++ " of " ++ totalCount ++ " items"
     ]
-
-
-tableConfig : Table.Config Driver Msg
-tableConfig =
-  Table.customConfig {
-    toId = .model,
-    toMsg = SetTableState,
-    columns = [
-      manufacturerColumn,
-      Table.stringColumn "Model" .model,
-      maybeFloatColumn "Diam" .nominal_diameter inches,
-      maybeFloatColumn "Fs" .resonant_frequency hertz,
-      maybeFloatColumn "SPL" .sensitivity decibels,
-      maybeIntColumn "Z"  .nominal_impedance ohms,
-      maybeIntColumn "Max P" .max_power watts,
-      maybeIntColumn "RMS P" .rms_power watts ],
-    customizations = {
-      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
-    }
-  }
 
 
 maybeFloatColumn : String -> (Driver -> Maybe Float) -> String -> Table.Column Driver Msg
@@ -121,6 +115,31 @@ maybeIntColumn name toData unit=
     }
 
 
-appendUnit : number -> String -> String
-appendUnit n unit =
-  (toString n) ++ " " ++ unit
+tableConfig : Table.Config Driver Msg
+tableConfig =
+  Table.customConfig {
+    toId = .model,
+    toMsg = SetTableState,
+    columns = [
+      manufacturerColumn,
+      modelColumn,
+      maybeFloatColumn "Diam" .nominal_diameter inches,
+      maybeFloatColumn "Fs" .resonant_frequency hertz,
+      maybeFloatColumn "SPL" .sensitivity decibels,
+      maybeIntColumn "Z"  .nominal_impedance ohms,
+      maybeIntColumn "Max P" .max_power watts,
+      maybeIntColumn "RMS P" .rms_power watts ],
+    customizations = {
+      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
+    }
+  }
+
+
+viewModel : Driver -> Table.HtmlDetails Msg
+viewModel {model} =
+  let
+    limit = 30
+    txt = (String.left limit model) ++ (if (String.length model > limit) then "..." else "")
+  in
+    Table.HtmlDetails [] [
+      span [ title model ] [ text txt ]]
