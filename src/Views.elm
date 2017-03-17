@@ -9,7 +9,7 @@ import Table exposing (defaultCustomizations)
 import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
-import Units exposing (decibels, hertz, ohms, watts)
+import Units exposing (decibels, hertz, inches, ohms, watts)
 
 
 view : Model -> Html Msg
@@ -40,16 +40,6 @@ view model =
 manufacturerColumn : Table.Column Driver Msg
 manufacturerColumn =
   Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
-
-
---maybeFloatColumn : String -> (a -> Maybe Float) -> Table.Column a Msg
---maybeFloatColumn name a =
---  Table.floatColumn name (maybeFloatToFloat << a)
-
-
---maybeIntColumn : String -> (a -> Maybe Int) -> Table.Column a Msg
---maybeIntColumn name a =
---  Table.intColumn name (maybeIntToInt << a)
 
 
 paginationControl : Maybe String -> Msg -> String -> Html Msg
@@ -95,6 +85,7 @@ tableConfig =
     columns = [
       manufacturerColumn,
       Table.stringColumn "Model" .model,
+      maybeFloatColumn "Diam" .nominal_diameter inches,
       maybeFloatColumn "Fs" .resonant_frequency hertz,
       maybeFloatColumn "SPL" .sensitivity decibels,
       maybeIntColumn "Z"  .nominal_impedance ohms,

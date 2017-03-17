@@ -14,6 +14,7 @@ driverDecoder = decode Driver
   |> requiredAt [ "manufacturer" ] manufacturerDecoder
   |> required "max_power" (nullable int)
   |> required "model" string
+  |> required "nominal_diameter" (nullable stringToFloat)
   |> required "nominal_impedance" (nullable int)
   |> required "resonant_frequency" (nullable stringToFloat)
   |> required "rms_power" (nullable int)

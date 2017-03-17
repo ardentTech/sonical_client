@@ -10,6 +10,7 @@ type alias Driver = {
   manufacturer : Manufacturer,
   max_power : Maybe Int,
   model : String,
+  nominal_diameter : Maybe Float,
   nominal_impedance : Maybe Int,
   resonant_frequency : Maybe Float,
   rms_power : Maybe Int,
