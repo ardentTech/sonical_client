@@ -92,25 +92,29 @@ paginationInfo model =
 
 
 maybeFloatColumn : String -> (Driver -> Maybe Float) -> String -> Table.Column Driver Msg
-maybeFloatColumn name toData unit=
+maybeFloatColumn name toData unit =
   let
     data = maybeFloatToFloat << toData
+    formatData = (\d -> if d > 0 then (appendUnit d unit) else "-")
+    vData = (\v -> formatData (data v))
   in
     Table.customColumn {
       name = name,
-      viewData = (\v -> appendUnit (data v) unit),
+      viewData = vData,
       sorter = Table.increasingOrDecreasingBy data 
     }
 
 
 maybeIntColumn : String -> (Driver -> Maybe Int) -> String -> Table.Column Driver Msg
-maybeIntColumn name toData unit=
+maybeIntColumn name toData unit =
   let
     data = maybeIntToInt << toData
+    formatData = (\d -> if d > 0 then (appendUnit d unit) else "-")
+    vData = (\v -> formatData (data v))
   in
     Table.customColumn {
       name = name,
-      viewData = (\v -> appendUnit (data v) unit),
+      viewData = vData,
       sorter = Table.increasingOrDecreasingBy data 
     }
 
