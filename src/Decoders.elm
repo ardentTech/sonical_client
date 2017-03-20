@@ -1,4 +1,4 @@
-module Decoders exposing (httpResponseDecoder, driverDecoder, driversDecoder)
+module Decoders exposing (httpResponseListDecoder, driversDecoder)
 
 import Json.Decode exposing (
   Decoder, andThen, at, fail, float, int, list, nullable, string, succeed)
@@ -32,18 +32,23 @@ frequencyResponseDecoder = decode FrequencyResponse
   |> required "upper" (nullable int)
 
 
-httpResponseDecoder : Decoder (ListHttpResponse Driver)
-httpResponseDecoder = decode ListHttpResponse
+httpResponseListDecoder : Decoder (List a) -> Decoder (ListHttpResponse a)
+httpResponseListDecoder listDecoder = decode ListHttpResponse
   |> required "count" int
   |> required "next" (nullable string)
   |> required "previous" (nullable string)
-  |> required "results" driversDecoder
+  |> required "results" listDecoder
 
 
 manufacturerDecoder : Decoder Manufacturer
 manufacturerDecoder = decode Manufacturer
   |> required "name" string
   |> required "website" (nullable string)
+
+
+manufacturersDecoder : Decoder (List Manufacturer)
+manufacturersDecoder =
+  list manufacturerDecoder
 
 
 -- PRIVATE
