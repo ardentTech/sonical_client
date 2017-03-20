@@ -24,11 +24,11 @@ type alias FrequencyResponse = {
 }
 
 
-type alias ListHttpResponse = {
+type alias ListHttpResponse a = {
   count : Int,
   next : Maybe String,
   previous : Maybe String,
-  results : List Driver
+  results : List a
 }
 
 

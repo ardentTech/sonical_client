@@ -32,7 +32,7 @@ frequencyResponseDecoder = decode FrequencyResponse
   |> required "upper" (nullable int)
 
 
-httpResponseDecoder : Decoder ListHttpResponse
+httpResponseDecoder : Decoder (ListHttpResponse Driver)
 httpResponseDecoder = decode ListHttpResponse
   |> required "count" int
   |> required "next" (nullable string)
