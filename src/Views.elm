@@ -1,8 +1,8 @@
 module Views exposing (view)
 
-import Html exposing (Html, button, div, form, h1, input, span, text)
+import Html exposing (Html, button, div, form, h1, input, option, select, span, text)
 import Html.Attributes exposing (class, disabled, id, placeholder, title, type_, value)
-import Html.Events exposing (onClick, onInput, onSubmit)
+import Html.Events exposing (on, onClick, onInput, onSubmit)
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))
@@ -15,17 +15,10 @@ view : Model -> Html Msg
 view model =
   div [ class "row" ] [
     div [ class "col-12" ] [
-      h1 [] [ text "Drivers" ],
-      form [ onSubmit NoOp ] [
-        div [ class "form-group" ] [
-          input [
-              class "form-control",
-              placeholder "Model",
-              onInput QueryInput,
-              type_ "text",
-              value model.driversQuery ] []
-        ]
-      ],
+      h1 [] [ text "Drivers" ]
+    ],
+    div [ class "col-12" ] [
+      filterControls model,
       Table.view tableConfig model.tableState model.drivers
     ], 
     div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
@@ -41,6 +34,25 @@ appendUnit n unit =
   (toString n) ++ " " ++ unit
 
 
+filterControls : Model -> Html Msg
+filterControls model =
+  form [ onSubmit NoOp ] [
+    div [ class "form-group" ] [
+      input [
+          class "form-control",
+          placeholder "Model",
+          onInput QueryInput,
+          type_ "text",
+          value model.driversQuery ] []
+    ],
+    div [ class "form-group" ] [
+      select [
+        class "form-control" ] (List.map (
+          \m -> option [ value m.name ] [ text m.name ]) model.manufacturers)
+    ]
+  ]
+
+
 manufacturerColumn : Table.Column Driver Msg
 manufacturerColumn =
   Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
@@ -48,7 +60,6 @@ manufacturerColumn =
 
 modelColumn : Table.Column Driver Msg
 modelColumn =
---  Table.stringColumn "Model" .model
   Table.veryCustomColumn {
     name = "Model",
     viewData = viewModel,

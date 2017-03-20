@@ -31,6 +31,12 @@ update msg model =
         }, Cmd.none )
       GetDriversDone (Err _) ->
         ( model, Cmd.none )
+      GetManufacturersDone (Ok response) ->
+        ({ model | manufacturers = response.results }, Cmd.none )
+      GetManufacturersDone (Err _) ->
+        ( model, Cmd.none )
+      ManufacturerSelected ->
+        ( model, Cmd.none )
       NextPageClicked ->
         ( model, getDrivers model model.driversNextPage )
       NoOp ->

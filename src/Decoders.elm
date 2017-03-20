@@ -1,4 +1,5 @@
-module Decoders exposing (httpResponseListDecoder, driversDecoder)
+module Decoders exposing (
+  httpResponseListDecoder, driversDecoder, manufacturersDecoder)
 
 import Json.Decode exposing (
   Decoder, andThen, at, fail, float, int, list, nullable, string, succeed)

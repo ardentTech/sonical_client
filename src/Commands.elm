@@ -1,8 +1,8 @@
-module Commands exposing (getDrivers, searchDrivers)
+module Commands exposing (getDrivers, getManufacturers, searchDrivers)
 
-import Api exposing (driversUrl)
-import Decoders exposing (driversDecoder)
-import Messages exposing (Msg (GetDriversDone))
+import Api exposing (driversUrl, manufacturersUrl)
+import Decoders exposing (driversDecoder, manufacturersDecoder)
+import Messages exposing (Msg (GetDriversDone, GetManufacturersDone))
 import Models exposing (Model)
 import Rest exposing (getList)
 
@@ -16,6 +16,14 @@ getDrivers model url =
         Just s -> s
   in
     getList endpoint driversDecoder GetDriversDone
+
+
+getManufacturers : Model -> Cmd Msg
+getManufacturers model =
+  let
+    endpoint = manufacturersUrl model
+  in
+    getList endpoint manufacturersDecoder GetManufacturersDone
 
 
 searchDrivers : Model -> String -> Cmd Msg

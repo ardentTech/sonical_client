@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Html exposing (Html)
 
-import Commands exposing (getDrivers)
+import Commands exposing (getDrivers, getManufacturers)
 import Messages exposing (Msg(..))
 import Models exposing (Driver, Model, defaultModel)
 import Subscriptions exposing (subscriptions)
@@ -18,9 +18,7 @@ init flags =
   let
     model = { defaultModel | apiUrl = flags.apiUrl }
   in
-    (model, Cmd.batch [
-      getDrivers model Nothing
-    ])
+    (model, Cmd.batch [ getDrivers model Nothing, getManufacturers model ])
 
 
 main : Program Flags Model Msg
