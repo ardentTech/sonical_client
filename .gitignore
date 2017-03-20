@@ -1,6 +1,7 @@
 # npm
 node_modules
 .env
+npm-debug.log
 
 # elm
 elm-stuff
