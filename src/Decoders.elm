@@ -32,8 +32,8 @@ frequencyResponseDecoder = decode FrequencyResponse
   |> required "upper" (nullable int)
 
 
-httpResponseDecoder : Decoder HttpResponse
-httpResponseDecoder = decode HttpResponse
+httpResponseDecoder : Decoder ListHttpResponse
+httpResponseDecoder = decode ListHttpResponse
   |> required "count" int
   |> required "next" (nullable string)
   |> required "previous" (nullable string)

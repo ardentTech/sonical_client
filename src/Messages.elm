@@ -4,13 +4,13 @@ import Debounce exposing (Debounce)
 import Http
 import Table
 
-import Models exposing (HttpResponse)
+import Models exposing (ListHttpResponse)
 
 
 type Msg =
   DebounceMsg Debounce.Msg |
   Fail Http.Error |
-  GetDriversDone (Result Http.Error HttpResponse) |
+  GetDriversDone (Result Http.Error ListHttpResponse) |
   NextPageClicked |
   NoOp |
   PrevPageClicked |
