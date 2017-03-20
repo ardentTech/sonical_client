@@ -1,14 +1,9 @@
 module Commands exposing (getDrivers, searchDrivers)
 
-import Endpoints exposing (drivers)
+import Api exposing (driversUrl)
 import Messages exposing (Msg (GetDriversDone))
 import Models exposing (Model)
-import Rest exposing (get)
-
-
-driversUrl : Model -> String
-driversUrl model =
-  model.apiUrl ++ drivers
+import Rest exposing (getList)
 
 
 getDrivers : Model -> Maybe String -> Cmd Msg
@@ -19,7 +14,7 @@ getDrivers model url =
         Nothing -> driversUrl model
         Just s -> s
   in
-    get endpoint GetDriversDone
+    getList endpoint GetDriversDone
 
 
 searchDrivers : Model -> String -> Cmd Msg
