@@ -12,7 +12,7 @@ type Msg =
   Fail Http.Error |
   GetDriversDone (Result Http.Error (ListHttpResponse Driver)) |
   GetManufacturersDone (Result Http.Error (ListHttpResponse Manufacturer)) |
-  ManufacturerSelected |
+  ManufacturerSelected Int |
   NextPageClicked |
   NoOp |
   PrevPageClicked |

@@ -33,6 +33,7 @@ type alias ListHttpResponse a = {
 
 
 type alias Manufacturer = {
+  id : Int,
   name : String,
   website : Maybe String
 }
@@ -47,6 +48,7 @@ type alias Model = {
   driversPreviousPage : Maybe String,
   driversQuery : String,
   manufacturers : List Manufacturer,
+  selectedManufacturer : Maybe Int,
   tableState : Table.State
 }
 
@@ -61,4 +63,5 @@ defaultModel = {
   driversPreviousPage = Nothing,
   driversQuery = "",
   manufacturers = [],
+  selectedManufacturer = Nothing,
   tableState = (Table.initialSort "Manufacturer")}

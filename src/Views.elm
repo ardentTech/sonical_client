@@ -3,6 +3,8 @@ module Views exposing (view)
 import Html exposing (Html, button, div, form, h1, input, option, select, span, text)
 import Html.Attributes exposing (class, disabled, id, placeholder, title, type_, value)
 import Html.Events exposing (on, onClick, onInput, onSubmit)
+import Html.Events.Extra exposing (targetValueIntParse)
+import Json.Decode as Json
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))
@@ -47,8 +49,10 @@ filterControls model =
     ],
     div [ class "form-group" ] [
       select [
-        class "form-control" ] (List.map (
-          \m -> option [ value m.name ] [ text m.name ]) model.manufacturers)
+        class "custom-select",
+        on "change" (Json.map ManufacturerSelected targetValueIntParse) ]
+        (List.map (
+          \m -> option [ value <| toString m.id ] [ text m.name ]) model.manufacturers)
     ]
   ]
 
