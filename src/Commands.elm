@@ -1,4 +1,5 @@
-module Commands exposing (getDrivers, getManufacturers, searchDrivers)
+module Commands exposing (
+  getDrivers, getDriversByManufacturer, getManufacturers, searchDrivers)
 
 import Api exposing (driversUrl, manufacturersUrl)
 import Decoders exposing (driversDecoder, manufacturersDecoder)
@@ -16,6 +17,15 @@ getDrivers model url =
         Just s -> s
   in
     getList endpoint driversDecoder GetDriversDone
+
+
+getDriversByManufacturer : Model -> Int -> Cmd Msg
+getDriversByManufacturer model id =
+  let
+    url = (driversUrl model) ++ "?manufacturer=" ++ (toString id)
+  in
+    getDrivers model (Just url)
+
 
 
 getManufacturers : Model -> Cmd Msg

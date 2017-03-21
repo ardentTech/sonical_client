@@ -51,6 +51,7 @@ filterControls model =
       select [
         class "custom-select",
         on "change" (Json.map ManufacturerSelected targetValueIntParse) ]
+        -- @todo add 'Select Manufacturer' option with no value
         (List.map (
           \m -> option [ value <| toString m.id ] [ text m.name ]) model.manufacturers)
     ]

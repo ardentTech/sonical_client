@@ -2,7 +2,7 @@ module Update exposing (update)
 
 import Debounce exposing (Debounce)
 
-import Commands exposing (getDrivers, searchDrivers)
+import Commands exposing (getDrivers, getDriversByManufacturer, searchDrivers)
 import Config exposing (debounceConfig)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
@@ -36,7 +36,7 @@ update msg model =
       GetManufacturersDone (Err _) ->
         ( model, Cmd.none )
       ManufacturerSelected id ->
-        ({ model | selectedManufacturer = Just id }, Cmd.none )
+        ({ model | selectedManufacturer = Just id }, getDriversByManufacturer model id )
       NextPageClicked ->
         ( model, getDrivers model model.driversNextPage )
       NoOp ->
