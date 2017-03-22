@@ -5,7 +5,7 @@ import Table
 
 
 type alias Driver = {
-  frequency_response : FrequencyResponse,
+  frequency_response : Maybe FrequencyResponse,
   id : Int,
   manufacturer : Manufacturer,
   max_power : Maybe Int,
@@ -19,8 +19,8 @@ type alias Driver = {
 
 
 type alias FrequencyResponse = {
-  lower : Maybe Int,
-  upper : Maybe Int
+  lower : Int,
+  upper : Int
 }
 
 

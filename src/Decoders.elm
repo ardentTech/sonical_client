@@ -10,7 +10,7 @@ import Models exposing (..)
 
 driverDecoder : Decoder Driver
 driverDecoder = decode Driver
-  |> requiredAt [ "frequency_response" ] frequencyResponseDecoder
+  |> requiredAt [ "frequency_response" ] (nullable frequencyResponseDecoder)
   |> required "id" int
   |> requiredAt [ "manufacturer" ] manufacturerDecoder
   |> required "max_power" (nullable int)
@@ -29,8 +29,8 @@ driversDecoder =
 
 frequencyResponseDecoder : Decoder FrequencyResponse
 frequencyResponseDecoder = decode FrequencyResponse
-  |> required "lower" (nullable int)
-  |> required "upper" (nullable int)
+  |> required "lower" int
+  |> required "upper" int
 
 
 httpResponseListDecoder : Decoder (List a) -> Decoder (ListHttpResponse a)
