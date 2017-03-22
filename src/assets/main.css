@@ -7,9 +7,10 @@ body { font-size: .85rem; padding-top: 5rem; }
 h1, h2, h3, h4, h5, h6 { margin-bottom: 1rem; }
 h1 { font-size: 1.85rem; }
 th span { cursor: pointer; }
-.form-control { font-size: inherit; }
+.form-control { font-size: inherit; padding: .6rem .75rem;  }
 .form-control::-webkit-input-placeholder { color: #aaa; }
 .form-control:-moz-placeholder { color: #aaa; }
 .form-control::-moz-placeholder { color: #aaa; }
 .form-control:-ms-input-placeholder { color: #aaa; }
 #pagination-info div { padding-top: 7px; }
+#driver-filter-controls { margin-bottom: 10px; }

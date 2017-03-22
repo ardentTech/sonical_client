@@ -1,7 +1,9 @@
 module Views exposing (view)
 
-import Html exposing (Html, button, div, form, h1, input, option, select, span, text)
-import Html.Attributes exposing (class, disabled, id, placeholder, title, type_, value)
+import Html exposing (
+  Html, button, div, form, h1, input, label, option, select, span, text)
+import Html.Attributes exposing (
+  class, disabled, id, placeholder, title, type_, value)
 import Html.Events exposing (on, onClick, onInput, onSubmit)
 import Html.Events.Extra exposing (targetValueIntParse)
 import Json.Decode as Json
@@ -38,29 +40,34 @@ appendUnit n unit =
 
 filterControls : Model -> Html Msg
 filterControls model =
-  form [ onSubmit NoOp ] [
-    div [ class "form-group" ] [
-      input [
-          class "form-control",
-          placeholder "Model",
-          onInput QueryInput,
-          type_ "text",
-          value model.driversQuery ] []
-    ],
-    div [ class "form-group" ] [
-      select [
-        class "custom-select",
-        on "change" (Json.map ManufacturerSelected targetValueIntParse) ]
-        -- @todo add 'Select Manufacturer' option with no value
-        (List.map (
-          \m -> option [ value <| toString m.id ] [ text m.name ]) model.manufacturers)
-    ]
+  form [ class "form-inline", id "driver-filter-controls", onSubmit NoOp ] [
+    label [ class "sr-only" ] [ text "Model" ],
+    input [
+        class "form-control mb-2 mr-sm-2 mb-sm-0",
+        placeholder "Model",
+        onInput QueryInput,
+        type_ "text",
+        value model.driversQuery ] [],
+    label [ class "sr-only" ] [ text "Manufacturer" ],
+    manufacturerDropdown model
   ]
 
 
 manufacturerColumn : Table.Column Driver Msg
 manufacturerColumn =
   Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
+
+
+manufacturerDropdown : Model -> Html Msg
+manufacturerDropdown model =
+  let
+    options = ( option [] [ text "-- Select Manufacturer --" ] ) :: (List.map (
+      \m -> option [ value <| toString m.id ] [ text m.name ]) model.manufacturers)
+  in
+    select [
+      class "custom-select mb-2 mr-sm-2 mb-sm-0",
+      on "change" (Json.map ManufacturerSelected targetValueIntParse) ]
+    options
 
 
 modelColumn : Table.Column Driver Msg
