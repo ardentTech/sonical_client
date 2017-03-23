@@ -8,7 +8,40 @@ import Models exposing (Model)
 import Rest exposing (getList)
 
 
--- @todo this module sucks. refactor it.
+type alias QueryParam = { key : String, value : String }
+
+
+buildQueryString : List QueryParam -> String
+buildQueryString params =
+  let
+    assemble = \qp -> qp.key ++ "=" ++ qp.value ++ "&"
+  in
+    if not (List.isEmpty params) then
+      String.dropRight 1 ("?" ++ String.concat (List.map assemble params))
+    else
+      ""
+
+
+buildDriverQueryString : Model -> String
+buildDriverQueryString model =
+  buildQueryString (List.filterMap identity (List.map (\f -> f model) [
+    buildManufacturerQueryParam, buildSearchQueryParam]))
+
+
+buildManufacturerQueryParam : Model -> Maybe QueryParam
+buildManufacturerQueryParam model =
+  if model.selectedManufacturer > 0 then
+    Just <| QueryParam "manufacturer" (toString <| model.selectedManufacturer)
+  else
+    Nothing
+
+
+buildSearchQueryParam : Model -> Maybe QueryParam
+buildSearchQueryParam model =
+  if (String.length model.driversQuery) > 0 then
+    Just <| QueryParam "search" model.driversQuery
+  else
+    Nothing
 
 
 getDrivers : Model -> Maybe String -> Cmd Msg
@@ -18,24 +51,14 @@ getDrivers model url =
       case url of
         Nothing -> driversUrl model
         Just s -> s
+    queryParams = buildDriverQueryString model
   in
-    getList endpoint driversDecoder GetDriversDone
+    getList (endpoint ++ queryParams) driversDecoder GetDriversDone
 
 
-getDriversByManufacturer : Model -> Int -> Cmd Msg
-getDriversByManufacturer model id =
-  if id > 0 then
-    let
-      search =
-        case String.length model.driversQuery of
-          0 -> ""
-          _ -> "&search=" ++ model.driversQuery
-      url = (driversUrl model) ++ "?manufacturer=" ++ (toString id) ++ search
-    in
-      getDrivers model (Just url)
-  else
-    Cmd.none
-    -- @todo handle situation where manufacturer id == 0 and there IS a search query
+getDriversByManufacturer : Model -> Cmd Msg
+getDriversByManufacturer model =
+  getDrivers model (Just (driversUrl model))
 
 
 
@@ -48,12 +71,5 @@ getManufacturers model =
 
 
 searchDrivers : Model -> String -> Cmd Msg
-searchDrivers model query =
-  let
-    manufacturer =
-      case model.selectedManufacturer of
-        0 -> ""
-        _ -> "&manufacturer=" ++ (toString model.selectedManufacturer)
-    url = (driversUrl model) ++ "?search=" ++ query ++ manufacturer
-  in
-    getDrivers model (Just url)
+searchDrivers model q =
+  getDrivers model (Just (driversUrl model))

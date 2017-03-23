@@ -36,7 +36,10 @@ update msg model =
       GetManufacturersDone (Err _) ->
         ( model, Cmd.none )
       ManufacturerSelected id ->
-        ({ model | selectedManufacturer = id }, getDriversByManufacturer model id )
+        let
+          myModel = { model | selectedManufacturer = id }
+        in
+          (myModel, getDriversByManufacturer myModel )
       NextPageClicked ->
         ( model, getDrivers model model.driversNextPage )
       NoOp ->
