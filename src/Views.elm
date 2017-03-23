@@ -61,7 +61,7 @@ manufacturerColumn =
 manufacturerDropdown : Model -> Html Msg
 manufacturerDropdown model =
   let
-    options = ( option [] [ text "-- Select Manufacturer --" ] ) :: (List.map (
+    options = ( option [ value "0" ] [ text "-- Select Manufacturer --" ] ) :: (List.map (
       \m -> option [ value <| toString m.id ] [ text m.name ]) model.manufacturers)
   in
     select [

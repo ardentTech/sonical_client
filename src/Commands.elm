@@ -8,6 +8,9 @@ import Models exposing (Model)
 import Rest exposing (getList)
 
 
+-- @todo this module sucks. refactor it.
+
+
 getDrivers : Model -> Maybe String -> Cmd Msg
 getDrivers model url =
   let
@@ -21,10 +24,18 @@ getDrivers model url =
 
 getDriversByManufacturer : Model -> Int -> Cmd Msg
 getDriversByManufacturer model id =
-  let
-    url = (driversUrl model) ++ "?manufacturer=" ++ (toString id)
-  in
-    getDrivers model (Just url)
+  if id > 0 then
+    let
+      search =
+        case String.length model.driversQuery of
+          0 -> ""
+          _ -> "&search=" ++ model.driversQuery
+      url = (driversUrl model) ++ "?manufacturer=" ++ (toString id) ++ search
+    in
+      getDrivers model (Just url)
+  else
+    Cmd.none
+    -- @todo handle situation where manufacturer id == 0 and there IS a search query
 
 
 
@@ -39,6 +50,10 @@ getManufacturers model =
 searchDrivers : Model -> String -> Cmd Msg
 searchDrivers model query =
   let
-    url = (driversUrl model) ++ "?search=" ++ query
+    manufacturer =
+      case model.selectedManufacturer of
+        0 -> ""
+        _ -> "&manufacturer=" ++ (toString model.selectedManufacturer)
+    url = (driversUrl model) ++ "?search=" ++ query ++ manufacturer
   in
     getDrivers model (Just url)
