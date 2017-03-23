@@ -45,7 +45,7 @@ filterControls model =
     input [
         class "form-control mb-2 mr-sm-2 mb-sm-0",
         placeholder "Model",
-        onInput QueryInput,
+        onInput QueryEntered,
         type_ "text",
         value model.driversQuery ] [],
     label [ class "sr-only" ] [ text "Manufacturer" ],
