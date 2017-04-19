@@ -22,6 +22,7 @@ view model =
       h1 [] [ text "Drivers" ]
     ],
     div [ class "col-12" ] [
+      queryStringForm,
       filterControls model,
       Table.view tableConfig model.tableState model.drivers
     ], 
@@ -140,6 +141,29 @@ maybeIntColumn name toData unit =
       viewData = vData,
       sorter = Table.increasingOrDecreasingBy data 
     }
+
+
+queryParamInput : Html Msg
+queryParamInput =
+  let
+    options = [ option [ value "test" ] [ text "TEST" ]]
+  in
+    div [] [
+      input [ class "form-control", type_ "text" ] [],
+      select [ class "custom-select" ] options,
+      input [ class "form-control", type_ "text" ] [],
+      button [ class "btn btn-secondary", type_ "button" ] [ text "X" ]
+    ]
+
+
+queryStringForm : Html Msg
+queryStringForm =
+  let
+    queryParamInputs = [ queryParamInput ]
+  in
+    div [ id "query-builder" ] [
+      form [ class "form-inline" ] queryParamInputs
+    ]
 
 
 tableConfig : Table.Config Driver Msg

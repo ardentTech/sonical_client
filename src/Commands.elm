@@ -9,6 +9,8 @@ import Rest exposing (getList)
 
 
 type alias QueryParam = { key : String, value : String }
+--type alias QueryParam = {
+--  leftOperand : String, operator: String, rightOperand : String }
 
 
 buildQueryString : List QueryParam -> String
