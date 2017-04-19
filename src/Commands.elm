@@ -66,7 +66,7 @@ getManufacturers : Model -> Cmd Msg
 getManufacturers model =
   let
     endpoint = manufacturersUrl model
-    queryParams = buildQueryString([QueryParam "limit" (toString <| 0)])
+    queryParams = buildQueryString([QueryParam "limit" "1000"])
   in
     getList (endpoint ++ queryParams) manufacturersDecoder GetManufacturersDone
 
