@@ -66,8 +66,9 @@ getManufacturers : Model -> Cmd Msg
 getManufacturers model =
   let
     endpoint = manufacturersUrl model
+    queryParams = buildQueryString([QueryParam "limit" (toString <| 0)])
   in
-    getList endpoint manufacturersDecoder GetManufacturersDone
+    getList (endpoint ++ queryParams) manufacturersDecoder GetManufacturersDone
 
 
 searchDrivers : Model -> String -> Cmd Msg
