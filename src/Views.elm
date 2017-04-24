@@ -22,8 +22,8 @@ view model =
       h1 [] [ text "Drivers" ]
     ],
     div [ class "col-12" ] [
-      queryStringForm,
-      filterControls model,
+      queryBuilder,
+--      filterControls model,
       Table.view tableConfig model.tableState model.drivers
     ], 
     div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
@@ -156,8 +156,8 @@ queryParamInput =
     ]
 
 
-queryStringForm : Html Msg
-queryStringForm =
+queryBuilder : Html Msg
+queryBuilder =
   let
     queryParamInputs = [ queryParamInput ]
   in

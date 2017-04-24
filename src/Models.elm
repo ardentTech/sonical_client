@@ -53,6 +53,9 @@ type alias Model = {
 }
 
 
+type alias QueryParam = { leftOperand : String, operator : String,  rightOperand : String }
+
+
 defaultModel : Model
 defaultModel = {
   apiUrl = "",
