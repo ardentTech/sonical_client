@@ -16,5 +16,6 @@ type Msg =
   NextPageClicked |
   NoOp |
   PrevPageClicked |
+  QueryBuilderClearClicked |
   QueryEntered String |
   SetTableState Table.State

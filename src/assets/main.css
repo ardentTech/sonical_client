@@ -14,3 +14,6 @@ th span { cursor: pointer; }
 .form-control:-ms-input-placeholder { color: #aaa; }
 #pagination-info div { padding-top: 7px; }
 #driver-filter-controls { margin-bottom: 10px; }
+#query-builder { margin-bottom: 1rem; }
+#query-builder button.btn-secondary { margin-right: .5rem; }
+.btn { font-size: .85rem; }

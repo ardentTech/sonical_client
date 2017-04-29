@@ -1,7 +1,8 @@
 module Views exposing (view)
 
 import Html exposing (
-  Html, button, div, form, h1, input, label, option, select, span, text)
+  Html, button, div, form, h1, input, label, option, select, span, text,
+  textarea)
 import Html.Attributes exposing (
   class, disabled, id, placeholder, title, type_, value)
 import Html.Events exposing (on, onClick, onInput, onSubmit)
@@ -22,7 +23,7 @@ view model =
       h1 [] [ text "Drivers" ]
     ],
     div [ class "col-12" ] [
-      filterControls model,
+      queryBuilder model,
       Table.view tableConfig model.tableState model.drivers
     ], 
     div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
@@ -140,6 +141,29 @@ maybeIntColumn name toData unit =
       viewData = vData,
       sorter = Table.increasingOrDecreasingBy data 
     }
+
+
+queryBuilder : Model -> Html Msg
+queryBuilder model =
+  div [ id "query-builder" ] [
+    form [ class "clearfix" ] [
+      div [ class "form-group" ] [
+        textarea [
+          class "form-control",
+          placeholder "manufacturer=3",
+          value model.queryBuilderVal ] [ ]
+      ],
+      div [ class "float-right" ] [
+        button [
+            class "btn btn-md btn-secondary",
+            onClick QueryBuilderClearClicked,
+            type_ "button"
+          ] [ text "Clear" ],
+        button [
+          class "btn btn-md btn-primary", type_ "submit" ] [ text "Submit" ]
+      ]
+    ]
+  ]
 
 
 tableConfig : Table.Config Driver Msg

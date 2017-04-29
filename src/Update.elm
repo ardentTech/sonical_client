@@ -46,6 +46,8 @@ update msg model =
         ( model, Cmd.none )
       PrevPageClicked ->
         ( model, getDrivers model model.driversPreviousPage )
+      QueryBuilderClearClicked ->
+        ({ model | queryBuilderVal = "" }, Cmd.none )
       QueryEntered q ->
         let
           (debounce, cmd) = Debounce.push debounceConfig q model.debounce
