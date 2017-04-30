@@ -1,5 +1,5 @@
 module Commands exposing (
-  getDrivers, getDriversByManufacturer, getManufacturers, searchDrivers)
+  getDrivers, getDriversByManufacturer, getManufacturers, queryDrivers, searchDrivers)
 
 import Api exposing (driversUrl, manufacturersUrl)
 import Decoders exposing (driversDecoder, manufacturersDecoder)
@@ -69,6 +69,11 @@ getManufacturers model =
     queryParams = buildQueryString([QueryParam "limit" "1000"])
   in
     getList (endpoint ++ queryParams) manufacturersDecoder GetManufacturersDone
+
+
+queryDrivers : Model -> Cmd Msg
+queryDrivers model =
+  getList (driversUrl model) driversDecoder GetDriversDone
 
 
 searchDrivers : Model -> String -> Cmd Msg

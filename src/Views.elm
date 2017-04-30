@@ -145,7 +145,7 @@ maybeIntColumn name toData unit =
 
 queryBuilder : Model -> Html Msg
 queryBuilder model =
-  div [ id "query-builder" ] [
+  div [ id "query-builder", onSubmit QueryBuilderSubmitted ] [
     form [ class "clearfix" ] [
       div [ class "form-group" ] [
         textarea [

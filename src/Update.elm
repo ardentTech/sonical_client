@@ -2,7 +2,8 @@ module Update exposing (update)
 
 import Debounce exposing (Debounce)
 
-import Commands exposing (getDrivers, getDriversByManufacturer, searchDrivers)
+import Commands exposing (
+  getDrivers, getDriversByManufacturer, queryDrivers, searchDrivers)
 import Config exposing (debounceConfig)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
@@ -48,6 +49,8 @@ update msg model =
         ( model, getDrivers model model.driversPreviousPage )
       QueryBuilderCleared ->
         ({ model | queryBuilderVal = "" }, Cmd.none )
+      QueryBuilderSubmitted ->
+        ( model, queryDrivers model )
       QueryBuilderUpdated val ->
         ({ model | queryBuilderVal = val }, Cmd.none )
       QueryEntered q ->

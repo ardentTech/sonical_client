@@ -17,6 +17,7 @@ type Msg =
   NoOp |
   PrevPageClicked |
   QueryBuilderCleared |
+  QueryBuilderSubmitted |
   QueryBuilderUpdated String |
   QueryEntered String |
   SetTableState Table.State
