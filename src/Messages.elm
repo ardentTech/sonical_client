@@ -4,15 +4,13 @@ import Debounce exposing (Debounce)
 import Http
 import Table
 
-import Models exposing (Driver, ListHttpResponse, Manufacturer)
+import Models exposing (Driver, ListHttpResponse)
 
 
 type Msg =
   DebounceMsg Debounce.Msg |
   Fail Http.Error |
   GetDriversDone (Result Http.Error (ListHttpResponse Driver)) |
-  GetManufacturersDone (Result Http.Error (ListHttpResponse Manufacturer)) |
-  ManufacturerSelected Int |
   NextPageClicked |
   NoOp |
   PrevPageClicked |

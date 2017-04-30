@@ -1,9 +1,9 @@
 module Commands exposing (
-  getDrivers, getDriversByManufacturer, queryDrivers, searchDrivers)
+  getDrivers, queryDrivers, searchDrivers)
 
 import Api exposing (driversUrl)
 import Decoders exposing (driversDecoder, manufacturersDecoder)
-import Messages exposing (Msg (GetDriversDone, GetManufacturersDone))
+import Messages exposing (Msg (GetDriversDone))
 import Models exposing (Model)
 import Rest exposing (getList)
 
@@ -30,15 +30,7 @@ buildQueryString params =
 buildDriverQueryString : Model -> String
 buildDriverQueryString model =
   buildQueryString (List.filterMap identity (List.map (\f -> f model) [
-    buildManufacturerQueryParam, buildSearchQueryParam]))
-
-
-buildManufacturerQueryParam : Model -> Maybe QueryParam
-buildManufacturerQueryParam model =
-  if model.selectedManufacturer > 0 then
-    Just <| QueryParam "manufacturer" (toString <| model.selectedManufacturer)
-  else
-    Nothing
+    buildSearchQueryParam]))
 
 
 buildSearchQueryParam : Model -> Maybe QueryParam
@@ -59,11 +51,6 @@ getDrivers model url =
     queryParams = buildDriverQueryString model
   in
     getList (endpoint ++ queryParams) driversDecoder GetDriversDone
-
-
-getDriversByManufacturer : Model -> Cmd Msg
-getDriversByManufacturer model =
-  getDrivers model (Just (driversUrl model))
 
 
 queryDrivers : Model -> Cmd Msg

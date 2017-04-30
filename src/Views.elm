@@ -39,36 +39,9 @@ appendUnit n unit =
   (toString n) ++ " " ++ unit
 
 
-filterControls : Model -> Html Msg
-filterControls model =
-  form [ class "form-inline", id "driver-filter-controls", onSubmit NoOp ] [
-    label [ class "sr-only" ] [ text "Model" ],
-    input [
-        class "form-control mb-2 mr-sm-2 mb-sm-0",
-        placeholder "Model",
-        onInput QueryEntered,
-        type_ "text",
-        value model.driversQuery ] [],
-    label [ class "sr-only" ] [ text "Manufacturer" ],
-    manufacturerDropdown model
-  ]
-
-
 manufacturerColumn : Table.Column Driver Msg
 manufacturerColumn =
   Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
-
-
-manufacturerDropdown : Model -> Html Msg
-manufacturerDropdown model =
-  let
-    options = ( option [ value "0" ] [ text "-- Select Manufacturer --" ] ) :: (List.map (
-      \m -> option [ value <| toString m.id ] [ text m.name ]) model.manufacturers)
-  in
-    select [
-      class "custom-select mb-2 mr-sm-2 mb-sm-0",
-      on "change" (Json.map ManufacturerSelected targetValueIntParse) ]
-    options
 
 
 modelColumn : Table.Column Driver Msg
