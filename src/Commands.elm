@@ -1,4 +1,4 @@
-module Commands exposing (getDrivers, queryDrivers)
+module Commands exposing (..)
 
 import Api exposing (driversUrl)
 import Decoders exposing (driversDecoder, manufacturersDecoder)
@@ -14,16 +14,26 @@ import Rest exposing (getList)
 type alias QueryParam = { key : String, value : String }
 
 
-getDrivers : Model -> Maybe String -> Cmd Msg
-getDrivers model url =
-  let
-    endpoint =
-      case url of
-        Nothing -> driversUrl model
-        Just s -> s
-    queryParams = ""
-  in
-    getList (endpoint ++ queryParams) driversDecoder GetDriversDone
+getDrivers : Model -> Cmd Msg
+getDrivers model =
+  getList (driversUrl model) driversDecoder GetDriversDone
+
+
+getDriversNextPage : Model -> Cmd Msg
+getDriversNextPage model =
+  getDriversPage model.driversNextPage
+
+
+getDriversPage : Maybe String -> Cmd Msg
+getDriversPage page =
+  case page of
+    Nothing -> Cmd.none
+    Just str -> getList str driversDecoder GetDriversDone
+
+
+getDriversPreviousPage : Model -> Cmd Msg
+getDriversPreviousPage model =
+  getDriversPage model.driversPreviousPage
 
 
 queryDrivers : Model -> Cmd Msg

@@ -1,6 +1,6 @@
 module Update exposing (update)
 
-import Commands exposing (getDrivers, queryDrivers)
+import Commands exposing (..)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 
@@ -20,11 +20,11 @@ update msg model =
       GetDriversDone (Err _) ->
         ( model, Cmd.none )
       NextPageClicked ->
-        ( model, getDrivers model model.driversNextPage )
+        ( model, getDriversNextPage model )
       NoOp ->
         ( model, Cmd.none )
       PrevPageClicked ->
-        ( model, getDrivers model model.driversPreviousPage )
+        ( model, getDriversPreviousPage model )
       QueryBuilderCleared ->
         ({ model | queryBuilderVal = "" }, Cmd.none )
       QueryBuilderSubmitted ->

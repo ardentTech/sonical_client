@@ -6,8 +6,6 @@ import Html exposing (
 import Html.Attributes exposing (
   class, disabled, id, placeholder, title, type_, value)
 import Html.Events exposing (on, onClick, onInput, onSubmit)
-import Html.Events.Extra exposing (targetValueIntParse)
-import Json.Decode as Json
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))

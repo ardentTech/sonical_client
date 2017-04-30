@@ -18,7 +18,7 @@ init flags =
   let
     model = { defaultModel | apiUrl = flags.apiUrl }
   in
-    (model, Cmd.batch [ getDrivers model Nothing ])
+    (model, Cmd.batch [ getDrivers model ])
 
 
 main : Program Flags Model Msg
