@@ -73,7 +73,10 @@ getManufacturers model =
 
 queryDrivers : Model -> Cmd Msg
 queryDrivers model =
-  getList (driversUrl model) driversDecoder GetDriversDone
+  let
+    endpoint = driversUrl model
+  in
+    getList (endpoint ++ model.queryBuilderVal) driversDecoder GetDriversDone
 
 
 searchDrivers : Model -> String -> Cmd Msg
