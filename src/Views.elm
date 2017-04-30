@@ -123,7 +123,7 @@ queryBuilder model =
           class "form-control",
           onInput QueryBuilderUpdated,
           placeholder "manufacturer=3",
-          value model.queryBuilderVal ] [ ]
+          value model.driversQuery ] [ ]
       ],
       div [ class "float-right" ] [
         button [

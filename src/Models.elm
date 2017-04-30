@@ -44,7 +44,7 @@ type alias Model = {
   driversCount : Int,
   driversNextPage : Maybe String,
   driversPreviousPage : Maybe String,
-  queryBuilderVal : String,
+  driversQuery : String,
   tableState : Table.State
 }
 
@@ -56,5 +56,5 @@ defaultModel = {
   driversCount = 0,
   driversNextPage = Nothing,
   driversPreviousPage = Nothing,
-  queryBuilderVal = "",
+  driversQuery = "",
   tableState = (Table.initialSort "Manufacturer")}

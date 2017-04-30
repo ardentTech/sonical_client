@@ -26,10 +26,10 @@ update msg model =
       PrevPageClicked ->
         ( model, getDriversPreviousPage model )
       QueryBuilderCleared ->
-        ({ model | queryBuilderVal = "" }, Cmd.none )
+        ({ model | driversQuery = "" }, Cmd.none )
       QueryBuilderSubmitted ->
         ( model, queryDrivers model )
       QueryBuilderUpdated val ->
-        ({ model | queryBuilderVal = val }, Cmd.none )
+        ({ model | driversQuery = val }, Cmd.none )
       SetTableState newState ->
         ({ model | tableState = newState }, Cmd.none )
