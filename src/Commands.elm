@@ -1,5 +1,4 @@
-module Commands exposing (
-  getDrivers, queryDrivers, searchDrivers)
+module Commands exposing (getDrivers, queryDrivers)
 
 import Api exposing (driversUrl)
 import Decoders exposing (driversDecoder, manufacturersDecoder)
@@ -59,8 +58,3 @@ queryDrivers model =
     endpoint = driversUrl model
   in
     getList (endpoint ++ model.queryBuilderVal) driversDecoder GetDriversDone
-
-
-searchDrivers : Model -> String -> Cmd Msg
-searchDrivers model q =
-  getDrivers model (Just (driversUrl model))

@@ -1,6 +1,6 @@
 module Update exposing (update)
 
-import Commands exposing (getDrivers, queryDrivers, searchDrivers)
+import Commands exposing (getDrivers, queryDrivers)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 
