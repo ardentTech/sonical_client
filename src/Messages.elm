@@ -8,7 +8,6 @@ import Models exposing (Driver, ListHttpResponse)
 
 
 type Msg =
-  DebounceMsg Debounce.Msg |
   Fail Http.Error |
   GetDriversDone (Result Http.Error (ListHttpResponse Driver)) |
   NextPageClicked |
@@ -17,5 +16,4 @@ type Msg =
   QueryBuilderCleared |
   QueryBuilderSubmitted |
   QueryBuilderUpdated String |
-  QueryEntered String |
   SetTableState Table.State
