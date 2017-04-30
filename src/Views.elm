@@ -150,13 +150,14 @@ queryBuilder model =
       div [ class "form-group" ] [
         textarea [
           class "form-control",
+          onInput QueryBuilderUpdated,
           placeholder "manufacturer=3",
           value model.queryBuilderVal ] [ ]
       ],
       div [ class "float-right" ] [
         button [
             class "btn btn-md btn-secondary",
-            onClick QueryBuilderClearClicked,
+            onClick QueryBuilderCleared,
             type_ "button"
           ] [ text "Clear" ],
         button [
