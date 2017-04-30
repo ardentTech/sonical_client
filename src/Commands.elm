@@ -1,11 +1,16 @@
 module Commands exposing (
-  getDrivers, getDriversByManufacturer, getManufacturers, queryDrivers, searchDrivers)
+  getDrivers, getDriversByManufacturer, queryDrivers, searchDrivers)
 
-import Api exposing (driversUrl, manufacturersUrl)
+import Api exposing (driversUrl)
 import Decoders exposing (driversDecoder, manufacturersDecoder)
 import Messages exposing (Msg (GetDriversDone, GetManufacturersDone))
 import Models exposing (Model)
 import Rest exposing (getList)
+
+
+-- @todo convert manufacturer name to id
+-- @todo validate input?
+-- @todo clean this file up
 
 
 type alias QueryParam = { key : String, value : String }
@@ -59,16 +64,6 @@ getDrivers model url =
 getDriversByManufacturer : Model -> Cmd Msg
 getDriversByManufacturer model =
   getDrivers model (Just (driversUrl model))
-
-
-
-getManufacturers : Model -> Cmd Msg
-getManufacturers model =
-  let
-    endpoint = manufacturersUrl model
-    queryParams = buildQueryString([QueryParam "limit" "1000"])
-  in
-    getList (endpoint ++ queryParams) manufacturersDecoder GetManufacturersDone
 
 
 queryDrivers : Model -> Cmd Msg

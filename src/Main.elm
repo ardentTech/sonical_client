@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Html exposing (Html)
 
-import Commands exposing (getDrivers, getManufacturers)
+import Commands exposing (getDrivers)
 import Messages exposing (Msg(..))
 import Models exposing (Driver, Model, defaultModel)
 import Subscriptions exposing (subscriptions)
