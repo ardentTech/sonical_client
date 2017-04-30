@@ -1,6 +1,5 @@
 module Models exposing (..)
 
-import Debounce exposing (Debounce)
 import Table
 
 
@@ -41,12 +40,10 @@ type alias Manufacturer = {
 
 type alias Model = {
   apiUrl : String,
-  debounce : Debounce String,
   drivers : List Driver,
   driversCount : Int,
   driversNextPage : Maybe String,
   driversPreviousPage : Maybe String,
-  driversQuery : String,
   queryBuilderVal : String,
   tableState : Table.State
 }
@@ -55,11 +52,9 @@ type alias Model = {
 defaultModel : Model
 defaultModel = {
   apiUrl = "",
-  debounce = Debounce.init,
   drivers = [],
   driversCount = 0,
   driversNextPage = Nothing,
   driversPreviousPage = Nothing,
-  driversQuery = "",
   queryBuilderVal = "",
   tableState = (Table.initialSort "Manufacturer")}
