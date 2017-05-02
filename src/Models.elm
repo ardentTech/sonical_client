@@ -1,5 +1,6 @@
 module Models exposing (..)
 
+import Navigation exposing (Location)
 import Table
 
 
@@ -46,6 +47,7 @@ type alias Model = {
   driversPreviousPage : Maybe String,
   driversQuery : String,
   errorMessage : String,  -- @todo call this 'error' instead
+  history : List Location,
   tableState : Table.State
 }
 
@@ -59,4 +61,5 @@ defaultModel = {
   driversPreviousPage = Nothing,
   driversQuery = "",
   errorMessage = "",
+  history = [],
   tableState = (Table.initialSort "Manufacturer")}

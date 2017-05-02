@@ -52,3 +52,5 @@ update msg model =
         ({ model | driversQuery = val }, Cmd.none )
       SetTableState newState ->
         ({ model | tableState = newState }, Cmd.none )
+      UrlChange location ->
+        ({ model | history = location :: model.history }, Cmd.none )

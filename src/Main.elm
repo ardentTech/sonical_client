@@ -1,6 +1,6 @@
 module Main exposing (main)
 
-import Html exposing (Html)
+import Navigation exposing (Location, programWithFlags)
 
 import Commands exposing (getDrivers)
 import Messages exposing (Msg(..))
@@ -13,16 +13,16 @@ import Views exposing (view)
 type alias Flags = { apiUrl: String }
 
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
+init : Flags -> Location -> ( Model, Cmd Msg )
+init flags location =
   let
-    model = { defaultModel | apiUrl = flags.apiUrl }
+    model = { defaultModel | apiUrl = flags.apiUrl, history = [ location ] }
   in
     (model, Cmd.batch [ getDrivers model ])
 
 
 main : Program Flags Model Msg
-main = Html.programWithFlags {
+main = programWithFlags UrlChange {
     init = init,
     view = view,
     update = update,

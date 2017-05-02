@@ -2,6 +2,7 @@ module Messages exposing (..)
 
 import Debounce exposing (Debounce)
 import Http
+import Navigation exposing (Location)
 import Table
 
 import Models exposing (Driver, ListHttpResponse)
@@ -17,4 +18,5 @@ type Msg =
   QueryBuilderCleared |
   QueryBuilderSubmitted |
   QueryBuilderUpdated String |
-  SetTableState Table.State
+  SetTableState Table.State |
+  UrlChange Location
