@@ -8,9 +8,6 @@ import Models exposing (Model)
 import Rest exposing (getList)
 
 
-type alias QueryParam = { key : String, value : String }
-
-
 getDrivers : Model -> Cmd Msg
 getDrivers model =
   getList (driversUrl model) driversDecoder GetDriversDone
@@ -31,9 +28,12 @@ getDriversPreviousPage model =
 queryDrivers : Model -> Cmd Msg
 queryDrivers model =
   let
-    endpoint = driversUrl model
+    query =
+      case String.startsWith "?" model.driversQuery of
+        True -> model.driversQuery
+        False -> "?" ++ model.driversQuery
   in
-    getList (endpoint ++ model.driversQuery) driversDecoder GetDriversDone
+    getList ((driversUrl model) ++ query) driversDecoder GetDriversDone
 
 
 -- PRIVATE
