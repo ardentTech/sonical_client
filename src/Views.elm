@@ -1,7 +1,7 @@
 module Views exposing (view)
 
 import Html exposing (
-  Html, button, div, form, h1, input, label, option, select, span, text,
+  Html, button, div, form, h1, input, label, option, select, span, strong, text,
   textarea)
 import Html.Attributes exposing (
   class, disabled, id, placeholder, title, type_, value)
@@ -16,17 +16,29 @@ import Units exposing (decibels, hertz, inches, ohms, watts)
 
 view : Model -> Html Msg
 view model =
-  div [ class "row" ] [
-    div [ class "col-12" ] [
-      h1 [] [ text "Drivers" ]
-    ],
-    div [ class "col-12" ] [
-      queryBuilder model,
-      Table.view tableConfig model.tableState model.drivers
-    ], 
-    div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
-    div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
-    ]
+  let
+    alert =
+      case String.length model.errorMessage > 0 of
+        True ->  div [ class "alert alert-danger" ] [
+            button [ class "close", onClick ErrorDismissed, type_ "button" ] [
+              span [] [ text "×" ]],
+            strong [] [ text "Error! " ],
+            text model.errorMessage
+          ]
+        False -> text ""
+  in
+    div [ class "row" ] [
+      div [ class "col-12" ] [
+        alert,
+        h1 [] [ text "Drivers" ]
+      ],
+      div [ class "col-12" ] [
+        queryBuilder model,
+        Table.view tableConfig model.tableState model.drivers
+      ], 
+      div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
+      div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
+      ]
 
 
 -- PRIVATE

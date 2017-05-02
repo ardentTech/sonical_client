@@ -1,13 +1,32 @@
 module Update exposing (update)
 
+import Http exposing (Error (..))
 import Commands exposing (..)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 
 
+httpErrorString : Error -> String
+httpErrorString error =
+  case error of
+    BadUrl text ->
+      "Bad Url: " ++ text
+    Timeout ->
+      "Http Timeout"
+    NetworkError ->
+      "Network Error"
+    BadStatus response ->
+      "Bad HTTP Status: " ++ toString response.status.code
+    BadPayload message response ->
+      "Bad HTTP Payload: " ++ toString message ++ " (" ++
+      toString response.status.code ++ ")"
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+      ErrorDismissed ->
+        ({ model | errorMessage = "" }, Cmd.none )
       Fail _ ->
         ( model, Cmd.none )
       GetDriversDone (Ok response) ->
@@ -17,8 +36,8 @@ update msg model =
           driversNextPage = response.next,
           driversPreviousPage = response.previous
         }, Cmd.none )
-      GetDriversDone (Err _) ->
-        ( model, Cmd.none )
+      GetDriversDone (Err error) ->
+        ({ model | errorMessage = httpErrorString error }, Cmd.none )
       NextPageClicked ->
         ( model, getDriversNextPage model )
       NoOp ->

@@ -25,6 +25,7 @@ getDriversPreviousPage model =
 
 -- @todo convert manufacturer name to id
 -- @todo validate input?
+-- @todo don't fire requests on empty submit
 queryDrivers : Model -> Cmd Msg
 queryDrivers model =
   let
