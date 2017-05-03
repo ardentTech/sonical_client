@@ -1,12 +1,13 @@
 module Update exposing (update)
 
 import Http exposing (Error (..))
+import Navigation exposing (newUrl)
 import UrlParser exposing (parsePath)
 
 import Commands exposing (..)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
-import Routes exposing (route)
+import Router exposing (route)
 
 
 httpErrorString : Error -> String
@@ -43,6 +44,8 @@ update msg model =
         ({ model | errorMessage = httpErrorString error }, Cmd.none )
       NextPageClicked ->
         ( model, getDriversNextPage model )
+      NewUrl url ->
+        ( model, newUrl url )
       NoOp ->
         ( model, Cmd.none )
       PrevPageClicked ->

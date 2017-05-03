@@ -11,6 +11,7 @@ type Msg =
   ErrorDismissed |
   Fail Http.Error |
   GetDriversDone (Result Http.Error (ListHttpResponse Driver)) |
+  NewUrl String |
   NextPageClicked |
   NoOp |
   PrevPageClicked |

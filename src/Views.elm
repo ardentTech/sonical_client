@@ -1,10 +1,7 @@
 module Views exposing (view)
 
-import Html exposing (
-  Html, button, div, form, h1, input, label, option, select, span, strong, text,
-  textarea)
-import Html.Attributes exposing (
-  class, disabled, id, placeholder, title, type_, value)
+import Html exposing (..)
+import Html.Attributes exposing (..)
 import Html.Events exposing (on, onClick, onInput, onSubmit)
 import Table exposing (defaultCustomizations)
 
@@ -14,6 +11,7 @@ import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
 
 
+-- @todo handle head of model.history and route to subviews!
 view : Model -> Html Msg
 view model =
   let
@@ -29,6 +27,8 @@ view model =
   in
     div [ class "row" ] [
       div [ class "col-12" ] [
+        code [] [ text (toString (List.head model.history)) ],
+        button [ onClick (NewUrl "/drivers/1") ] [ text "DEMO" ],
         alert,
         h1 [] [ text "Drivers" ]
       ],
@@ -129,7 +129,7 @@ maybeIntColumn name toData unit =
 queryBuilder : Model -> Html Msg
 queryBuilder model =
   div [ id "query-builder", onSubmit QueryBuilderSubmitted ] [
-    form [ class "clearfix" ] [
+    Html.form [ class "clearfix" ] [
       div [ class "form-group" ] [
         textarea [
           class "form-control",

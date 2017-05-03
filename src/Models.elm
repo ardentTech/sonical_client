@@ -2,7 +2,7 @@ module Models exposing (..)
 
 import Table
 
-import Routes exposing (Route)
+import Router exposing (Route)
 
 
 type alias Driver = {
