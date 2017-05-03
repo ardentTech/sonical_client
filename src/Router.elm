@@ -1,4 +1,4 @@
-module Router exposing (Route, route)
+module Router exposing (..)
 
 import UrlParser exposing ((</>), Parser, int, map, oneOf, s)
 

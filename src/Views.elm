@@ -11,7 +11,7 @@ import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
 
 
--- @todo handle head of model.history and route to subviews!
+-- @todo need to load specific subview off of model.currentRoute
 view : Model -> Html Msg
 view model =
   let
@@ -27,8 +27,6 @@ view model =
   in
     div [ class "row" ] [
       div [ class "col-12" ] [
-        code [] [ text (toString (List.head model.history)) ],
-        button [ onClick (NewUrl "/drivers/1") ] [ text "DEMO" ],
         alert,
         h1 [] [ text "Drivers" ]
       ],

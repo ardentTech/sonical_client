@@ -59,4 +59,4 @@ update msg model =
       SetTableState newState ->
         ({ model | tableState = newState }, Cmd.none )
       UrlChange location ->
-        ({ model | history = parsePath route location :: model.history }, Cmd.none )
+        ({ model | currentRoute = parsePath route location }, Cmd.none )

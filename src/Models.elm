@@ -2,7 +2,7 @@ module Models exposing (..)
 
 import Table
 
-import Router exposing (Route)
+import Router exposing (Route (DriverList))
 
 
 type alias Driver = {
@@ -42,25 +42,26 @@ type alias Manufacturer = {
 
 type alias Model = {
   apiUrl : String,
+  currentRoute : Maybe Route,
   drivers : List Driver,
   driversCount : Int,
   driversNextPage : Maybe String,
   driversPreviousPage : Maybe String,
   driversQuery : String,
   errorMessage : String,  -- @todo call this 'error' instead
-  history : List (Maybe Route),
   tableState : Table.State
 }
 
 
+-- @todo should be an empty/null model that is populated inside of Main.elm
 defaultModel : Model
 defaultModel = {
   apiUrl = "",
+  currentRoute = Just DriverList,
   drivers = [],
   driversCount = 0,
   driversNextPage = Nothing,
   driversPreviousPage = Nothing,
   driversQuery = "",
   errorMessage = "",
-  history = [],
   tableState = (Table.initialSort "Manufacturer")}
