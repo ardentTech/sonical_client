@@ -1,6 +1,5 @@
 module Messages exposing (..)
 
-import Debounce exposing (Debounce)
 import Http
 import Navigation exposing (Location)
 import Table

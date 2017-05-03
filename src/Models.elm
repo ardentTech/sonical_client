@@ -1,7 +1,8 @@
 module Models exposing (..)
 
-import Navigation exposing (Location)
 import Table
+
+import Routes exposing (Route)
 
 
 type alias Driver = {
@@ -47,7 +48,7 @@ type alias Model = {
   driversPreviousPage : Maybe String,
   driversQuery : String,
   errorMessage : String,  -- @todo call this 'error' instead
-  history : List Location,
+  history : List (Maybe Route),
   tableState : Table.State
 }
 

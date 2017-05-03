@@ -1,9 +1,12 @@
 module Update exposing (update)
 
 import Http exposing (Error (..))
+import UrlParser exposing (parsePath)
+
 import Commands exposing (..)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
+import Routes exposing (route)
 
 
 httpErrorString : Error -> String
@@ -53,4 +56,4 @@ update msg model =
       SetTableState newState ->
         ({ model | tableState = newState }, Cmd.none )
       UrlChange location ->
-        ({ model | history = location :: model.history }, Cmd.none )
+        ({ model | history = parsePath route location :: model.history }, Cmd.none )
