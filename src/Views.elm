@@ -44,7 +44,16 @@ notFound =
 
 driverDetail : Model -> Int -> Html Msg
 driverDetail model id =
-  div [] [ h3 [] [ text "Driver Detail" ]]
+  let
+    txt = case (findDriver model.drivers id) of
+      Just d -> d.manufacturer.name ++ " " ++ d.model
+      Nothing -> "Something went wrong"
+  in
+    div [] [ h3 [] [ text txt ]]
+
+findDriver : List Driver -> Int -> Maybe Driver
+findDriver drivers id =
+  List.head <| List.filter (\d -> d.id == id) drivers
 
 driverList : Model -> Html Msg
 driverList model =
@@ -173,8 +182,8 @@ tableConfig =
     toId = .model,
     toMsg = SetTableState,
     columns = [
-      manufacturerColumn,
       modelColumn,
+      manufacturerColumn,
       maybeFloatColumn "Diam" .nominal_diameter inches,
       maybeFloatColumn "Fs" .resonant_frequency hertz,
       maybeFloatColumn "SPL" .sensitivity decibels,
@@ -188,10 +197,10 @@ tableConfig =
 
 
 viewModel : Driver -> Table.HtmlDetails Msg
-viewModel {model} =
+viewModel {id, model} =
   let
     limit = 30
     txt = (String.left limit model) ++ (if (String.length model > limit) then "..." else "")
   in
-    Table.HtmlDetails [] [
-      span [ title model ] [ text txt ]]
+    Table.HtmlDetails [ class "col-driver-model" ] [
+      a [ onClick (NewUrl ("drivers/" ++ (toString id)))] [ text txt ]]
