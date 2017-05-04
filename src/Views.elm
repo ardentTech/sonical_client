@@ -7,13 +7,23 @@ import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
+import Router exposing (Route(..))
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
 
 
--- @todo need to load specific subview off of model.currentRoute
 view : Model -> Html Msg
 view model =
+  let
+    subView = case model.currentRoute of
+      Just DriverList -> [ text "driver list" ]
+      Just (DriverDetail i) -> [ text "driver detail" ]
+      Nothing -> [ text (toString model.currentRoute) ]
+  in
+    div [] subView
+
+viewz : Model -> Html Msg
+viewz model =
   let
     alert =
       case String.length model.errorMessage > 0 of

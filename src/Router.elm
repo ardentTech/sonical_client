@@ -10,5 +10,5 @@ route : Parser (Route -> a) a
 route =
   oneOf [
     -- @todo might need to use 'top' here...
-    map DriverList (s "drivers"),
-    map DriverDetail (s "drivers" </> int)]
+    map DriverDetail (s "drivers" </> int),
+    map DriverList (s "drivers")]
