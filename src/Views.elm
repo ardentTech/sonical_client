@@ -16,37 +16,46 @@ view : Model -> Html Msg
 view model =
   let
     subView = case model.currentRoute of
-      Just DriverList -> [ text "driver list" ]
-      Just (DriverDetail i) -> [ text "driver detail" ]
-      Nothing -> [ text (toString model.currentRoute) ]
-  in
-    div [] subView
-
-viewz : Model -> Html Msg
-viewz model =
-  let
-    alert =
-      case String.length model.errorMessage > 0 of
-        True ->  div [ class "alert alert-danger" ] [
-            button [ class "close", onClick ErrorDismissed, type_ "button" ] [
-              span [] [ text "×" ]],
-            strong [] [ text "Error! " ],
-            text model.errorMessage
-          ]
-        False -> text ""
+      Just DriverList -> driverList model
+      Just (DriverDetail id) -> driverDetail model id
+      Nothing -> notFound
   in
     div [ class "row" ] [
-      div [ class "col-12" ] [
-        alert,
-        h1 [] [ text "Drivers" ]
-      ],
-      div [ class "col-12" ] [
-        queryBuilder model,
-        Table.view tableConfig model.tableState model.drivers
-      ], 
-      div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
-      div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
-      ]
+      div [ class "col-12" ] [ (alert model), subView ]
+    ]
+
+alert : Model -> Html Msg
+alert model =
+  let
+    markup = case String.length model.errorMessage > 0 of
+      True ->  div [ class "alert alert-danger" ] [
+          button [ class "close", onClick ErrorDismissed, type_ "button" ] [
+            span [] [ text "×" ]],
+          strong [] [ text "Error! " ],
+          text model.errorMessage
+        ]
+      False -> text ""
+  in
+    markup
+
+notFound : Html Msg
+notFound =
+  div [] [ h3 [] [ text "404 Not Found" ]]
+
+driverDetail : Model -> Int -> Html Msg
+driverDetail model id =
+  div [] [ h3 [] [ text "Driver Detail" ]]
+
+driverList : Model -> Html Msg
+driverList model =
+  div [ class "row" ] [
+    div [ class "col-12" ] [
+      queryBuilder model,
+      Table.view tableConfig model.tableState model.drivers
+    ], 
+    div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
+    div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
+  ]
 
 
 -- PRIVATE
