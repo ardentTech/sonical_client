@@ -1,23 +1,26 @@
 module Views.DriverDetail exposing (driverDetail)
 
-import Html exposing (Html, div, h3, text)
+import Html exposing (Html, div, h3, table, tbody, td, text, tr)
 import Html.Attributes exposing (class)
-import Table exposing (defaultCustomizations, stringColumn)
 
 import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
+import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
+import Views.Table exposing (appendUnit)
 import Units exposing (decibels, hertz, inches, ohms, watts)
-import Views.Table exposing (
-  manufacturerColumn, maybeFloatColumn, maybeIntColumn)
 
 driverDetail : Model -> Int -> Html Msg
 driverDetail model id =
   let
-    txt = case (findDriver model.drivers id) of
-      Just d -> d.manufacturer.name ++ " " ++ d.model
-      Nothing -> "Something went wrong"
+    markup = case (findDriver model.drivers id) of
+      Just driver ->
+        div [] [
+          h3 [] [ text (driver.manufacturer.name ++ " " ++ driver.model) ],
+          tableView driver
+        ]
+      Nothing -> div [] []
   in
-    div [] [ h3 [] [ text txt ]]
+    markup
 
 
 -- PRIVATE
@@ -29,22 +32,22 @@ findDriver drivers id =
 
 
 -- @todo add frequency_response
-tableConfig : Table.Config Driver Msg
-tableConfig =
-  Table.customConfig {
-    toId = .model,
-    toMsg = SetTableState,
-    columns = [
-      manufacturerColumn,
-      maybeIntColumn "Max Power" .max_power watts,
-      stringColumn "Model" .model,
-      maybeFloatColumn "Nominal Diameter" .nominal_diameter inches,
-      maybeIntColumn "Nominal Impedance" .nominal_impedance ohms,
-      maybeFloatColumn "Resonant Frequency" .resonant_frequency hertz,
-      maybeFloatColumn "Sensitivity" .sensitivity decibels,
-      maybeIntColumn "RMS Power" .rms_power watts
-    ],
-    customizations = {
-      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
-    }
-  }
+-- @todo refine row generation process
+tableView : Driver -> Html Msg
+tableView driver =
+  table [ class "table table-sm table-striped" ] [
+    tbody [] [
+      row "Manufacturer" driver.manufacturer.name,
+      row "Max Power" (appendUnit (maybeIntToInt driver.max_power) watts),
+      row "Model" driver.model,
+      row "Nominal Diameter" (appendUnit (maybeFloatToFloat driver.nominal_diameter) inches),
+      row "Nominal Impedance" (appendUnit (maybeIntToInt driver.nominal_impedance) ohms),
+      row "Resonant Frequency" (appendUnit (maybeFloatToFloat driver.resonant_frequency) hertz),
+      row "Sensitivity" (appendUnit (maybeFloatToFloat driver.sensitivity) decibels),
+      row "RMS Power" (appendUnit (maybeIntToInt driver.rms_power) watts)
+    ]
+  ]
+
+row : String -> String -> Html Msg
+row label value =
+  tr [] [ td [] [ text label ], td [] [ text value ]]

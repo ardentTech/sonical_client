@@ -1,4 +1,4 @@
-module Views.Table exposing (manufacturerColumn, maybeFloatColumn, maybeIntColumn)
+module Views.Table exposing (appendUnit, manufacturerColumn, maybeFloatColumn, maybeIntColumn)
 
 import Table
 
@@ -36,9 +36,6 @@ maybeIntColumn name toData unit =
       viewData = vData,
       sorter = Table.increasingOrDecreasingBy data 
     }
-
-
--- PRIVATE
 
 
 appendUnit : number -> String -> String
