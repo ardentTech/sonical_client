@@ -1,4 +1,4 @@
-module Views exposing (view)
+module Views.App exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -10,6 +10,7 @@ import Models exposing (Driver, Model)
 import Router exposing (Route(..))
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
+import Views.NotFound exposing (notFound)
 
 
 view : Model -> Html Msg
@@ -37,10 +38,6 @@ alert model =
       False -> text ""
   in
     markup
-
-notFound : Html Msg
-notFound =
-  div [] [ h3 [] [ text "404 Not Found" ]]
 
 driverDetail : Model -> Int -> Html Msg
 driverDetail model id =

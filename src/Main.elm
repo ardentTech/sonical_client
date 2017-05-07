@@ -7,7 +7,7 @@ import Messages exposing (Msg(..))
 import Models exposing (Driver, Model, defaultModel)
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
-import Views exposing (view)
+import Views.App exposing (view)
 
 
 type alias Flags = { apiUrl: String }

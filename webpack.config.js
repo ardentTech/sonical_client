@@ -107,9 +107,11 @@ if (environment === 'development') {
         ],
 
         devServer: {
+            historyApiFallback: true,
             inline: true,
             progress: true,
             stats: 'errors-only'
+//            stats: { colors: true },
         }
     };
 
@@ -151,6 +153,7 @@ if (environment === 'development') {
         ],
 
         devServer: {
+            historyApiFallback: true,
             inline: true,
             progress: true,
             stats: 'errors-only'
