@@ -1,14 +1,15 @@
 module Views.DriverList exposing (driverList)
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (on, onClick, onInput, onSubmit)
+import Html exposing (Html, a, button, div, text, textarea)
+import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
+import Html.Events exposing (onClick, onInput, onSubmit)
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
-import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
+import Views.Table exposing (
+  manufacturerColumn, maybeFloatColumn, maybeIntColumn)
 
 
 driverList : Model -> Html Msg
@@ -24,16 +25,6 @@ driverList model =
 
 
 -- PRIVATE
-
-
-appendUnit : number -> String -> String
-appendUnit n unit =
-  (toString n) ++ " " ++ unit
-
-
-manufacturerColumn : Table.Column Driver Msg
-manufacturerColumn =
-  Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
 
 
 modelColumn : Table.Column Driver Msg
@@ -78,34 +69,6 @@ paginationInfo model =
     div [ class "text-muted" ] [
       text <| "Showing " ++ currentCount ++ " of " ++ totalCount ++ " items"
     ]
-
-
-maybeFloatColumn : String -> (Driver -> Maybe Float) -> String -> Table.Column Driver Msg
-maybeFloatColumn name toData unit =
-  let
-    data = maybeFloatToFloat << toData
-    formatData = (\d -> if d > 0 then (appendUnit d unit) else "-")
-    vData = (\v -> formatData (data v))
-  in
-    Table.customColumn {
-      name = name,
-      viewData = vData,
-      sorter = Table.increasingOrDecreasingBy data 
-    }
-
-
-maybeIntColumn : String -> (Driver -> Maybe Int) -> String -> Table.Column Driver Msg
-maybeIntColumn name toData unit =
-  let
-    data = maybeIntToInt << toData
-    formatData = (\d -> if d > 0 then (appendUnit d unit) else "-")
-    vData = (\v -> formatData (data v))
-  in
-    Table.customColumn {
-      name = name,
-      viewData = vData,
-      sorter = Table.increasingOrDecreasingBy data 
-    }
 
 
 queryBuilder : Model -> Html Msg

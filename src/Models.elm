@@ -17,6 +17,13 @@ type alias Driver = {
   rms_power : Maybe Int,
   sensitivity : Maybe Float
 }
+-- basket_frame, bl_product, compliance_equivalent_volume, cone, cone_surface_area,
+-- dc_resistance, diaphragm_mass_including_airload, driver_product_listings,
+-- electromagnetic_q, in_production, magnet,
+-- max_linear_excursion, mechanical_compliance_of_suspension,
+-- mechanical_q,
+-- surround, voice_coil_diameter, voice_coil_former,
+-- voice_coil_inductance, voice_coil_wire
 
 
 type alias FrequencyResponse = {
