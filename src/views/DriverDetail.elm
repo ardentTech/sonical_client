@@ -6,7 +6,6 @@ import Html.Attributes exposing (class)
 import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
-import Views.Table exposing (appendUnit)
 import Units exposing (decibels, hertz, inches, ohms, watts)
 
 driverDetail : Model -> Int -> Html Msg
@@ -26,10 +25,13 @@ driverDetail model id =
 -- PRIVATE
 
 
+appendUnit : number -> String -> String
+appendUnit n unit =
+  (toString n) ++ " " ++ unit
+
 findDriver : List Driver -> Int -> Maybe Driver
 findDriver drivers id =
   List.head <| List.filter (\d -> d.id == id) drivers
-
 
 -- @todo add frequency_response
 -- @todo refine row generation process
