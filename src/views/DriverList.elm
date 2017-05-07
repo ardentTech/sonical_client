@@ -1,4 +1,4 @@
-module Views.App exposing (view)
+module Views.DriverList exposing (driverList)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -7,53 +7,9 @@ import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
-import Router exposing (Route(..))
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
 
-
-view : Model -> Html Msg
-view model =
-  let
-    subView = case model.currentRoute of
-      Just DriverList -> driverList model
-      Just (DriverDetail id) -> driverDetail model id
-      Nothing -> notFound
-  in
-    div [ class "row" ] [
-      div [ class "col-12" ] [ (alert model), subView ]
-    ]
-
-alert : Model -> Html Msg
-alert model =
-  let
-    markup = case String.length model.errorMessage > 0 of
-      True ->  div [ class "alert alert-danger" ] [
-          button [ class "close", onClick ErrorDismissed, type_ "button" ] [
-            span [] [ text "×" ]],
-          strong [] [ text "Error! " ],
-          text model.errorMessage
-        ]
-      False -> text ""
-  in
-    markup
-
-notFound : Html Msg
-notFound =
-  div [] [ h3 [] [ text "404 Not Found" ]]
-
-driverDetail : Model -> Int -> Html Msg
-driverDetail model id =
-  let
-    txt = case (findDriver model.drivers id) of
-      Just d -> d.manufacturer.name ++ " " ++ d.model
-      Nothing -> "Something went wrong"
-  in
-    div [] [ h3 [] [ text txt ]]
-
-findDriver : List Driver -> Int -> Maybe Driver
-findDriver drivers id =
-  List.head <| List.filter (\d -> d.id == id) drivers
 
 driverList : Model -> Html Msg
 driverList model =

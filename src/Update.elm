@@ -5,7 +5,7 @@ import Navigation exposing (newUrl)
 import UrlParser exposing (parsePath)
 
 import Commands exposing (..)
-import Messages exposing (Msg(..))
+import Messages exposing (Msg (..))
 import Models exposing (Model)
 import Router exposing (route)
 
