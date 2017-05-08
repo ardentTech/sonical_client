@@ -10,14 +10,17 @@ import Models exposing (..)
 
 driverDecoder : Decoder Driver
 driverDecoder = decode Driver
+  |> requiredAt [ "basket_frame" ] (nullable materialDecoder)
   |> required "bl_product" (nullable stringToFloat)
   |> required "compliance_equivalent_volume" (nullable stringToFloat)
+  |> requiredAt [ "cone" ] (nullable materialDecoder)
   |> required "cone_surface_area" (nullable stringToFloat)
   |> required "dc_resistance" (nullable stringToFloat)
   |> required "diaphragm_mass_including_airload" (nullable stringToFloat)
   |> required "electromagnetic_q" (nullable stringToFloat)
   |> requiredAt [ "frequency_response" ] (nullable frequencyResponseDecoder)
   |> required "id" int
+  |> requiredAt [ "magnet" ] (nullable materialDecoder)
   |> requiredAt [ "manufacturer" ] manufacturerDecoder
   |> required "max_linear_excursion" (nullable stringToFloat)
   |> required "max_power" (nullable int)
@@ -29,8 +32,11 @@ driverDecoder = decode Driver
   |> required "resonant_frequency" (nullable stringToFloat)
   |> required "rms_power" (nullable int)
   |> required "sensitivity" (nullable stringToFloat)
+  |> requiredAt [ "surround" ] (nullable materialDecoder)
   |> required "voice_coil_diameter" (nullable stringToFloat)
+  |> requiredAt [ "voice_coil_former" ] (nullable materialDecoder)
   |> required "voice_coil_inductance" (nullable stringToFloat)
+  |> requiredAt [ "voice_coil_wire" ] (nullable materialDecoder)
 
 
 driversDecoder : Decoder (List Driver)
@@ -62,6 +68,12 @@ manufacturerDecoder = decode Manufacturer
 manufacturersDecoder : Decoder (List Manufacturer)
 manufacturersDecoder =
   list manufacturerDecoder
+
+
+materialDecoder : Decoder Material
+materialDecoder = decode Material
+  |> required "id" int
+  |> required "name" string
 
 
 -- PRIVATE

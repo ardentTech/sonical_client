@@ -6,14 +6,17 @@ import Router exposing (Route (DriverList))
 
 
 type alias Driver = {
+  basketFrame : Maybe Material,
   bl_product : Maybe Float,
   compliance_equivalent_volume : Maybe Float,
+  cone : Maybe Material,
   cone_surface_area : Maybe Float,
   dc_resistance : Maybe Float,
   diaphragm_mass_including_airload : Maybe Float,
   electromagnetic_q : Maybe Float,
   frequency_response : Maybe FrequencyResponse,
   id : Int,
+  magnet : Maybe Material,
   manufacturer : Manufacturer,
   max_linear_excursion : Maybe Float,
   max_power : Maybe Int,
@@ -25,8 +28,11 @@ type alias Driver = {
   resonant_frequency : Maybe Float,
   rms_power : Maybe Int,
   sensitivity : Maybe Float,
+  surround : Maybe Material,
   voice_coil_diameter : Maybe Float,
-  voice_coil_inductance : Maybe Float
+  voice_coil_former : Maybe Material,
+  voice_coil_inductance : Maybe Float,
+  voice_coil_wire : Maybe Material
 }
 
 
