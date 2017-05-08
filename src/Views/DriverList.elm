@@ -1,6 +1,6 @@
 module Views.DriverList exposing (driverList)
 
-import Html exposing (Html, a, button, div, text, textarea)
+import Html exposing (Html, a, button, div, p, text, textarea)
 import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Table exposing (defaultCustomizations)
@@ -114,7 +114,10 @@ queryBuilder model =
           class "form-control",
           onInput QueryBuilderUpdated,
           placeholder "manufacturer=3&dc_resistance__gte=4",
-          value model.driversQuery ] [ ]
+          value model.driversQuery ] [ ],
+        p [ class "form-text text-muted" ] [
+          text "Numerical Operators: __gt, __gte, __lt, __lte"
+        ]
       ],
       div [ class "float-right" ] [
         button [

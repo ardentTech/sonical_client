@@ -22,3 +22,5 @@ td.col-driver-model a,
 #pagination-controls button { cursor: pointer; }
 
 td.col-driver-model a:not([href]) { color: #0275d8; }
+
+p.form-text { font-size: .65rem; }
