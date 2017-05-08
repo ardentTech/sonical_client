@@ -113,7 +113,7 @@ queryBuilder model =
         textarea [
           class "form-control",
           onInput QueryBuilderUpdated,
-          placeholder "manufacturer=3",
+          placeholder "manufacturer=3&dc_resistance__gte=4",
           value model.driversQuery ] [ ]
       ],
       div [ class "float-right" ] [

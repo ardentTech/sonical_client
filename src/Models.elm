@@ -6,7 +6,7 @@ import Router exposing (Route (DriverList))
 
 
 type alias Driver = {
-  basketFrame : Maybe Material,
+  basket_frame : Maybe Material,
   bl_product : Maybe Float,
   compliance_equivalent_volume : Maybe Float,
   cone : Maybe Material,
