@@ -204,10 +204,14 @@ if (environment === 'development') {
         },
 
         plugins: [
-            new CopyWebpackPlugin([{
-                from: 'src/assets',
-                to: 'assets'
-            }]),
+            new CopyWebpackPlugin([
+                {
+                    from: 'src/assets',
+                    to: 'assets'
+                }, {
+                    from: "./.htaccess",
+                    to: "./"
+                }]),
             extractCssApp,
             extractCssVendor,
             new UnminifiedWebpackPlugin(),
