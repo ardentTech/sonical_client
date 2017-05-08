@@ -6,24 +6,28 @@ import Router exposing (Route (DriverList))
 
 
 type alias Driver = {
+  bl_product : Maybe Float,
+  compliance_equivalent_volume : Maybe Float,
+  cone_surface_area : Maybe Float,
+  dc_resistance : Maybe Float,
+  diaphragm_mass_including_airload : Maybe Float,
+  electromagnetic_q : Maybe Float,
   frequency_response : Maybe FrequencyResponse,
   id : Int,
   manufacturer : Manufacturer,
+  max_linear_excursion : Maybe Float,
   max_power : Maybe Int,
+  mechanical_compliance_of_suspension : Maybe Float,
+  mechanical_q : Maybe Float,
   model : String,
   nominal_diameter : Maybe Float,
   nominal_impedance : Maybe Int,
   resonant_frequency : Maybe Float,
   rms_power : Maybe Int,
-  sensitivity : Maybe Float
+  sensitivity : Maybe Float,
+  voice_coil_diameter : Maybe Float,
+  voice_coil_inductance : Maybe Float
 }
--- basket_frame, bl_product, compliance_equivalent_volume, cone, cone_surface_area,
--- dc_resistance, diaphragm_mass_including_airload, driver_product_listings,
--- electromagnetic_q, in_production, magnet,
--- max_linear_excursion, mechanical_compliance_of_suspension,
--- mechanical_q,
--- surround, voice_coil_diameter, voice_coil_former,
--- voice_coil_inductance, voice_coil_wire
 
 
 type alias FrequencyResponse = {
@@ -44,6 +48,12 @@ type alias Manufacturer = {
   id : Int,
   name : String,
   website : Maybe String
+}
+
+
+type alias Material = {
+  id : Int,
+  name : String
 }
 
 

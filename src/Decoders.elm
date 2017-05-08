@@ -10,16 +10,27 @@ import Models exposing (..)
 
 driverDecoder : Decoder Driver
 driverDecoder = decode Driver
+  |> required "bl_product" (nullable stringToFloat)
+  |> required "compliance_equivalent_volume" (nullable stringToFloat)
+  |> required "cone_surface_area" (nullable stringToFloat)
+  |> required "dc_resistance" (nullable stringToFloat)
+  |> required "diaphragm_mass_including_airload" (nullable stringToFloat)
+  |> required "electromagnetic_q" (nullable stringToFloat)
   |> requiredAt [ "frequency_response" ] (nullable frequencyResponseDecoder)
   |> required "id" int
   |> requiredAt [ "manufacturer" ] manufacturerDecoder
+  |> required "max_linear_excursion" (nullable stringToFloat)
   |> required "max_power" (nullable int)
+  |> required "mechanical_compliance_of_suspension" (nullable stringToFloat)
+  |> required "mechanical_q" (nullable stringToFloat)
   |> required "model" string
   |> required "nominal_diameter" (nullable stringToFloat)
   |> required "nominal_impedance" (nullable int)
   |> required "resonant_frequency" (nullable stringToFloat)
   |> required "rms_power" (nullable int)
   |> required "sensitivity" (nullable stringToFloat)
+  |> required "voice_coil_diameter" (nullable stringToFloat)
+  |> required "voice_coil_inductance" (nullable stringToFloat)
 
 
 driversDecoder : Decoder (List Driver)
