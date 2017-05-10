@@ -1,6 +1,6 @@
 module Views.DriverDetail exposing (driverDetail)
 
-import Html exposing (Html, div, h3, table, tbody, td, text, tr)
+import Html exposing (Html, div, h3, h5, table, tbody, td, text, tr)
 import Html.Attributes exposing (class)
 
 import Messages exposing (Msg (..))
@@ -59,8 +59,11 @@ formatMaterialName material =
 -- @todo refine row generation process
 tableView : Driver -> Html Msg
 tableView driver =
-  table [ class "table table-sm table-striped" ] [
-    tbody [] [
+  let
+    listings = case driver.driver_product_listings of
+      Just l -> List.map (\dpl -> div [] [ text (dollars ++ (toString dpl.price)) ]) l
+      Nothing -> []
+    rows = [
       row "Basket Frame" (formatMaterialName driver.basket_frame),
       row "BL Product" (appendUnit (maybeFloatToFloat driver.bl_product) tesla_meters),
       row "Compliance Equivalent Volume" (appendUnit (maybeFloatToFloat driver.compliance_equivalent_volume) feet_cubed),
@@ -88,7 +91,17 @@ tableView driver =
       row "Voice Coil Inductance" (appendUnit (maybeFloatToFloat driver.voice_coil_inductance) millihenries),
       row "Voice Coil Wire" (formatMaterialName driver.voice_coil_wire)
     ]
-  ]
+  in
+    div [ class "row" ] [ 
+      div [ class "col-8" ] [
+        table [ class "table table-sm table-striped" ] [ tbody [] rows ]
+      ],
+      div [ class "col-4" ] [
+        h5 [] [ text "Product Listings" ],
+        div [] listings
+      ]
+    ]
+
 
 row : String -> String -> Html Msg
 row label value =

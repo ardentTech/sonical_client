@@ -17,6 +17,7 @@ driverDecoder = decode Driver
   |> required "cone_surface_area" (nullable stringToFloat)
   |> required "dc_resistance" (nullable stringToFloat)
   |> required "diaphragm_mass_including_airload" (nullable stringToFloat)
+  |> requiredAt [ "driver_product_listings" ] (nullable driverProductListingsDecoder)
   |> required "electromagnetic_q" (nullable stringToFloat)
   |> requiredAt [ "frequency_response" ] (nullable frequencyResponseDecoder)
   |> required "id" int
@@ -42,6 +43,18 @@ driverDecoder = decode Driver
 driversDecoder : Decoder (List Driver)
 driversDecoder =
   list driverDecoder
+
+
+driverProductListingDecoder : Decoder DriverProductListing
+driverProductListingDecoder = decode DriverProductListing
+  |> required "path" string
+  |> required "price" stringToFloat
+
+
+
+driverProductListingsDecoder : Decoder (List DriverProductListing)
+driverProductListingsDecoder =
+  list driverProductListingDecoder
 
 
 frequencyResponseDecoder : Decoder FrequencyResponse

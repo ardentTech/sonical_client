@@ -16,6 +16,9 @@ cubed = "^3"
 decibels : String
 decibels = " dB"
 
+dollars : String
+dollars = "$"
+
 feet : String
 feet = " ft"
 
@@ -26,16 +29,16 @@ grams : String
 grams = "g"
 
 hertz : String
-hertz = "  Hz"
+hertz = " Hz"
 
 inches : String
 inches = "\""
 
 millimeters : String
-millimeters = "mm"
+millimeters = " mm"
 
 millimeters_newton : String
-millimeters_newton = "mm/N"
+millimeters_newton = " mm/N"
 
 millihenries : String
 millihenries = " mH"
@@ -47,7 +50,7 @@ squared : String
 squared = "^2"
 
 tesla_meters : String
-tesla_meters = "Tm"
+tesla_meters = " Tm"
 
 watts : String
 watts = " W"

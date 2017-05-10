@@ -13,6 +13,7 @@ type alias Driver = {
   cone_surface_area : Maybe Float,
   dc_resistance : Maybe Float,
   diaphragm_mass_including_airload : Maybe Float,
+  driver_product_listings : Maybe (List DriverProductListing),
   electromagnetic_q : Maybe Float,
   frequency_response : Maybe FrequencyResponse,
   id : Int,
@@ -33,6 +34,12 @@ type alias Driver = {
   voice_coil_former : Maybe Material,
   voice_coil_inductance : Maybe Float,
   voice_coil_wire : Maybe Material
+}
+
+
+type alias DriverProductListing = {
+  path : String,
+  price : Float
 }
 
 
