@@ -38,6 +38,8 @@ view model =
       ]
     ]
 
+
+-- @todo move this to own file
 alert : Model -> Html Msg
 alert model =
   let
