@@ -7,16 +7,17 @@ import Messages exposing (Msg (..))
 import Models exposing (Driver, DriverProductListing, FrequencyResponse, Material, Model)
 import TypeConverters exposing (..)
 import Units exposing (..)
+import Views.NotFound exposing (notFound)
 
 
 driverDetail : Model -> Int -> Html Msg
 driverDetail model id =
   let
-    markup = case (findDriver model.drivers id) of
+    view = case (findDriver model.drivers id) of
       Just driver -> withDriver driver
-      Nothing -> div [] []  -- @todo use alert here?
+      Nothing -> notFound
   in
-    markup
+    view
 
 
 -- PRIVATE
@@ -84,17 +85,6 @@ formatMaterialName material =
     val
 
 
--- @todo refine row generation process
-tableView : Driver -> Html Msg
-tableView driver =
-  let
-    view = case driver.driver_product_listings of
-      Just l -> withProductListings driver l
-      Nothing -> withoutProductListings driver
-  in
-    view
-
-
 row : String -> String -> Html Msg
 row label value =
   tr [] [ td [] [ text label ], td [] [ text value ]]
@@ -102,10 +92,15 @@ row label value =
 
 withDriver : Driver -> Html Msg
 withDriver driver =
-  div [] [
-    h3 [] [ text (driver.manufacturer.name ++ " " ++ driver.model) ],
-    tableView driver
-  ]
+  let
+    view = case driver.driver_product_listings of
+      Just l -> withProductListings driver l
+      Nothing -> withoutProductListings driver
+  in
+    div [] [
+      h3 [] [ text (driver.manufacturer.name ++ " " ++ driver.model) ],
+      view
+    ]
 
 
 withProductListings : Driver -> List DriverProductListing -> Html Msg
