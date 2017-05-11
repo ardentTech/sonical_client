@@ -14,7 +14,7 @@ driverDetail model id =
   let
     markup = case (findDriver model.drivers id) of
       Just driver -> withDriver driver
-      Nothing -> div [] []  -- @todo use alert here
+      Nothing -> div [] []  -- @todo use alert here?
   in
     markup
 

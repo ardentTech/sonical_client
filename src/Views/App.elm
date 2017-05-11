@@ -7,6 +7,7 @@ import Html.Events exposing (onClick)
 import Messages exposing (Msg (ErrorDismissed, NewUrl))
 import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList))
+import Views.Alert exposing (alert)
 import Views.NotFound exposing (notFound)
 import Views.DriverDetail exposing (driverDetail)
 import Views.DriverList exposing (driverList)
@@ -37,19 +38,3 @@ view model =
         ]
       ]
     ]
-
-
--- @todo move this to own file
-alert : Model -> Html Msg
-alert model =
-  let
-    markup = case String.length model.errorMessage > 0 of
-      True ->  div [ class "alert alert-danger" ] [
-          button [ class "close", onClick ErrorDismissed, type_ "button" ] [
-            span [] [ text "×" ]],
-          strong [] [ text "Error! " ],
-          text model.errorMessage
-        ]
-      False -> text ""
-  in
-    markup
