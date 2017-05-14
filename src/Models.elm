@@ -87,7 +87,7 @@ type alias Model = {
 defaultModel : Model
 defaultModel = {
   apiUrl = "",
-  currentRoute = Just DriverList,
+  currentRoute = Nothing,
   drivers = [],
   driversCount = 0,
   driversNextPage = Nothing,

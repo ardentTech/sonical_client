@@ -16,11 +16,9 @@ import Views.DriverList exposing (driverList)
 view : Model -> Html Msg
 view model =
   let
-    copyright = "© 2017 Ardent TechniCreative"
     subView = case model.currentRoute of
-      Just DriverList -> driverList model
-      Just (DriverDetail id) -> driverDetail model id
-      Nothing -> notFound
+      Just route -> routeToView route model
+      Nothing -> notFound  -- @todo should be "invalid URL" something...
   in
     div [] [
       nav [ class "navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top" ] [
@@ -33,8 +31,17 @@ view model =
         hr [] [],
         footer [] [
           p [ class "float-right text-muted" ] [
-            small [] [ text copyright ]
+            small [] [ text "© 2017 Ardent TechniCreative" ]
           ]   
         ]
       ]
     ]
+
+
+-- PRIVATE
+
+routeToView : Route -> Model -> Html Msg
+routeToView route model =
+  case route of
+    DriverList -> driverList model
+    DriverDetail id -> driverDetail model id
