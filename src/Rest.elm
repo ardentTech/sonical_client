@@ -4,10 +4,10 @@ import Http
 import Json.Decode exposing (Decoder)
 import Result exposing (Result)
 
-import Decoders exposing (httpResponseListDecoder)
-import Models exposing (ListHttpResponse)
+import Decoders exposing (httpListResponseDecoder)
+import Models exposing (HttpListResponse)
 
 
-getList : String -> Decoder (List a) -> (Result Http.Error (ListHttpResponse a) -> b) -> Cmd b
+getList : String -> Decoder (List a) -> (Result Http.Error (HttpListResponse a) -> b) -> Cmd b
 getList url listDecoder resultToMsg =
-  Http.send resultToMsg <| Http.get url (httpResponseListDecoder listDecoder)
+  Http.send resultToMsg <| Http.get url (httpListResponseDecoder listDecoder)

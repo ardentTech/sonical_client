@@ -4,13 +4,13 @@ import Http
 import Navigation exposing (Location)
 import Table
 
-import Models exposing (Driver, ListHttpResponse)
+import Models exposing (Driver, HttpListResponse)
 
 
 type Msg =
   ErrorDismissed |
   Fail Http.Error |
-  GetDriversDone (Result Http.Error (ListHttpResponse Driver)) |
+  GetDriversDone (Result Http.Error (HttpListResponse Driver)) |
   NewUrl String |
   NextPageClicked |
   NoOp |

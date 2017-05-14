@@ -49,7 +49,7 @@ type alias FrequencyResponse = {
 }
 
 
-type alias ListHttpResponse a = {
+type alias HttpListResponse a = {
   count : Int,
   next : Maybe String,
   previous : Maybe String,
