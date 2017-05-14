@@ -15,19 +15,28 @@ import Views.App exposing (view)
 type alias Flags = { apiUrl: String }
 
 
-init : Flags -> Location -> ( Model, Cmd Msg )
-init flags location =
-  let
-    model = { defaultModel |
-      apiUrl = flags.apiUrl,
-      currentRoute = parsePath route location }
-  in
-    (model, Cmd.batch [ getDrivers model ])
-
-
 main : Program Flags Model Msg
 main = programWithFlags UrlChange {
     init = init,
     view = view,
     update = update,
     subscriptions = subscriptions }
+
+
+-- PRIVATE
+
+
+init : Flags -> Location -> ( Model, Cmd Msg )
+init flags location =
+  let
+    model = { defaultModel |
+      apiUrl = flags.apiUrl,
+      currentRoute = parsePath route location }
+    cmd = routeToCmd model
+  in
+    (model, cmd)
+
+
+routeToCmd : Model -> Cmd Msg
+routeToCmd model =
+  getDrivers model

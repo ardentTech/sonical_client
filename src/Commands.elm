@@ -10,7 +10,7 @@ import Rest exposing (getList)
 
 getDrivers : Model -> Cmd Msg
 getDrivers model =
-  getList (driversUrl model) driversDecoder GetDriversDone
+  getDriversPage (Just (driversUrl model))
 
 
 getDriversNextPage : Model -> Cmd Msg
