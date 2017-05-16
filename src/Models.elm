@@ -5,6 +5,12 @@ import Table
 import Router exposing (Route (DriverList))
 
 
+type alias Dealer = {
+  name : String,
+  website : String
+}
+
+
 type alias Driver = {
   basket_frame : Maybe Material,
   bl_product : Maybe Float,
@@ -38,6 +44,7 @@ type alias Driver = {
 
 
 type alias DriverProductListing = {
+  dealer : Dealer,
   path : String,
   price : Float
 }

@@ -8,6 +8,12 @@ import Json.Decode.Pipeline exposing (decode, required, requiredAt)
 import Models exposing (..)
 
 
+dealerDecoder : Decoder Dealer
+dealerDecoder = decode Dealer
+  |> required "name" string
+  |> required "website" string
+
+
 driverDecoder : Decoder Driver
 driverDecoder = decode Driver
   |> requiredAt [ "basket_frame" ] (nullable materialDecoder)
@@ -47,6 +53,7 @@ driversDecoder =
 
 driverProductListingDecoder : Decoder DriverProductListing
 driverProductListingDecoder = decode DriverProductListing
+  |> requiredAt [ "dealer" ] dealerDecoder
   |> required "path" string
   |> required "price" stringToFloat
 

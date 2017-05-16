@@ -1,7 +1,7 @@
 module Views.DriverDetail exposing (driverDetail)
 
-import Html exposing (Html, div, h3, h5, table, tbody, td, text, tr)
-import Html.Attributes exposing (class)
+import Html exposing (Html, a, div, h3, h5, table, tbody, td, text, tr)
+import Html.Attributes exposing (class, href, target)
 
 import Messages exposing (Msg (..))
 import Models exposing (Driver, DriverProductListing, FrequencyResponse, Material, Model)
@@ -85,6 +85,17 @@ formatMaterialName material =
     val
 
 
+productListingRows : List DriverProductListing -> List (Html Msg)
+productListingRows listings =
+  let
+    toDealer = \l -> [ a [ 
+      href (l.dealer.website ++ l.path), target "_blank" ] [
+      text (l.dealer.name)]]
+    toPrice = \l -> [ text (dollars ++ (toString l.price))]
+  in
+    List.map (\l -> tr [] [ td [] (toPrice l), td [] (toDealer l)]) listings
+
+
 row : String -> String -> Html Msg
 row label value =
   tr [] [ td [] [ text label ], td [] [ text value ]]
@@ -105,18 +116,16 @@ withDriver driver =
 
 withProductListings : Driver -> List DriverProductListing -> Html Msg
 withProductListings driver productListings =
-  let
-    listings = List.map (\dpl -> div [] [ text (dollars ++ (toString dpl.price)) ]) productListings
-  in
-    div [ class "row" ] [ 
-      div [ class "col-8" ] [
-        table [ class "table table-sm table-striped" ] [ tbody [] (driverRows driver) ]
-      ],
-      div [ class "col-4" ] [
-        h5 [] [ text "Product Listings" ],
-        div [] listings
-      ]
+  div [ class "row" ] [ 
+    div [ class "col-8" ] [
+      table [ class "table table-sm table-striped" ] [ tbody [] (driverRows driver) ]
+    ],
+    div [ class "col-4" ] [
+      h5 [] [ text "Product Listings" ],
+      table [ class "table table-sm table-striped" ] [ tbody [] (
+        productListingRows productListings) ]
     ]
+  ]
 
 
 withoutProductListings : Driver -> Html Msg
