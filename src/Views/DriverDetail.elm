@@ -7,13 +7,14 @@ import Messages exposing (Msg (..))
 import Models exposing (Driver, DriverProductListing, FrequencyResponse, Material, Model)
 import TypeConverters exposing (..)
 import Units exposing (..)
+import Views.Loading exposing (loading)
 
 
 driverDetail : Model -> Html Msg
 driverDetail model =
   case model.driver of
     Just d -> withDriver d
-    Nothing -> div [] [ h3 [] [ text "Loading..." ]]
+    Nothing -> loading
 
 
 -- PRIVATE
