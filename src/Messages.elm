@@ -4,7 +4,8 @@ import Http
 import Navigation exposing (Location)
 import Table
 
-import Models exposing (Driver, HttpListResponse)
+import Models exposing (Driver)
+import Rest exposing (HttpListResponse)
 
 
 type Msg =

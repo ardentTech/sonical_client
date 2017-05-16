@@ -56,14 +56,6 @@ type alias FrequencyResponse = {
 }
 
 
-type alias HttpListResponse a = {
-  count : Int,
-  next : Maybe String,
-  previous : Maybe String,
-  results : List a
-}
-
-
 type alias Manufacturer = {
   id : Int,
   name : String,
