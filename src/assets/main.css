@@ -1,5 +1,4 @@
 body { font-size: .85rem; padding-top: 5rem; }
-.navbar-brand { font-size: 1rem; padding: 0; text-transform: uppercase; }
 #pagination-controls button:disabled { cursor: default; }
 #pagination-info { font-size: .7rem; }
 .text-muted { color: #aaa!important; }
@@ -24,3 +23,6 @@ td.col-driver-model a,
 td.col-driver-model a:not([href]) { color: #0275d8; }
 
 p.form-text { font-size: .65rem; }
+
+.navbar-brand { font-size: 1rem; padding: 0; text-transform: uppercase; }
+a.navbar-brand:not([href]):not([tabindex]) { color: #fff; cursor: pointer; }

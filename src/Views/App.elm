@@ -20,7 +20,7 @@ view model =
   in
     div [] [
       nav [ class "navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top" ] [
-        a [ class "navbar-brand", href "/", onClick (NewUrl "/") ] [ text "Sonical" ]
+        a [ class "navbar-brand", onClick (NewUrl "/") ] [ text "Sonical" ]
       ],
       div [ class "container" ] [
         div [ class "row" ] [
