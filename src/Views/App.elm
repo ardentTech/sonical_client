@@ -16,9 +16,7 @@ import Views.DriverList exposing (driverList)
 view : Model -> Html Msg
 view model =
   let
-    subView = case model.currentRoute of
-      Just route -> routeToView route model
-      Nothing -> notFound  -- @todo should be "invalid URL" something...
+    subView = routeToView model.currentRoute model
   in
     div [] [
       nav [ class "navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top" ] [
@@ -40,8 +38,9 @@ view model =
 
 -- PRIVATE
 
-routeToView : Route -> Model -> Html Msg
+routeToView : Maybe Route -> Model -> Html Msg
 routeToView route model =
   case route of
-    DriverList -> driverList model
-    DriverDetail id -> driverDetail model id
+    Just (DriverDetail i) -> driverDetail model
+    Just DriverList -> driverList model
+    Nothing -> notFound  -- @todo should be "invalid URL" something...

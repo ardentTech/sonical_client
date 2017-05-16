@@ -159,4 +159,5 @@ viewModel {id, model} =
     txt = (String.left limit model) ++ (if (String.length model > limit) then "..." else "")
   in
     Table.HtmlDetails [ class "col-driver-model" ] [
+      -- @todo doesn't load the driver detail
       a [ onClick (NewUrl ("drivers/" ++ (toString id)))] [ text txt ]]

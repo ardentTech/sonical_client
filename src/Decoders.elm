@@ -1,5 +1,5 @@
 module Decoders exposing (
-  driversDecoder, manufacturersDecoder)
+  driverDecoder, driversDecoder, manufacturersDecoder)
 
 import Json.Decode exposing (
   Decoder, andThen, at, fail, float, int, list, nullable, string, succeed)

@@ -72,6 +72,7 @@ type alias Material = {
 type alias Model = {
   apiUrl : String,
   currentRoute : Maybe Route,
+  driver : Maybe Driver,
   drivers : List Driver,
   driversCount : Int,
   driversNextPage : Maybe String,
@@ -82,11 +83,13 @@ type alias Model = {
 }
 
 
+-- @todo nest driver/s inside a datastore type or something
 -- @todo should be an empty/null model that is populated inside of Main.elm
 defaultModel : Model
 defaultModel = {
   apiUrl = "",
   currentRoute = Nothing,
+  driver = Nothing,
   drivers = [],
   driversCount = 0,
   driversNextPage = Nothing,

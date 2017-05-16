@@ -3,7 +3,7 @@ module Main exposing (main)
 import Navigation exposing (Location, programWithFlags)
 import UrlParser exposing (parsePath)
 
-import Commands exposing (getDrivers)
+import Commands exposing (routeToCmd)
 import Messages exposing (Msg(..))
 import Models exposing (Driver, Model, defaultModel)
 import Router exposing (route)
@@ -35,8 +35,3 @@ init flags location =
     cmd = routeToCmd model
   in
     (model, cmd)
-
-
-routeToCmd : Model -> Cmd Msg
-routeToCmd model =
-  getDrivers model

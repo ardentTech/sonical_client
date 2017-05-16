@@ -11,6 +11,7 @@ import Rest exposing (HttpListResponse)
 type Msg =
   ErrorDismissed |
   Fail Http.Error |
+  GetDriverDone (Result Http.Error Driver) |
   GetDriversDone (Result Http.Error (HttpListResponse Driver)) |
   NewUrl String |
   NextPageClicked |

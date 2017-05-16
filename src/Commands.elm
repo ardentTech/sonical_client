@@ -1,11 +1,20 @@
 module Commands exposing (
-  getDrivers, getDriversNextPage, getDriversPreviousPage, queryDrivers)
+  getDrivers, getDriversNextPage, getDriversPreviousPage, queryDrivers, routeToCmd)
 
-import Api exposing (driversUrl)
-import Decoders exposing (driversDecoder, manufacturersDecoder)
-import Messages exposing (Msg (GetDriversDone))
+import Api exposing (driverUrl, driversUrl)
+import Decoders exposing (driverDecoder, driversDecoder, manufacturersDecoder)
+import Messages exposing (Msg (GetDriverDone, GetDriversDone))
 import Models exposing (Model)
-import Rest exposing (getList)
+import Rest exposing (getItem, getList)
+import Router exposing (Route (DriverDetail, DriverList))
+
+
+getDriver : Model -> Int -> Cmd Msg
+getDriver model i =
+  let
+    url = driverUrl model i
+  in
+    getItem url driverDecoder GetDriverDone
 
 
 getDrivers : Model -> Cmd Msg
@@ -35,6 +44,14 @@ queryDrivers model =
         False -> "?" ++ model.driversQuery
   in
     getList ((driversUrl model) ++ query) driversDecoder GetDriversDone
+
+
+routeToCmd : Model -> Cmd Msg
+routeToCmd model =
+  case model.currentRoute of
+    Nothing -> Cmd.none
+    Just DriverList -> getDrivers model
+    Just (DriverDetail i) -> getDriver model i
 
 
 -- PRIVATE

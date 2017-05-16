@@ -33,6 +33,10 @@ update msg model =
         ({ model | errorMessage = "" }, Cmd.none )
       Fail _ ->
         ( model, Cmd.none )
+      GetDriverDone (Ok driver) ->
+        ({ model | driver = Just driver }, Cmd.none )
+      GetDriverDone (Err error) ->
+        ({ model | errorMessage = httpErrorString error }, Cmd.none )
       GetDriversDone (Ok response) ->
         ({ model |
           drivers = response.results,

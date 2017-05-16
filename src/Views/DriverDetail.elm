@@ -10,14 +10,11 @@ import Units exposing (..)
 import Views.NotFound exposing (notFound)
 
 
-driverDetail : Model -> Int -> Html Msg
-driverDetail model id =
-  let
-    view = case (findDriver model.drivers id) of
-      Just driver -> withDriver driver
-      Nothing -> notFound
-  in
-    view
+driverDetail : Model -> Html Msg
+driverDetail model =
+  case model.driver of
+    Just d -> withDriver d
+    Nothing -> notFound
 
 
 -- PRIVATE
