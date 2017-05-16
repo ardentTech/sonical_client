@@ -7,14 +7,13 @@ import Messages exposing (Msg (..))
 import Models exposing (Driver, DriverProductListing, FrequencyResponse, Material, Model)
 import TypeConverters exposing (..)
 import Units exposing (..)
-import Views.NotFound exposing (notFound)
 
 
 driverDetail : Model -> Html Msg
 driverDetail model =
   case model.driver of
     Just d -> withDriver d
-    Nothing -> notFound
+    Nothing -> div [] [ h3 [] [ text "Loading..." ]]
 
 
 -- PRIVATE

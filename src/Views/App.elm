@@ -8,7 +8,6 @@ import Messages exposing (Msg (ErrorDismissed, NewUrl))
 import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList))
 import Views.Alert exposing (alert)
-import Views.NotFound exposing (notFound)
 import Views.DriverDetail exposing (driverDetail)
 import Views.DriverList exposing (driverList)
 
@@ -43,4 +42,4 @@ routeToView route model =
   case route of
     Just (DriverDetail i) -> driverDetail model
     Just DriverList -> driverList model
-    Nothing -> notFound  -- @todo should be "invalid URL" something...
+    Nothing -> div [] [ h3 [] [ text "Invalid URL" ]]
