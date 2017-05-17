@@ -1,6 +1,7 @@
 module Views.QueryBuilder exposing (queryBuilder)
 
-import Html exposing (Html, button, div, h5, table, tbody, td, text, textarea, th, thead, tr)
+import Html exposing (
+  Html, button, div, h5, table, tbody, td, text, textarea, th, thead, tr)
 import Html.Attributes exposing (class, id, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 
@@ -37,37 +38,49 @@ queryBuilder model =
 -- PRIVATE
 
 
+-- @todo more efficient way to build operator lists
+-- @todo more efficient way to assign operator lists to row configs
+-- @todo new type for row config
 queryBuilderHelp : Html Msg
 queryBuilderHelp =
   let
+    contains = "__contains" ++ eq
+    eq = "="
     float = "Float"
+    gt = "__gt" ++ eq
+    gte = "__gte" ++ eq
+    icontains = "__icontains" ++ eq
     integer = "Integer"
+    lt = "__lt" ++ eq
+    lte = "__lte" ++ eq
+    numerical_operators = String.join ", " [eq, gt, gte, lt, lte]
     string = "String"
+    string_operators = String.join ", " [eq, contains, icontains]
     rows = [
-      ["bl_product", float],
-      ["compliance_equivalent_volume", float],
-      ["cone_surface_area", float],
-      ["dc_resistance", float],
-      ["diaphragm_mass_including_airload", float],
-      ["electromagnetic_q", float],
-      ["max_linear_excursion", float],
-      ["max_power", integer],
-      ["mechanical_compliance_of_suspension", float],
-      ["mechanical_q", float],
-      ["model", string],
-      ["nominal_diameter", float],
-      ["nominal_impedance", integer],
-      ["resonant_frequency", float],
-      ["rms_power", integer],
-      ["sensitivity", float],
-      ["voice_coil_diameter", float],
-      ["voice_coil_inductance", float]
+      ["bl_product", numerical_operators, float],
+      ["compliance_equivalent_volume", numerical_operators, float],
+      ["cone_surface_area", numerical_operators, float],
+      ["dc_resistance", numerical_operators, float],
+      ["diaphragm_mass_including_airload", numerical_operators, float],
+      ["electromagnetic_q", numerical_operators, float],
+      ["max_linear_excursion", numerical_operators, float],
+      ["max_power", numerical_operators, integer],
+      ["mechanical_compliance_of_suspension", numerical_operators, float],
+      ["mechanical_q", numerical_operators, float],
+      ["model", string_operators, string],
+      ["nominal_diameter", numerical_operators, float],
+      ["nominal_impedance", numerical_operators, integer],
+      ["resonant_frequency", numerical_operators, float],
+      ["rms_power", numerical_operators, integer],
+      ["sensitivity", numerical_operators, float],
+      ["voice_coil_diameter", numerical_operators, float],
+      ["voice_coil_inductance", numerical_operators, float]
     ]
   in
     div [ class "row" ] [
       div [ class "col-12" ] [
         table [ class "table table-sm table-striped" ] [
-          thead [] [ tr [] [ th [] [ text "Name" ], th [] [ text "Type" ]] ],
+          thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Comparison Operators", "Type"])],
           tbody [] (List.map (\r -> tr [] (List.map (\rd -> td [] [ text rd ]) r)) rows)
         ]
       ]
