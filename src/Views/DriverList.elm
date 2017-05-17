@@ -1,14 +1,15 @@
 module Views.DriverList exposing (driverList)
 
-import Html exposing (Html, a, button, div, p, text, textarea)
+import Html exposing (Html, a, button, div, text)
 import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
-import Html.Events exposing (onClick, onInput, onSubmit)
+import Html.Events exposing (onClick)
 import Table exposing (defaultCustomizations)
 
 import Messages exposing (Msg (..))
 import Models exposing (Driver, Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
+import Views.QueryBuilder exposing (queryBuilder)
 
 
 driverList : Model -> Html Msg
@@ -103,33 +104,6 @@ paginationInfo model =
     div [ class "text-muted" ] [
       text <| "Showing " ++ currentCount ++ " of " ++ totalCount ++ " items"
     ]
-
-
-queryBuilder : Model -> Html Msg
-queryBuilder model =
-  div [ id "query-builder", onSubmit QueryBuilderSubmitted ] [
-    Html.form [ class "clearfix" ] [
-      div [ class "form-group" ] [
-        textarea [
-          class "form-control",
-          onInput QueryBuilderUpdated,
-          placeholder "manufacturer=3&dc_resistance__gte=4",
-          value model.driversQuery ] [ ],
-        p [ class "form-text text-muted" ] [
-          text "Numerical Operators: __gt, __gte, __lt, __lte"
-        ]
-      ],
-      div [ class "float-right" ] [
-        button [
-            class "btn btn-md btn-secondary",
-            onClick QueryBuilderCleared,
-            type_ "button"
-          ] [ text "Clear" ],
-        button [
-          class "btn btn-md btn-primary", type_ "submit" ] [ text "Submit" ]
-      ]
-    ]
-  ]
 
 
 tableConfig : Table.Config Driver Msg
