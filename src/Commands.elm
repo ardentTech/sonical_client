@@ -12,14 +12,14 @@ import Router exposing (Route (DriverDetail, DriverList))
 getDriver : Model -> Int -> Cmd Msg
 getDriver model i =
   let
-    url = driverUrl model i
+    url = driverUrl model.apiUrl i
   in
     getItem url driverDecoder GetDriverDone
 
 
 getDrivers : Model -> Cmd Msg
 getDrivers model =
-  getDriversPage (Just (driversUrl model))
+  getDriversPage (Just (driversUrl model.apiUrl))
 
 
 getDriversNextPage : Model -> Cmd Msg
@@ -43,7 +43,7 @@ queryDrivers model =
         True -> model.driversQuery
         False -> "?" ++ model.driversQuery
   in
-    getList ((driversUrl model) ++ query) driversDecoder GetDriversDone
+    getList ((driversUrl model.apiUrl) ++ query) driversDecoder GetDriversDone
 
 
 routeToCmd : Model -> Cmd Msg
