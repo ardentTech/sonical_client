@@ -78,6 +78,7 @@ type alias Model = {
   driversNextPage : Maybe String,
   driversPreviousPage : Maybe String,
   driversQuery : String,
+  driversQueryBuilderHelp : Bool,
   errorMessage : String,  -- @todo call this 'error' instead
   tableState : Table.State
 }
@@ -95,5 +96,6 @@ defaultModel = {
   driversNextPage = Nothing,
   driversPreviousPage = Nothing,
   driversQuery = "",
+  driversQueryBuilderHelp = False,
   errorMessage = "",
   tableState = (Table.initialSort "Manufacturer")}

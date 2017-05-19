@@ -2,7 +2,7 @@ module Views.QueryBuilder exposing (queryBuilder)
 
 import Html exposing (
   Html, button, div, h5, table, tbody, td, text, textarea, th, thead, tr)
-import Html.Attributes exposing (class, id, placeholder, type_, value)
+import Html.Attributes exposing (class, id, placeholder, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 
 import Messages exposing (Msg (..))
@@ -21,6 +21,13 @@ queryBuilder model =
           placeholder "manufacturer=3&dc_resistance__gte=4",
           value model.driversQuery ] [ ]
       ],
+      div [ class "float-left" ] [
+        button [
+            class "btn btn-md btn-link",
+            onClick QueryBuilderHelpClicked,
+            type_ "button"
+          ] [ text "Toggle Help" ]
+      ],
       div [ class "float-right" ] [
         button [
             class "btn btn-md btn-secondary",
@@ -31,7 +38,7 @@ queryBuilder model =
           class "btn btn-md btn-primary", type_ "submit" ] [ text "Submit" ]
       ]
     ],
-    queryBuilderHelp
+    queryBuilderHelp model.driversQueryBuilderHelp
   ]
 
 
@@ -41,8 +48,8 @@ queryBuilder model =
 -- @todo more efficient way to build operator lists
 -- @todo more efficient way to assign operator lists to row configs
 -- @todo new type for row config
-queryBuilderHelp : Html Msg
-queryBuilderHelp =
+queryBuilderHelp : Bool -> Html Msg
+queryBuilderHelp show =
   let
     contains = "__contains" ++ eq
     eq = "="
@@ -76,8 +83,9 @@ queryBuilderHelp =
       ["voice_coil_diameter", numerical_operators, float],
       ["voice_coil_inductance", numerical_operators, float]
     ]
+    visibility = if show then "block" else "none"
   in
-    div [ class "row" ] [
+    div [ class "row", style [("display", visibility)] ] [
       div [ class "col-12" ] [
         table [ class "table table-sm table-striped" ] [
           thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Comparison Operators", "Type"])],

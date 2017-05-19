@@ -56,6 +56,11 @@ update msg model =
         ( model, getDriversPreviousPage model )
       QueryBuilderCleared ->
         ({ model | driversQuery = "" }, Cmd.none )
+      QueryBuilderHelpClicked ->
+        let
+          showHelp = not model.driversQueryBuilderHelp
+        in
+          ({ model | driversQueryBuilderHelp = showHelp }, Cmd.none )
       QueryBuilderSubmitted ->
         ( model, queryDrivers model )
       QueryBuilderUpdated val ->
