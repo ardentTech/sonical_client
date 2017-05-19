@@ -27,3 +27,4 @@ p.form-text { font-size: .65rem; }
 
 .navbar-brand { font-size: 1rem; padding: 0; text-transform: uppercase; }
 a.navbar-brand:not([href]):not([tabindex]) { color: #fff; cursor: pointer; }
+a.nav-link { cursor: pointer; }

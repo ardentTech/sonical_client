@@ -6,7 +6,7 @@ import Decoders exposing (driverDecoder, driversDecoder, manufacturersDecoder)
 import Messages exposing (Msg (GetDriverDone, GetDriversDone))
 import Models exposing (Model)
 import Rest exposing (getItem, getList)
-import Router exposing (Route (DriverDetail, DriverList))
+import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
 
 
 getDriver : Model -> Int -> Cmd Msg
@@ -52,6 +52,7 @@ routeToCmd model =
     Nothing -> Cmd.none
     Just DriverList -> getDrivers model
     Just (DriverDetail i) -> getDriver model i
+    Just ManufacturerList -> Cmd.none
 
 
 -- PRIVATE
