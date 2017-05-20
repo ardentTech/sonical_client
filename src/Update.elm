@@ -68,8 +68,11 @@ update msg model =
       SetTableState newState ->
         ({ model | tableState = newState }, Cmd.none )
       UrlChange location ->
-      -- @todo don't do anything if requesting the same page as is currently loaded
         let
-          newModel = { model | currentRoute = parsePath route location }
+          newRoute = parsePath route location
+          newModel = { model | currentRoute = newRoute }
         in
-          (newModel, routeToCmd newModel )
+          if (model.currentRoute == newRoute) then
+            (model, Cmd.none)
+          else
+            (newModel, routeToCmd newModel )

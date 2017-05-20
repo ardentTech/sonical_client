@@ -1,5 +1,9 @@
 module Commands exposing (
-  getDrivers, getDriversNextPage, getDriversPreviousPage, queryDrivers, routeToCmd)
+  getDrivers,
+  getDriversNextPage,
+  getDriversPreviousPage,
+  queryDrivers,
+  routeToCmd)
 
 import Api exposing (driverUrl, driversUrl)
 import Decoders exposing (driverDecoder, driversDecoder, manufacturersDecoder)
@@ -7,6 +11,9 @@ import Messages exposing (Msg (GetDriverDone, GetDriversDone))
 import Models exposing (Model)
 import Rest exposing (getItem, getList)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
+
+
+-- @todo explicit next/previous page commands seems a bit much...
 
 
 getDriver : Model -> Int -> Cmd Msg
@@ -30,6 +37,11 @@ getDriversNextPage model =
 getDriversPreviousPage : Model -> Cmd Msg
 getDriversPreviousPage model =
   getDriversPage model.driversPreviousPage
+
+
+--getManufacturers : Model -> Cmd Msg
+--getManufacturers model =
+--  getList (manufacturersUrl model.apiUrl) manufacturersDecoder GetManufacturersDone
 
 
 -- @todo convert manufacturer name to id

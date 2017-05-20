@@ -9,6 +9,7 @@ type Route = DriverList | DriverDetail Int | ManufacturerList
 route : Parser (Route -> a) a
 route =
   oneOf [
+    -- @todo handle driver pagination
     map DriverList top,
     map DriverList (s "drivers"),
     map DriverDetail (s "drivers" </> int),
