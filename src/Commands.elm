@@ -5,9 +5,9 @@ module Commands exposing (
   queryDrivers,
   routeToCmd)
 
-import Api exposing (driverUrl, driversUrl)
+import Api exposing (driverUrl, driversUrl, manufacturersUrl)
 import Decoders exposing (driverDecoder, driversDecoder, manufacturersDecoder)
-import Messages exposing (Msg (GetDriverDone, GetDriversDone))
+import Messages exposing (Msg (..))
 import Models exposing (Model)
 import Rest exposing (getItem, getList)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
@@ -39,14 +39,14 @@ getDriversPreviousPage model =
   getDriversPage model.driversPreviousPage
 
 
---getManufacturers : Model -> Cmd Msg
---getManufacturers model =
---  getList (manufacturersUrl model.apiUrl) manufacturersDecoder GetManufacturersDone
+getManufacturers : Model -> Cmd Msg
+getManufacturers model =
+  getList (manufacturersUrl model.apiUrl) manufacturersDecoder GetManufacturersDone
 
 
 -- @todo convert manufacturer name to id
 -- @todo validate input?
--- @todo don't fire requests on empty submit
+-- @todo materials
 queryDrivers : Model -> Cmd Msg
 queryDrivers model =
   let
@@ -64,7 +64,7 @@ routeToCmd model =
     Nothing -> Cmd.none
     Just DriverList -> getDrivers model
     Just (DriverDetail i) -> getDriver model i
-    Just ManufacturerList -> Cmd.none
+    Just ManufacturerList -> getManufacturers model
 
 
 -- PRIVATE

@@ -80,6 +80,7 @@ type alias Model = {
   driversQuery : String,
   driversQueryBuilderHelp : Bool,
   errorMessage : String,  -- @todo call this 'error' instead
+  manufacturers : List Manufacturer,
   tableState : Table.State
 }
 
@@ -98,4 +99,5 @@ defaultModel = {
   driversQuery = "",
   driversQueryBuilderHelp = False,
   errorMessage = "",
+  manufacturers = [],
   tableState = (Table.initialSort "Manufacturer")}

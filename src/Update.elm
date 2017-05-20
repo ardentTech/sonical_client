@@ -46,6 +46,10 @@ update msg model =
         }, Cmd.none )
       GetDriversDone (Err error) ->
         ({ model | errorMessage = httpErrorString error }, Cmd.none )
+      GetManufacturersDone (Ok response) ->
+        ({ model | manufacturers = response.results }, Cmd.none )
+      GetManufacturersDone (Err error) ->
+        ({ model | errorMessage = httpErrorString error }, Cmd.none )
       NextPageClicked ->
         ( model, getDriversNextPage model )
       NewUrl url ->
