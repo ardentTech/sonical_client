@@ -11,35 +11,38 @@ import Models exposing (Model)
 
 queryBuilder : Model -> Html Msg
 queryBuilder model =
-  div [ id "query-builder" ] [
-    h5 [] [ text "Driver Query Builder" ],
-    Html.form [ class "clearfix", onSubmit QueryBuilderSubmitted ] [
-      div [ class "form-group" ] [
-        textarea [
-          class "form-control",
-          onInput QueryBuilderUpdated,
-          placeholder "manufacturer=3&dc_resistance__gte=4",
-          value model.driversQuery ] [ ]
+  let
+    helpControlText = "Help " ++ (if model.driversQueryBuilderHelp then " [-]" else "[+]")
+  in
+    div [ id "query-builder" ] [
+      h5 [] [ text "Driver Query Builder" ],
+      Html.form [ class "clearfix", onSubmit QueryBuilderSubmitted ] [
+        div [ class "form-group" ] [
+          textarea [
+            class "form-control",
+            onInput QueryBuilderUpdated,
+            placeholder "manufacturer=3&dc_resistance__gte=4",
+            value model.driversQuery ] [ ]
+        ],
+        div [ class "float-left" ] [
+          button [
+              class "btn btn-md btn-link",
+              onClick QueryBuilderHelpClicked,
+              type_ "button"
+            ] [ text helpControlText ]
+        ],
+        div [ class "float-right" ] [
+          button [
+              class "btn btn-md btn-secondary",
+              onClick QueryBuilderCleared,
+              type_ "button"
+            ] [ text "Clear" ],
+          button [
+            class "btn btn-md btn-primary", type_ "submit" ] [ text "Submit" ]
+        ]
       ],
-      div [ class "float-left" ] [
-        button [
-            class "btn btn-md btn-link",
-            onClick QueryBuilderHelpClicked,
-            type_ "button"
-          ] [ text "Toggle Help" ]
-      ],
-      div [ class "float-right" ] [
-        button [
-            class "btn btn-md btn-secondary",
-            onClick QueryBuilderCleared,
-            type_ "button"
-          ] [ text "Clear" ],
-        button [
-          class "btn btn-md btn-primary", type_ "submit" ] [ text "Submit" ]
-      ]
-    ],
-    queryBuilderHelp model.driversQueryBuilderHelp
-  ]
+      queryBuilderHelp model.driversQueryBuilderHelp
+    ]
 
 
 -- PRIVATE

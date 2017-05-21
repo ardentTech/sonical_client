@@ -12,7 +12,7 @@ manufacturerList model =
   div [ class "row" ] [
     div [ class "col-12" ] [
       h5 [] [ text "Manufacturers" ],
-      table [] [
+      table [ class "table table-sm table-striped" ] [
         thead [] [
           tr [] [ th [] [ text "Name" ], th [] [ text "Website" ]]
         ],
