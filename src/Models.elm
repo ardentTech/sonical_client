@@ -59,7 +59,7 @@ type alias FrequencyResponse = {
 type alias Manufacturer = {
   id : Int,
   name : String,
-  website : Maybe String
+  website : String
 }
 
 

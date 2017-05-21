@@ -118,7 +118,7 @@ withProductListings driver productListings =
       table [ class "table table-sm table-striped" ] [ tbody [] (driverRows driver) ]
     ],
     div [ class "col-4" ] [
-      h5 [] [ text "Product Listings" ],
+      h5 [] [ text "Purchase Now" ],
       table [ class "table table-sm table-striped" ] [ tbody [] (
         productListingRows productListings) ]
     ]

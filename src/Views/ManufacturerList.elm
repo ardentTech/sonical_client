@@ -1,7 +1,7 @@
 module Views.ManufacturerList exposing (manufacturerList)
 
-import Html exposing (Html, div, h5, table, tbody, td, text, th, thead, tr)
-import Html.Attributes exposing (class)
+import Html exposing (Html, a, div, h5, table, tbody, td, text, th, thead, tr)
+import Html.Attributes exposing (class, href, target)
 
 import Messages exposing (Msg)
 import Models exposing (Manufacturer, Model)
@@ -28,8 +28,8 @@ manufacturerList model =
 toRow : Manufacturer -> Html Msg
 toRow manufacturer =
   let
-    website = case manufacturer.website of
-      Nothing -> "-"
-      Just w -> w
+    website = case (String.length manufacturer.website) of
+      0 -> text ""
+      _ -> a [ href manufacturer.website, target "_blank" ] [ text manufacturer.website ]
   in
-    tr [] [ td [] [ text manufacturer.name ], td [] [ text website ]]
+    tr [] [ td [] [ text manufacturer.name ], td [] [ website ]]

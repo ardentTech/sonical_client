@@ -74,7 +74,7 @@ manufacturerDecoder : Decoder Manufacturer
 manufacturerDecoder = decode Manufacturer
   |> required "id" int
   |> required "name" string
-  |> required "website" (nullable string)
+  |> required "website" string
 
 
 manufacturersDecoder : Decoder (List Manufacturer)
