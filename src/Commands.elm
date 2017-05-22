@@ -41,7 +41,10 @@ getDriversPreviousPage model =
 
 getManufacturers : Model -> Cmd Msg
 getManufacturers model =
-  getList (manufacturersUrl model.apiUrl) manufacturersDecoder GetManufacturersDone
+  let
+    url = (manufacturersUrl model.apiUrl) ++ "?limit=100"
+  in
+    getList url manufacturersDecoder GetManufacturersDone
 
 
 -- @todo convert manufacturer name to id
