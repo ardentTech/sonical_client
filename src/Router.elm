@@ -1,16 +1,15 @@
 module Router exposing (..)
 
-import UrlParser exposing ((</>), Parser, int, map, oneOf, s, top)
+import UrlParser exposing ((</>), (<?>), Parser, int, map, oneOf, s, stringParam, top)
 
 
-type Route = DriverList | DriverDetail Int | ManufacturerList
+type Route = DriverList (Maybe String) | DriverDetail Int | ManufacturerList
 
 
 route : Parser (Route -> a) a
 route =
   oneOf [
-    -- @todo handle driver pagination
-    map DriverList top,
-    map DriverList (s "drivers"),
+    map (DriverList Nothing) top,
+    map DriverList (s "drivers" <?> stringParam "limit"),
     map DriverDetail (s "drivers" </> int),
     map ManufacturerList (s "manufacturers")]
