@@ -65,8 +65,10 @@ routeToCmd : Model -> Cmd Msg
 routeToCmd model =
   case model.currentRoute of
     Nothing -> Cmd.none
-    Just (DriverList Nothing) -> getDrivers model
-    Just (DriverList (Just limit)) -> getDrivers model
+    Just (DriverList Nothing Nothing) -> getDrivers model
+    Just (DriverList Nothing (Just offset)) -> getDrivers model
+    Just (DriverList (Just limit) Nothing) -> getDrivers model
+    Just (DriverList (Just limit) (Just offset)) -> getDrivers model
     Just (DriverDetail i) -> getDriver model i
     Just ManufacturerList -> getManufacturers model
 
