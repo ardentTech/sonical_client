@@ -49,9 +49,6 @@ routeToView : Maybe Route -> Model -> Html Msg
 routeToView route model =
   case route of
     Just (DriverDetail i) -> driverDetail model
-    Just (DriverList Nothing Nothing) -> driverList model
-    Just (DriverList Nothing (Just offset)) -> driverList model
-    Just (DriverList (Just offset) Nothing) -> driverList model
-    Just (DriverList (Just limit) (Just offset)) -> driverList model
+    Just (DriverList _) -> driverList model
     Just ManufacturerList -> manufacturerList model
     Nothing -> div [] [ h3 [] [ text "Invalid URL" ]]
