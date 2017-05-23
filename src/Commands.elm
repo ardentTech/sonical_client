@@ -5,12 +5,9 @@ module Commands exposing (
   queryDrivers,
   routeToCmd)
 
-import Http exposing (decodeUri, encodeUri)
-import Json.Decode exposing (decodeString, int, keyValuePairs)
-import Tuple
-
 import Api exposing (driverUrl, driversUrl, manufacturersUrl)
 import Decoders exposing (driverDecoder, driversDecoder, manufacturersDecoder)
+import Drivers.QueryParams exposing (unpack)
 import Messages exposing (Msg (..))
 import Models exposing (Model)
 import Rest exposing (getItem, getList)
@@ -35,12 +32,7 @@ getDrivers model =
 
 getDriversWithParams : Model -> String -> Cmd Msg
 getDriversWithParams model params =
-  let
-    queryParams = case (decodeUriParams params) of
-      Ok raw -> assembleQueryParams raw
-      _ -> ""
-  in
-    getDriversPage (Just <| (driversUrl model.apiUrl) ++ queryParams)
+  getDriversPage (Just <| (driversUrl model.apiUrl) ++ (unpack params))
 
 
 getDriversNextPage : Model -> Cmd Msg
@@ -86,22 +78,6 @@ routeToCmd model =
 
 
 -- PRIVATE
-
-
-assembleQueryParams : List (String, Int) -> String
-assembleQueryParams raw =
-  "?" ++ (String.join "&" (
-    List.map (\t -> (Tuple.first t) ++ "=" ++ (toString <| Tuple.second t)) raw))
-
-
-decodeUriParams : String -> Result String (List (String, Int))
-decodeUriParams params =
-  let
-    str = case (decodeUri params) of
-      Just d -> d
-      Nothing -> "{}"
-  in
-    decodeString (keyValuePairs int) str
 
 
 getDriversPage : Maybe String -> Cmd Msg
