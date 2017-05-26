@@ -1,70 +1,10 @@
-module Commands exposing (
-  getDrivers,
-  getDriversNextPage,
-  getDriversPreviousPage,
-  queryDrivers,
-  routeToCmd)
+module Commands exposing (routeToCmd)
 
-import Api exposing (driverUrl, driversUrl, manufacturersUrl)
-import Decoders exposing (driverDecoder, driversDecoder, manufacturersDecoder)
-import Drivers.QueryParams exposing (unpack)
-import Messages exposing (Msg (..))
+import Drivers.Commands exposing (getDriver, getDrivers, getDriversWithParams)
+import Manufacturers.Commands exposing (getManufacturers)
+import Messages exposing (Msg)
 import Models exposing (Model)
-import Rest exposing (getItem, getList)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
-
-
--- @todo explicit next/previous page commands seems a bit much...
-
-
-getDriver : Model -> Int -> Cmd Msg
-getDriver model i =
-  let
-    url = driverUrl model.apiUrl i
-  in
-    getItem url driverDecoder GetDriverDone
-
-
-getDrivers : Model -> Cmd Msg
-getDrivers model =
-  getDriversPage (Just (driversUrl model.apiUrl))
-
-
-getDriversWithParams : Model -> String -> Cmd Msg
-getDriversWithParams model params =
-  getDriversPage (Just <| (driversUrl model.apiUrl) ++ (unpack params))
-
-
-getDriversNextPage : Model -> Cmd Msg
-getDriversNextPage model =
-  getDriversPage model.driversNextPage
-
-
-getDriversPreviousPage : Model -> Cmd Msg
-getDriversPreviousPage model =
-  getDriversPage model.driversPreviousPage
-
-
-getManufacturers : Model -> Cmd Msg
-getManufacturers model =
-  let
-    url = (manufacturersUrl model.apiUrl) ++ "?limit=100"
-  in
-    getList url manufacturersDecoder GetManufacturersDone
-
-
--- @todo convert manufacturer name to id
--- @todo validate input?
--- @todo materials
-queryDrivers : Model -> Cmd Msg
-queryDrivers model =
-  let
-    query =
-      case String.startsWith "?" model.driversQuery of
-        True -> model.driversQuery
-        False -> "?" ++ model.driversQuery
-  in
-    getList ((driversUrl model.apiUrl) ++ query) driversDecoder GetDriversDone
 
 
 routeToCmd : Model -> Cmd Msg
@@ -75,13 +15,3 @@ routeToCmd model =
     Just (DriverList (Just q)) -> getDriversWithParams model q
     Just (DriverDetail i) -> getDriver model i
     Just ManufacturerList -> getManufacturers model
-
-
--- PRIVATE
-
-
-getDriversPage : Maybe String -> Cmd Msg
-getDriversPage page =
-  case page of
-    Nothing -> Cmd.none
-    Just str -> getList str driversDecoder GetDriversDone
