@@ -49,27 +49,20 @@ queryBuilder model =
 
 
 type alias QueryBuilderOption = {
-  dataType : String,
   key : String,
-  operators : String
+  operators : String,
+  dataType : String
 }
 
 
 getQueryBuilderOptions : List QueryBuilderOption
 getQueryBuilderOptions =
   let
-    contains = "__contains" ++ eq
-    eq = "="
     float = "Float"
-    gt = "__gt" ++ eq
-    gte = "__gte" ++ eq
-    icontains = "__icontains" ++ eq
     integer = "Integer"
-    lt = "__lt" ++ eq
-    lte = "__lte" ++ eq
-    numerical_operators = String.join ", " [eq, gt, gte, lt, lte]
+    numerical_operators = String.join ", " ["=", "__gt=", "__gte=", "__lt=", "__lte"]
     string = "String"
-    string_operators = String.join ", " [eq, contains, icontains]
+    string_operators = String.join ", " ["=", "__contains=", "__icontains"]
   in
     -- 'QueryBuilderOption' repetition sucks...
     [
