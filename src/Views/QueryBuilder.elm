@@ -12,7 +12,7 @@ import Models exposing (Model)
 queryBuilder : Model -> Html Msg
 queryBuilder model =
   let
-    helpControlText = "Help " ++ (if model.driversQueryBuilderHelp then " [-]" else "[+]")
+    helpText = "Help " ++ (if model.driversQueryBuilderHelp then " [-]" else "[+]")
   in
     div [ id "query-builder" ] [
       h5 [] [ text "Driver Query Builder" ],
@@ -29,7 +29,7 @@ queryBuilder model =
               class "btn btn-md btn-link",
               onClick QueryBuilderHelpClicked,
               type_ "button"
-            ] [ text helpControlText ]
+            ] [ text helpText ]
         ],
         div [ class "float-right" ] [
           button [
@@ -41,7 +41,7 @@ queryBuilder model =
             class "btn btn-md btn-primary", type_ "submit" ] [ text "Submit" ]
         ]
       ],
-      queryBuilderHelp model.driversQueryBuilderHelp
+      help model.driversQueryBuilderHelp
     ]
 
 
@@ -55,52 +55,73 @@ type alias QueryBuilderOption = {
 }
 
 
-getQueryBuilderOptions : List QueryBuilderOption
-getQueryBuilderOptions =
+float : String
+float = "Float"
+
+
+integer : String
+integer = "Integer"
+
+
+string : String
+string = "String"
+
+
+numericalOperators : String
+numericalOperators = String.join ", " ["=", "__gt=", "__gte=", "__lt=", "__lte"]
+
+
+stringOperators : String
+stringOperators = String.join ", " ["=", "__contains=", "__icontains"]
+
+
+optionsLeft : List QueryBuilderOption
+optionsLeft =
+  [
+    QueryBuilderOption "bl_product" numericalOperators float,
+    QueryBuilderOption "compliance_equivalent_volume" numericalOperators float,
+    QueryBuilderOption "cone_surface_area" numericalOperators float,
+    QueryBuilderOption "dc_resistance" numericalOperators float,
+    QueryBuilderOption "diaphragm_mass_including_airload" numericalOperators float,
+    QueryBuilderOption "electromagnetic_q" numericalOperators float,
+    QueryBuilderOption "max_linear_excursion" numericalOperators float,
+    QueryBuilderOption "max_power" numericalOperators integer,
+    QueryBuilderOption "mechanical_compliance_of_suspension" numericalOperators float]
+
+
+optionsRight : List QueryBuilderOption
+optionsRight =
+  [
+    QueryBuilderOption "mechanical_q" numericalOperators float,
+    QueryBuilderOption "model" stringOperators string,
+    QueryBuilderOption "nominal_diameter" numericalOperators float,
+    QueryBuilderOption "nominal_impedance" numericalOperators integer,
+    QueryBuilderOption "resonant_frequency" numericalOperators float,
+    QueryBuilderOption "rms_power" numericalOperators integer,
+    QueryBuilderOption "sensitivity" numericalOperators float,
+    QueryBuilderOption "voice_coil_diameter" numericalOperators float,
+    QueryBuilderOption "voice_coil_inductance" numericalOperators float]
+
+
+help : Bool -> Html Msg
+help show =
   let
-    float = "Float"
-    integer = "Integer"
-    numerical_operators = String.join ", " ["=", "__gt=", "__gte=", "__lt=", "__lte"]
-    string = "String"
-    string_operators = String.join ", " ["=", "__contains=", "__icontains"]
+    visibility = if show then "block" else "none"
   in
-    -- 'QueryBuilderOption' repetition sucks...
-    [
-      QueryBuilderOption "bl_product" numerical_operators float,
-      QueryBuilderOption "compliance_equivalent_volume" numerical_operators float,
-      QueryBuilderOption "cone_surface_area" numerical_operators float,
-      QueryBuilderOption "dc_resistance" numerical_operators float,
-      QueryBuilderOption "diaphragm_mass_including_airload" numerical_operators float,
-      QueryBuilderOption "electromagnetic_q" numerical_operators float,
-      QueryBuilderOption "max_linear_excursion" numerical_operators float,
-      QueryBuilderOption "max_power" numerical_operators integer,
-      QueryBuilderOption "mechanical_compliance_of_suspension" numerical_operators float,
-      QueryBuilderOption "mechanical_q" numerical_operators float,
-      QueryBuilderOption "model" string_operators string,
-      QueryBuilderOption "nominal_diameter" numerical_operators float,
-      QueryBuilderOption "nominal_impedance" numerical_operators integer,
-      QueryBuilderOption "resonant_frequency" numerical_operators float,
-      QueryBuilderOption "rms_power" numerical_operators integer,
-      QueryBuilderOption "sensitivity" numerical_operators float,
-      QueryBuilderOption "voice_coil_diameter" numerical_operators float,
-      QueryBuilderOption "voice_coil_inductance" numerical_operators float
-    ]
+    div [ class "row", style [("display", visibility)]]
+      (List.map optionsTable [optionsLeft, optionsRight])
 
 
-queryBuilderHelp : Bool -> Html Msg
-queryBuilderHelp show =
+optionsTable : List QueryBuilderOption -> Html Msg
+optionsTable options =
   let
-    options = getQueryBuilderOptions
     toTextCell = \t -> td [] [ text t ]
     toRow = \qbo -> tr [] (
       List.map (\q -> toTextCell q) [qbo.key, qbo.operators, qbo.dataType])
-    visibility = if show then "block" else "none"
   in
-    div [ class "row", style [("display", visibility)] ] [
-      div [ class "col-12" ] [
-        table [ class "table table-sm table-striped" ] [
-          thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Comparison Operators", "Type"])],
-          tbody [] (List.map (\o -> toRow o) options)
-        ]
+    div [ class "col-6" ] [
+      table [ class "table table-sm table-striped" ] [
+        thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Comparison Operators", "Type"])],
+        tbody [] (List.map (\o -> toRow o) options)
       ]
     ]
