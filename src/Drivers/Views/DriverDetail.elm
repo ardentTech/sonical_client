@@ -1,4 +1,4 @@
-module Views.DriverDetail exposing (driverDetail)
+module Drivers.Views.DriverDetail exposing (driverDetail)
 
 import Html exposing (Html, a, div, h3, h5, table, tbody, td, text, tr)
 import Html.Attributes exposing (class, href, target)

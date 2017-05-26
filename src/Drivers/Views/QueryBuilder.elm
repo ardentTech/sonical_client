@@ -1,4 +1,4 @@
-module Views.QueryBuilder exposing (queryBuilder)
+module Drivers.Views.QueryBuilder exposing (queryBuilder)
 
 import Html exposing (
   Html, button, div, h5, table, tbody, td, text, textarea, th, thead, tr)

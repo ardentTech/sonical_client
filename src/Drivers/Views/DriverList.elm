@@ -1,16 +1,16 @@
-module Views.DriverList exposing (driverList)
+module Drivers.Views.DriverList exposing (driverList)
 
 import Html exposing (Html, a, button, div, text)
 import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
 import Html.Events exposing (onClick)
 import Table exposing (defaultCustomizations)
 
-import Messages exposing (Msg (..))
 import Drivers.Models exposing (Driver)
+import Drivers.Views.QueryBuilder exposing (queryBuilder)
+import Messages exposing (Msg (..))
 import Models exposing (Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
 import Units exposing (decibels, hertz, inches, ohms, watts)
-import Views.QueryBuilder exposing (queryBuilder)
 
 
 driverList : Model -> Html Msg
