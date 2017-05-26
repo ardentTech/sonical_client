@@ -1,12 +1,13 @@
 module Main exposing (main)
 
 import Navigation exposing (Location, programWithFlags)
+import Table
 import UrlParser exposing (parsePath)
 
 import Commands exposing (routeToCmd)
 import Drivers.QueryParams exposing (unpack)
 import Messages exposing (Msg(..))
-import Models exposing (Model, defaultModel)
+import Models exposing (Model)
 import Router exposing (Route (DriverList), route)
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
@@ -25,6 +26,22 @@ main = programWithFlags UrlChange {
 
 
 -- PRIVATE
+
+
+defaultModel : Model
+defaultModel = {
+  apiUrl = "",
+  currentRoute = Nothing,
+  driver = Nothing,
+  drivers = [],
+  driversCount = 0,
+  driversNextPage = Nothing,
+  driversPreviousPage = Nothing,
+  driversQuery = "",
+  driversQueryBuilderHelp = False,
+  error = "",
+  manufacturers = [],
+  tableState = (Table.initialSort "Manufacturer")}
 
 
 init : Flags -> Location -> ( Model, Cmd Msg )

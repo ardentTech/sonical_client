@@ -31,13 +31,13 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
       ErrorDismissed ->
-        ({ model | errorMessage = "" }, Cmd.none )
+        ({ model | error = "" }, Cmd.none )
       Fail _ ->
         ( model, Cmd.none )
       GetDriverDone (Ok driver) ->
         ({ model | driver = Just driver }, Cmd.none )
       GetDriverDone (Err error) ->
-        ({ model | errorMessage = httpErrorString error }, Cmd.none )
+        ({ model | error = httpErrorString error }, Cmd.none )
       GetDriversDone (Ok response) ->
         ({ model |
           drivers = response.results,
@@ -46,11 +46,11 @@ update msg model =
           driversPreviousPage = response.previous
         }, Cmd.none )
       GetDriversDone (Err error) ->
-        ({ model | errorMessage = httpErrorString error }, Cmd.none )
+        ({ model | error = httpErrorString error }, Cmd.none )
       GetManufacturersDone (Ok response) ->
         ({ model | manufacturers = response.results }, Cmd.none )
       GetManufacturersDone (Err error) ->
-        ({ model | errorMessage = httpErrorString error }, Cmd.none )
+        ({ model | error = httpErrorString error }, Cmd.none )
       NextPageClicked ->
         ( model, getDriversNextPage model )
       NewUrl url ->
