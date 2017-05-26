@@ -48,11 +48,15 @@ queryBuilder model =
 -- PRIVATE
 
 
--- @todo more efficient way to build operator lists
--- @todo more efficient way to assign operator lists to row configs
--- @todo new type for row config
-queryBuilderHelp : Bool -> Html Msg
-queryBuilderHelp show =
+type alias QueryBuilderOption = {
+  dataType : String,
+  key : String,
+  operators : String
+}
+
+
+getQueryBuilderOptions : List QueryBuilderOption
+getQueryBuilderOptions =
   let
     contains = "__contains" ++ eq
     eq = "="
@@ -66,33 +70,44 @@ queryBuilderHelp show =
     numerical_operators = String.join ", " [eq, gt, gte, lt, lte]
     string = "String"
     string_operators = String.join ", " [eq, contains, icontains]
-    rows = [
-      ["bl_product", numerical_operators, float],
-      ["compliance_equivalent_volume", numerical_operators, float],
-      ["cone_surface_area", numerical_operators, float],
-      ["dc_resistance", numerical_operators, float],
-      ["diaphragm_mass_including_airload", numerical_operators, float],
-      ["electromagnetic_q", numerical_operators, float],
-      ["max_linear_excursion", numerical_operators, float],
-      ["max_power", numerical_operators, integer],
-      ["mechanical_compliance_of_suspension", numerical_operators, float],
-      ["mechanical_q", numerical_operators, float],
-      ["model", string_operators, string],
-      ["nominal_diameter", numerical_operators, float],
-      ["nominal_impedance", numerical_operators, integer],
-      ["resonant_frequency", numerical_operators, float],
-      ["rms_power", numerical_operators, integer],
-      ["sensitivity", numerical_operators, float],
-      ["voice_coil_diameter", numerical_operators, float],
-      ["voice_coil_inductance", numerical_operators, float]
+  in
+    -- 'QueryBuilderOption' repetition sucks...
+    [
+      QueryBuilderOption "bl_product" numerical_operators float,
+      QueryBuilderOption "compliance_equivalent_volume" numerical_operators float,
+      QueryBuilderOption "cone_surface_area" numerical_operators float,
+      QueryBuilderOption "dc_resistance" numerical_operators float,
+      QueryBuilderOption "diaphragm_mass_including_airload" numerical_operators float,
+      QueryBuilderOption "electromagnetic_q" numerical_operators float,
+      QueryBuilderOption "max_linear_excursion" numerical_operators float,
+      QueryBuilderOption "max_power" numerical_operators integer,
+      QueryBuilderOption "mechanical_compliance_of_suspension" numerical_operators float,
+      QueryBuilderOption "mechanical_q" numerical_operators float,
+      QueryBuilderOption "model" string_operators string,
+      QueryBuilderOption "nominal_diameter" numerical_operators float,
+      QueryBuilderOption "nominal_impedance" numerical_operators integer,
+      QueryBuilderOption "resonant_frequency" numerical_operators float,
+      QueryBuilderOption "rms_power" numerical_operators integer,
+      QueryBuilderOption "sensitivity" numerical_operators float,
+      QueryBuilderOption "voice_coil_diameter" numerical_operators float,
+      QueryBuilderOption "voice_coil_inductance" numerical_operators float
     ]
+
+
+queryBuilderHelp : Bool -> Html Msg
+queryBuilderHelp show =
+  let
+    options = getQueryBuilderOptions
+    toTextCell = \t -> td [] [ text t ]
+    toRow = \qbo -> tr [] (
+      List.map (\q -> toTextCell q) [qbo.key, qbo.operators, qbo.dataType])
     visibility = if show then "block" else "none"
   in
     div [ class "row", style [("display", visibility)] ] [
       div [ class "col-12" ] [
         table [ class "table table-sm table-striped" ] [
           thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Comparison Operators", "Type"])],
-          tbody [] (List.map (\r -> tr [] (List.map (\rd -> td [] [ text rd ]) r)) rows)
+          tbody [] (List.map (\o -> toRow o) options)
         ]
       ]
     ]
