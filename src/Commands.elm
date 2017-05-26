@@ -1,7 +1,7 @@
 module Commands exposing (routeToCmd)
 
 import Drivers.Commands exposing (getDriver, getDrivers, getDriversWithParams)
-import Manufacturers.Commands exposing (getManufacturers)
+import Manufacturing.Commands exposing (getManufacturers)
 import Messages exposing (Msg)
 import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))

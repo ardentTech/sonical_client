@@ -3,8 +3,9 @@ module Views.ManufacturerList exposing (manufacturerList)
 import Html exposing (Html, a, div, h5, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (class, href, target)
 
+import Manufacturing.Models exposing (Manufacturer)
 import Messages exposing (Msg)
-import Models exposing (Manufacturer, Model)
+import Models exposing (Model)
 
 
 manufacturerList : Model -> Html Msg

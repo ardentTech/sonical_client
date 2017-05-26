@@ -4,8 +4,10 @@ import Json.Decode exposing (
   Decoder, andThen, at, fail, float, int, list, nullable, string, succeed)
 import Json.Decode.Pipeline exposing (decode, required, requiredAt)
 
-import Manufacturers.Decoders exposing (manufacturerDecoder)
-import Models exposing (..)
+import Dealers.Models exposing (Dealer)
+import Drivers.Models exposing (Driver, DriverProductListing, FrequencyResponse)
+import Manufacturing.Decoders exposing (manufacturerDecoder)
+import Manufacturing.Models exposing (Material)
 
 
 dealerDecoder : Decoder Dealer

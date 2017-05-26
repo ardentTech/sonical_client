@@ -4,7 +4,8 @@ import Http
 import Navigation exposing (Location)
 import Table
 
-import Models exposing (Driver, Manufacturer)
+import Drivers.Models exposing (Driver)
+import Manufacturing.Models exposing (Manufacturer)
 import Rest exposing (HttpListResponse)
 
 

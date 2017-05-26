@@ -1,9 +1,9 @@
-module Manufacturers.Decoders exposing (manufacturerDecoder, manufacturersDecoder)
+module Manufacturing.Decoders exposing (manufacturerDecoder, manufacturersDecoder)
 
 import Json.Decode exposing (Decoder, int, list, string)
 import Json.Decode.Pipeline exposing (decode, required)
 
-import Models exposing (Manufacturer)
+import Manufacturing.Models exposing (Manufacturer)
 
 
 manufacturerDecoder : Decoder Manufacturer
