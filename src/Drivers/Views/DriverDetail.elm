@@ -22,39 +22,34 @@ driverDetail model =
 -- PRIVATE
 
 
-appendUnit : number -> String -> String
-appendUnit n unit =
-  (toString n) ++ unit
-
-
 driverRows : Driver -> List (Html Msg)
 driverRows driver =
   [
     row "Basket Frame" (formatMaterialName driver.basket_frame),
-    row "BL Product" (appendUnit (maybeFloatToFloat driver.bl_product) tesla_meters),
-    row "Compliance Equivalent Volume" (appendUnit (maybeFloatToFloat driver.compliance_equivalent_volume) feet_cubed),
+    row "BL Product" (numAppendUnit (maybeFloatToFloat driver.bl_product) tesla_meters),
+    row "Compliance Equivalent Volume" (numAppendUnit (maybeFloatToFloat driver.compliance_equivalent_volume) feet_cubed),
     row "Cone" (formatMaterialName driver.cone),
-    row "Cone Surface Area" (appendUnit (maybeFloatToFloat driver.cone_surface_area) centimeters_squared),
-    row "DC Resistance" (appendUnit (maybeFloatToFloat driver.dc_resistance) ohms),
-    row "Diaphragm Mass Including Airload" (appendUnit (maybeFloatToFloat driver.diaphragm_mass_including_airload) grams),
+    row "Cone Surface Area" (numAppendUnit (maybeFloatToFloat driver.cone_surface_area) centimeters_squared),
+    row "DC Resistance" (numAppendUnit (maybeFloatToFloat driver.dc_resistance) ohms),
+    row "Diaphragm Mass Including Airload" (numAppendUnit (maybeFloatToFloat driver.diaphragm_mass_including_airload) grams),
     row "Electromagnetic Q" (toString <| maybeFloatToFloat driver.electromagnetic_q),
     row "Frequency Response" (formatFrequencyResponse driver.frequency_response),
     row "Magnet" (formatMaterialName driver.magnet),
     row "Manufacturer" driver.manufacturer.name,
-    row "Max Linear Excursion" (appendUnit (maybeFloatToFloat driver.max_linear_excursion) millimeters),
-    row "Max Power" (appendUnit (maybeIntToInt driver.max_power) watts),
-    row "Mechanical Compliance of Suspension" (appendUnit (maybeFloatToFloat driver.mechanical_compliance_of_suspension) millimeters_newton),
+    row "Max Linear Excursion" (numAppendUnit (maybeFloatToFloat driver.max_linear_excursion) millimeters),
+    row "Max Power" (numAppendUnit (maybeIntToInt driver.max_power) watts),
+    row "Mechanical Compliance of Suspension" (numAppendUnit (maybeFloatToFloat driver.mechanical_compliance_of_suspension) millimeters_newton),
     row "Mechanical Q" (toString <| maybeFloatToFloat driver.mechanical_q),
     row "Model" driver.model,
-    row "Nominal Diameter" (appendUnit (maybeFloatToFloat driver.nominal_diameter) inches),
-    row "Nominal Impedance" (appendUnit (maybeIntToInt driver.nominal_impedance) ohms),
-    row "Resonant Frequency" (appendUnit (maybeFloatToFloat driver.resonant_frequency) hertz),
-    row "RMS Power" (appendUnit (maybeIntToInt driver.rms_power) watts),
-    row "Sensitivity" (appendUnit (maybeFloatToFloat driver.sensitivity) decibels),
+    row "Nominal Diameter" (numAppendUnit (maybeFloatToFloat driver.nominal_diameter) inches),
+    row "Nominal Impedance" (numAppendUnit (maybeIntToInt driver.nominal_impedance) ohms),
+    row "Resonant Frequency" (numAppendUnit (maybeFloatToFloat driver.resonant_frequency) hertz),
+    row "RMS Power" (numAppendUnit (maybeIntToInt driver.rms_power) watts),
+    row "Sensitivity" (numAppendUnit (maybeFloatToFloat driver.sensitivity) decibels),
     row "Surround" (formatMaterialName driver.surround),
-    row "Voice Coil Diameter" (appendUnit (maybeFloatToFloat driver.voice_coil_diameter) inches),
+    row "Voice Coil Diameter" (numAppendUnit (maybeFloatToFloat driver.voice_coil_diameter) inches),
     row "Voice Coil Former" (formatMaterialName driver.voice_coil_former),
-    row "Voice Coil Inductance" (appendUnit (maybeFloatToFloat driver.voice_coil_inductance) millihenries),
+    row "Voice Coil Inductance" (numAppendUnit (maybeFloatToFloat driver.voice_coil_inductance) millihenries),
     row "Voice Coil Wire" (formatMaterialName driver.voice_coil_wire)
   ]
 

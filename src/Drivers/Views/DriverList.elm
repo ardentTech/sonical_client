@@ -10,11 +10,19 @@ import Drivers.Views.QueryBuilder exposing (queryBuilder)
 import Messages exposing (Msg (..))
 import Models exposing (Model)
 import TypeConverters exposing (maybeFloatToFloat, maybeIntToInt)
-import Units exposing (decibels, hertz, inches, ohms, watts)
+import Units exposing (decibels, hertz, inches, numAppendUnit, ohms, watts)
+import Views.Loading exposing (loading)
 
 
 driverList : Model -> Html Msg
 driverList model =
+  case (List.length model.drivers) of
+    0 -> loading
+    _ -> withDrivers model
+
+
+withDrivers : Model -> Html Msg
+withDrivers model =
   div [ class "row" ] [
     div [ class "col-12" ] [
       queryBuilder model,
@@ -27,11 +35,6 @@ driverList model =
 
 -- PRIVATE
 
-
-appendUnit : number -> String -> String
-appendUnit n unit =
-  (toString n) ++ " " ++ unit
-
 manufacturerColumn : Table.Column Driver Msg
 manufacturerColumn =
   Table.stringColumn "Manufacturer" ((\m -> m.name) << .manufacturer)
@@ -40,7 +43,7 @@ maybeFloatColumn : String -> (Driver -> Maybe Float) -> String -> Table.Column D
 maybeFloatColumn name toData unit =
   let
     data = maybeFloatToFloat << toData
-    formatData = (\d -> if d > 0 then (appendUnit d unit) else "-")
+    formatData = (\d -> if d > 0 then (numAppendUnit d unit) else "-")
     vData = (\v -> formatData (data v))
   in
     Table.customColumn {
@@ -53,7 +56,7 @@ maybeIntColumn : String -> (Driver -> Maybe Int) -> String -> Table.Column Drive
 maybeIntColumn name toData unit =
   let
     data = maybeIntToInt << toData
-    formatData = (\d -> if d > 0 then (appendUnit d unit) else "-")
+    formatData = (\d -> if d > 0 then (numAppendUnit d unit) else "-")
     vData = (\v -> formatData (data v))
   in
     Table.customColumn {
@@ -134,5 +137,4 @@ viewModel {id, model} =
     txt = (String.left limit model) ++ (if (String.length model > limit) then "..." else "")
   in
     Table.HtmlDetails [ class "col-driver-model" ] [
-      -- @todo doesn't load the driver detail
       a [ onClick (NewUrl ("drivers/" ++ (toString id)))] [ text txt ]]

@@ -1,9 +1,6 @@
 module Units exposing (..)
 
 
--- @todo manage space prefix here instead of within appendUnit
-
-
 centimeters : String
 centimeters = " cm"
 
@@ -54,3 +51,6 @@ tesla_meters = " Tm"
 
 watts : String
 watts = " W"
+
+numAppendUnit : number -> String -> String
+numAppendUnit n unit = (toString n) ++ unit
