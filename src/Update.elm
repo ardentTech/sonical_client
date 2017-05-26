@@ -52,12 +52,14 @@ update msg model =
       GetManufacturersDone (Err error) ->
         ({ model | error = httpErrorString error }, Cmd.none )
       NextPageClicked ->
+        -- @todo append to model.driversQuery to maintain filters
         ( model, getDriversNextPage model )
       NewUrl url ->
         ( model, newUrl url )
       NoOp ->
         ( model, Cmd.none )
       PrevPageClicked ->
+        -- @todo append to model.driversQuery to maintain filters
         ( model, getDriversPreviousPage model )
       QueryBuilderCleared ->
         ({ model | driversQuery = "" }, Cmd.none )

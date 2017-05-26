@@ -9,6 +9,7 @@ import Manufacturing.Models exposing (Manufacturer)
 import Rest exposing (HttpListResponse)
 
 
+-- @todo driver/manufacturer/etc.-specific messages
 -- @todo generic HttpRequestDone message instead of model-specific ones
 type Msg =
   ErrorDismissed |

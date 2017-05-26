@@ -46,8 +46,7 @@ getDriversPreviousPage model =
 
 
 -- @todo convert manufacturer name to id
--- @todo validate input?
--- @todo materials
+-- @todo validate input
 queryDrivers : Model -> Cmd Msg
 queryDrivers model =
   let
