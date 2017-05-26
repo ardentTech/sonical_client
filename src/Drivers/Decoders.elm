@@ -1,10 +1,10 @@
-module Decoders exposing (
-  driverDecoder, driversDecoder, manufacturersDecoder)
+module Drivers.Decoders exposing (driverDecoder, driversDecoder)
 
 import Json.Decode exposing (
   Decoder, andThen, at, fail, float, int, list, nullable, string, succeed)
 import Json.Decode.Pipeline exposing (decode, required, requiredAt)
 
+import Manufacturers.Decoders exposing (manufacturerDecoder)
 import Models exposing (..)
 
 
@@ -68,18 +68,6 @@ frequencyResponseDecoder : Decoder FrequencyResponse
 frequencyResponseDecoder = decode FrequencyResponse
   |> required "lower" int
   |> required "upper" int
-
-
-manufacturerDecoder : Decoder Manufacturer
-manufacturerDecoder = decode Manufacturer
-  |> required "id" int
-  |> required "name" string
-  |> required "website" string
-
-
-manufacturersDecoder : Decoder (List Manufacturer)
-manufacturersDecoder =
-  list manufacturerDecoder
 
 
 materialDecoder : Decoder Material

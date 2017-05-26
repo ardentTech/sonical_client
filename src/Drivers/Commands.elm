@@ -7,12 +7,11 @@ module Drivers.Commands exposing (
   queryDrivers)
 
 import Api exposing (driverUrl, driversUrl)
-import Decoders exposing (driverDecoder, driversDecoder)
+import Drivers.Decoders exposing (driverDecoder, driversDecoder)
 import Drivers.QueryParams exposing (unpack)
-import Messages exposing (Msg (..))
+import Messages exposing (Msg (GetDriverDone, GetDriversDone))
 import Models exposing (Model)
 import Rest exposing (getItem, getList)
-import Router exposing (Route (DriverDetail, DriverList))
 
 
 -- @todo explicit next/previous page commands seems a bit much...
