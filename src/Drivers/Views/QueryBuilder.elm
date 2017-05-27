@@ -1,7 +1,7 @@
 module Drivers.Views.QueryBuilder exposing (queryBuilder)
 
 import Html exposing (
-  Html, button, div, h5, table, tbody, td, text, textarea, th, thead, tr)
+  Html, button, code, div, h5, h6, hr, p, table, tbody, td, text, textarea, th, thead, tr)
 import Html.Attributes exposing (class, id, placeholder, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 
@@ -9,10 +9,11 @@ import Messages exposing (Msg (..))
 import Models exposing (Model)
 
 
+-- @todo would be awesome to allow clicks on table cells and dynamically fill in the text box
 queryBuilder : Model -> Html Msg
 queryBuilder model =
   let
-    helpText = "Help " ++ (if model.driversQueryBuilderHelp then " [-]" else "[+]")
+    helpToggleText = "Help " ++ (if model.driversQueryBuilderHelp then " [-]" else "[+]")
   in
     div [ id "query-builder" ] [
       h5 [] [ text "Driver Query Builder" ],
@@ -29,7 +30,7 @@ queryBuilder model =
               class "btn btn-md btn-link",
               onClick QueryBuilderHelpClicked,
               type_ "button"
-            ] [ text helpText ]
+            ] [ text helpToggleText ]
         ],
         div [ class "float-right" ] [
           button [
@@ -75,8 +76,8 @@ stringOperators : String
 stringOperators = String.join ", " ["=", "__contains=", "__icontains"]
 
 
-optionsLeft : List QueryBuilderOption
-optionsLeft =
+options : List QueryBuilderOption
+options =
   [
     QueryBuilderOption "bl_product" numericalOperators float,
     QueryBuilderOption "compliance_equivalent_volume" numericalOperators float,
@@ -86,12 +87,7 @@ optionsLeft =
     QueryBuilderOption "electromagnetic_q" numericalOperators float,
     QueryBuilderOption "max_linear_excursion" numericalOperators float,
     QueryBuilderOption "max_power" numericalOperators integer,
-    QueryBuilderOption "mechanical_compliance_of_suspension" numericalOperators float]
-
-
-optionsRight : List QueryBuilderOption
-optionsRight =
-  [
+    QueryBuilderOption "mechanical_compliance_of_suspension" numericalOperators float,
     QueryBuilderOption "mechanical_q" numericalOperators float,
     QueryBuilderOption "model" stringOperators string,
     QueryBuilderOption "nominal_diameter" numericalOperators float,
@@ -106,10 +102,30 @@ optionsRight =
 help : Bool -> Html Msg
 help show =
   let
-    visibility = if show then "block" else "none"
+    visibility = if show then "flex" else "none"
   in
-    div [ class "row", style [("display", visibility)]]
-      (List.map optionsTable [optionsLeft, optionsRight])
+    div [ class "row", id "query-builder-help", style [("display", visibility)]] [
+      optionsTable options, optionsHelp ]
+
+
+optionsHelp : Html Msg
+optionsHelp =
+  div [ class "col-md-4" ] [
+    h6 [] [ text "Help" ],
+    p [] [ text """
+      Query string statements use the format: <name><operator><type>. Create compound query 
+      strings by separating statements with the '&' character. Manually inserting the leading      '?' is optional.
+    """ ],
+    h6 [] [ text "Examples" ],
+    p [] [ text "Nominal diameter greater than 4\" and RMS power of exactly 50W:" ],
+    code [] [ text "nominal_diameter__gt=4&rms_power=50" ],
+    hr [] [],
+    p [] [ text "Model contains case-insensitive word \"classic\":" ],
+    code [] [ text "model__icontains=classic" ],
+    hr [] [],
+    p [] [ text "Mechanical Q greater than 2.0 and less that or equal to 3.1:" ],
+    code [] [ text "mechanical_q__gt=2.0&mechanical_q__lte=3.1" ]
+  ]
 
 
 optionsTable : List QueryBuilderOption -> Html Msg
@@ -119,9 +135,10 @@ optionsTable options =
     toRow = \qbo -> tr [] (
       List.map (\q -> toTextCell q) [qbo.key, qbo.operators, qbo.dataType])
   in
-    div [ class "col-6" ] [
+    div [ class "col-md-8" ] [
       table [ class "table table-sm table-striped" ] [
-        thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Comparison Operators", "Type"])],
+        -- @todo inclue unit column
+        thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Operators", "Type"])],
         tbody [] (List.map (\o -> toRow o) options)
       ]
     ]

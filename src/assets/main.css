@@ -15,6 +15,7 @@ th span { cursor: pointer; }
 #query-builder { margin-bottom: 1rem; }
 #query-builder button.btn-secondary { margin-right: .5rem; }
 #query-builder form { margin-bottom: 1rem; }
+#query-builder-help { font-size: .7rem; }
 .btn { font-size: .85rem; }
 .close { font-size: 1.2rem; }
 
