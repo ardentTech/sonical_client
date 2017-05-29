@@ -1,6 +1,6 @@
-module Rest exposing (HttpListResponse, getItem, getList)
+module Rest exposing (HttpListResponse, getItem, getList, httpErrorString)
 
-import Http
+import Http exposing (Error (..))
 import Json.Decode exposing (Decoder, int, nullable, string)
 import Json.Decode.Pipeline exposing (decode, required)
 import Result exposing (Result)
@@ -14,14 +14,30 @@ type alias HttpListResponse a = {
 }
 
 
-getItem : String -> Decoder a -> (Result Http.Error a -> b) -> Cmd b
+getItem : String -> Decoder a -> (Result Error a -> b) -> Cmd b
 getItem url itemDecoder resultToMsg =
   Http.send resultToMsg <| Http.get url itemDecoder
 
 
-getList : String -> Decoder (List a) -> (Result Http.Error (HttpListResponse a) -> b) -> Cmd b
+getList : String -> Decoder (List a) -> (Result Error (HttpListResponse a) -> b) -> Cmd b
 getList url listDecoder resultToMsg =
   Http.send resultToMsg <| Http.get url (httpListResponseDecoder listDecoder)
+
+
+httpErrorString : Error -> String
+httpErrorString error =
+  case error of
+    BadUrl text ->
+      "Bad Url: " ++ text
+    Timeout ->
+      "Http Timeout"
+    NetworkError ->
+      "Network Error"
+    BadStatus response ->
+      "Bad HTTP Status: " ++ toString response.status.code
+    BadPayload message response ->
+      "Bad HTTP Payload: " ++ toString message ++ " (" ++
+      toString response.status.code ++ ")"
 
 
 -- PRIVATE

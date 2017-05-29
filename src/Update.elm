@@ -1,6 +1,5 @@
 module Update exposing (update)
 
-import Http exposing (Error (..))
 import Manufacturing.Update
 import Navigation exposing (newUrl)
 import UrlParser exposing (parsePath)
@@ -9,23 +8,8 @@ import Commands exposing (..)
 import Drivers.Commands exposing (..)
 import Messages exposing (Msg (..))
 import Models exposing (Model)
+import Rest exposing (httpErrorString)
 import Router exposing (route)
-
-
-httpErrorString : Error -> String
-httpErrorString error =
-  case error of
-    BadUrl text ->
-      "Bad Url: " ++ text
-    Timeout ->
-      "Http Timeout"
-    NetworkError ->
-      "Network Error"
-    BadStatus response ->
-      "Bad HTTP Status: " ++ toString response.status.code
-    BadPayload message response ->
-      "Bad HTTP Payload: " ++ toString message ++ " (" ++
-      toString response.status.code ++ ")"
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
