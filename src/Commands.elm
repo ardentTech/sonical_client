@@ -2,7 +2,7 @@ module Commands exposing (routeToCmd)
 
 import Drivers.Commands exposing (getDriver, getDrivers, getDriversWithParams)
 import Manufacturing.Commands exposing (getManufacturers)
-import Messages exposing (Msg)
+import Messages exposing (Msg (..))
 import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
 
@@ -14,4 +14,4 @@ routeToCmd model =
     Just (DriverList Nothing) -> getDrivers model
     Just (DriverList (Just q)) -> getDriversWithParams model q
     Just (DriverDetail i) -> getDriver model i
-    Just ManufacturerList -> getManufacturers model
+    Just ManufacturerList -> Cmd.batch [ Cmd.map ManufacturingMsg (getManufacturers model)]

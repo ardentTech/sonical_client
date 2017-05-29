@@ -2,7 +2,7 @@ module Manufacturing.Commands exposing (getManufacturers)
 
 import Api exposing (manufacturersUrl)
 import Manufacturing.Decoders exposing (manufacturersDecoder)
-import Messages exposing (Msg (..))
+import Manufacturing.Messages exposing (Msg (..))
 import Models exposing (Model)
 import Rest exposing (getList)
 
