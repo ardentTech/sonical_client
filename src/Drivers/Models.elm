@@ -1,4 +1,5 @@
-module Drivers.Models exposing (Driver, DriverProductListing, FrequencyResponse)
+module Drivers.Models exposing (
+  Driver, DriverGroup, DriverProductListing, FrequencyResponse)
 
 
 import Dealers.Models exposing (Dealer)
@@ -34,6 +35,12 @@ type alias Driver = {
   voice_coil_former : Maybe Material,
   voice_coil_inductance : Maybe Float,
   voice_coil_wire : Maybe Material
+}
+
+
+type alias DriverGroup = {
+  drivers : List Driver,
+  name : String
 }
 
 

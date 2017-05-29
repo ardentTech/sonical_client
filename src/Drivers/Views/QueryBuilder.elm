@@ -76,6 +76,7 @@ stringOperators : String
 stringOperators = String.join ", " ["=", "__contains=", "__icontains"]
 
 
+-- @todo add manufacturer and materials
 options : List QueryBuilderOption
 options =
   [

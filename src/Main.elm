@@ -33,6 +33,7 @@ defaultModel = {
   apiUrl = "",
   currentRoute = Nothing,
   driver = Nothing,
+  driverGroups = [],
   drivers = [],
   driversCount = 0,
   driversNextPage = Nothing,

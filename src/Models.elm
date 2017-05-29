@@ -2,7 +2,7 @@ module Models exposing (Model)
 
 import Table
 
-import Drivers.Models exposing (Driver)
+import Drivers.Models exposing (Driver, DriverGroup)
 import Manufacturing.Models exposing (Manufacturer)
 import Router exposing (Route (DriverList))
 
@@ -11,6 +11,7 @@ type alias Model = {
   apiUrl : String,
   currentRoute : Maybe Route,
   driver : Maybe Driver,
+  driverGroups : List DriverGroup,
   drivers : List Driver,
   driversCount : Int,
   driversNextPage : Maybe String,
