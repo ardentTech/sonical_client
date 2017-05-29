@@ -2,11 +2,13 @@ module Models exposing (Model)
 
 import Table
 
-import Drivers.Models exposing (Driver, DriverGroup)
+import Drivers.Models exposing (Driver)
+import DriverGroups.Models exposing (DriverGroup)
 import Manufacturing.Models exposing (Manufacturer)
 import Router exposing (Route (DriverList))
 
 
+-- @todo use a session concept to store driverGroups, lastVisit, etc.?
 type alias Model = {
   apiUrl : String,
   currentRoute : Maybe Route,
