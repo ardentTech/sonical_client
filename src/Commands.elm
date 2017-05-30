@@ -9,13 +9,17 @@ import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
 
 routeToCmd : Model -> Cmd Msg
 routeToCmd model =
-  case model.currentRoute of
-    Nothing -> Cmd.none
-    Just (DriverList Nothing) ->
-      Cmd.map DriversMsg <| getDrivers model
-    Just (DriverList (Just q)) ->
-      Cmd.map DriversMsg <| getDriversWithParams model q
-    Just (DriverDetail i) ->
-      Cmd.map DriversMsg <| getDriver model i
-    Just ManufacturerList ->
-      Cmd.map ManufacturingMsg <| getManufacturers model
+  let
+    toDriversMsg = (\v -> Cmd.map DriversMsg <| v)
+    toManufacturingMsg = (\v -> Cmd.map ManufacturingMsg <| v)
+  in
+    case model.currentRoute of
+      Nothing -> Cmd.none
+      Just (DriverList Nothing) ->
+        toDriversMsg (getDrivers model)
+      Just (DriverList (Just q)) ->
+        toDriversMsg (getDriversWithParams model q)
+      Just (DriverDetail i) ->
+        toDriversMsg (getDriver model i)
+      Just ManufacturerList ->
+        toManufacturingMsg (getManufacturers model)
