@@ -5,7 +5,7 @@ import Html exposing (
 import Html.Attributes exposing (class, id, placeholder, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 
-import Messages exposing (Msg (..))
+import Drivers.Messages exposing (Msg (..))
 import Models exposing (Model)
 
 

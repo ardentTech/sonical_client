@@ -52,8 +52,11 @@ navbar =
 routeToView : Maybe Route -> Model -> Html Msg
 routeToView route model =
   case route of
-    Just (DriverDetail i) -> driverDetail model
-    Just (DriverList _) -> driverList model
+    Just (DriverDetail i) ->
+      Html.map Messages.DriversMsg <| driverDetail model
+    Just (DriverList _) ->
+      Html.map Messages.DriversMsg <| driverList model
     Just ManufacturerList ->
       Html.map Messages.ManufacturingMsg <| manufacturerList model
-    Nothing -> div [] [ h3 [] [ text "Invalid URL" ]]
+    Nothing ->
+      div [] [ h3 [] [ text "Invalid URL" ]]

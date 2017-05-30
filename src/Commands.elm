@@ -11,7 +11,11 @@ routeToCmd : Model -> Cmd Msg
 routeToCmd model =
   case model.currentRoute of
     Nothing -> Cmd.none
-    Just (DriverList Nothing) -> getDrivers model
-    Just (DriverList (Just q)) -> getDriversWithParams model q
-    Just (DriverDetail i) -> getDriver model i
-    Just ManufacturerList -> Cmd.batch [ Cmd.map ManufacturingMsg (getManufacturers model)]
+    Just (DriverList Nothing) ->
+      Cmd.map DriversMsg <| getDrivers model
+    Just (DriverList (Just q)) ->
+      Cmd.map DriversMsg <| getDriversWithParams model q
+    Just (DriverDetail i) ->
+      Cmd.map DriversMsg <| getDriver model i
+    Just ManufacturerList ->
+      Cmd.map ManufacturingMsg <| getManufacturers model
