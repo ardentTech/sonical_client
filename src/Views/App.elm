@@ -54,5 +54,6 @@ routeToView route model =
   case route of
     Just (DriverDetail i) -> driverDetail model
     Just (DriverList _) -> driverList model
-    Just ManufacturerList -> manufacturerList model
+    Just ManufacturerList ->
+      Html.map Messages.ManufacturingMsg <| manufacturerList model
     Nothing -> div [] [ h3 [] [ text "Invalid URL" ]]
