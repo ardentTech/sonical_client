@@ -3,7 +3,7 @@ module Update exposing (update)
 import Navigation exposing (newUrl)
 import UrlParser exposing (parsePath)
 
-import Commands exposing (..)
+import Commands exposing (routeToCmd)
 import Drivers.Update
 import Manufacturing.Update
 import Messages exposing (Msg (..))
@@ -31,9 +31,10 @@ update msg model =
     UrlChange location ->
       let
         newRoute = parsePath route location
-        newModel = { model | currentRoute = newRoute }
       in
-        if (model.currentRoute == newRoute) then
-          (model, Cmd.none)
+        if (model.currentRoute == newRoute) then (model, Cmd.none)
         else
-          (newModel, routeToCmd newModel )
+          let
+            newModel = { model | currentRoute = newRoute }
+          in
+            (newModel, routeToCmd newModel )
