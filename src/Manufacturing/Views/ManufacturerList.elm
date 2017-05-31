@@ -4,11 +4,11 @@ import Html exposing (Html, a, div, h5, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (class, href, target)
 
 import Manufacturing.Models exposing (Manufacturer)
-import Manufacturing.Messages exposing (Msg)
+import Manufacturing.Messages exposing (InternalMsg)
 import Models exposing (Model)
 
 
-manufacturerList : Model -> Html Msg
+manufacturerList : Model -> Html InternalMsg
 manufacturerList model =
   div [ class "row" ] [
     div [ class "col-12" ] [
@@ -26,7 +26,7 @@ manufacturerList model =
 -- PRIVATE
 
 
-toRow : Manufacturer -> Html Msg
+toRow : Manufacturer -> Html InternalMsg
 toRow manufacturer =
   let
     website = case (String.length manufacturer.website) of
