@@ -7,7 +7,7 @@ import Html.Events exposing (onClick)
 import Drivers.Views.DriverDetail exposing (driverDetail)
 import Drivers.Views.DriverList exposing (driverList)
 import Manufacturing.Views.ManufacturerList exposing (manufacturerList)
-import Messages exposing (Msg (ErrorDismissed, NewUrl))
+import Messages exposing (Msg (ErrorDismissed, NewUrl), childTranslator)
 import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
 import Views.Alert exposing (alert)
@@ -57,6 +57,6 @@ routeToView route model =
     Just (DriverList _) ->
       Html.map Messages.DriversMsg <| driverList model
     Just ManufacturerList ->
-      Html.map Messages.ManufacturingMsg <| manufacturerList model
+      Html.map childTranslator <| manufacturerList model
     Nothing ->
       div [] [ h3 [] [ text "Invalid URL" ]]
