@@ -6,7 +6,7 @@ import Manufacturing.Models exposing (Manufacturer)
 import Rest exposing (HttpListResponse)
 
 
-type InternalMsg = GetManufacturersDone (
+type InternalMsg = NoOp | GetManufacturersDone (
   Result Http.Error (HttpListResponse Manufacturer))
 
 

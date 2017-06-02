@@ -6,7 +6,7 @@ import UrlParser exposing (parsePath)
 import Commands exposing (routeToCmd)
 import Drivers.Update
 import Manufacturing.Update
-import Messages exposing (Msg (..))
+import Messages exposing (..)
 import Models exposing (Model)
 import Router exposing (route)
 
@@ -25,7 +25,7 @@ update msg model =
       let
         ( newModel, cmd ) = Manufacturing.Update.update subMsg model
       in
-        ( newModel, Cmd.map ManufacturingMsg cmd )
+        ( newModel, (Cmd.map childTranslator cmd))
     NewUrl url ->
       ( model, newUrl url )
     UrlChange location ->
