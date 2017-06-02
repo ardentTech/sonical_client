@@ -1,7 +1,7 @@
 module Commands exposing (routeToCmd)
 
 import Drivers.Commands exposing (getDriver, getDrivers, getDriversWithParams)
-import Manufacturing.Commands exposing (getManufacturers)
+import Manufacturing.Commands exposing (..)
 import Messages exposing (childTranslator, Msg (..))
 import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
@@ -14,7 +14,6 @@ routeToCmd model =
     toManufacturingMsg = (\v -> Cmd.map ManufacturingMsg <| v)
   in
     case model.currentRoute of
-      Nothing -> Cmd.none
       Just (DriverList Nothing) ->
         toDriversMsg (getDrivers model)
       Just (DriverList (Just q)) ->
@@ -22,4 +21,5 @@ routeToCmd model =
       Just (DriverDetail i) ->
         toDriversMsg (getDriver model i)
       Just ManufacturerList ->
-        toManufacturingMsg (getManufacturers model)
+        Cmd.map childTranslator <| manufacturingRouteToCmd ManufacturerList
+      _ -> Cmd.none
