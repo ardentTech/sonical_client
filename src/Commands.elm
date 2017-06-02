@@ -11,7 +11,6 @@ routeToCmd : Model -> Cmd Msg
 routeToCmd model =
   let
     toDriversMsg = (\v -> Cmd.map DriversMsg <| v)
-    toManufacturingMsg = (\v -> Cmd.map ManufacturingMsg <| v)
   in
     case model.currentRoute of
       Just (DriverList Nothing) ->
@@ -21,5 +20,5 @@ routeToCmd model =
       Just (DriverDetail i) ->
         toDriversMsg (getDriver model i)
       Just ManufacturerList ->
-        Cmd.map childTranslator <| manufacturingRouteToCmd ManufacturerList
+        Cmd.map childTranslator <| manufacturingRouteToCmd model
       _ -> Cmd.none

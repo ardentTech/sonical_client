@@ -5,20 +5,19 @@ import Manufacturing.Decoders exposing (manufacturersDecoder)
 import Manufacturing.Messages exposing (..)
 import Models exposing (Model)
 import Rest exposing (getList)
-import Router exposing (Route (ManufacturerList))
 
 
-manufacturingRouteToCmd : Route -> Cmd Msg
-manufacturingRouteToCmd route =
-  Cmd.none
+manufacturingRouteToCmd : Model -> Cmd Msg
+manufacturingRouteToCmd model =
+  getManufacturers model
 
 
 -- PRIVATE
 
 
---getManufacturers : Model -> Cmd Msg
---getManufacturers model =
---  let
---    url = (manufacturersUrl model.apiUrl) ++ "?limit=100"
---  in
---    getList url manufacturersDecoder (ForSelf GetManufacturersDone)
+getManufacturers : Model -> Cmd Msg
+getManufacturers model =
+  let
+    url = (manufacturersUrl model.apiUrl) ++ "?limit=100"
+  in
+    Cmd.map ForSelf (getList url manufacturersDecoder GetManufacturersDone)
