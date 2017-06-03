@@ -4,7 +4,7 @@ import Navigation exposing (Location, programWithFlags)
 import Table
 import UrlParser exposing (parsePath)
 
-import Commands exposing (routeToCmd)
+import Commands exposing (cmdFromRoute)
 import Drivers.QueryParams exposing (unpack)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
@@ -59,4 +59,4 @@ init flags location =
           _ -> ""
     }
   in
-    (model, routeToCmd model)
+    (model, cmdFromRoute model)

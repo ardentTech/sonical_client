@@ -1,4 +1,4 @@
-module Commands exposing (routeToCmd)
+module Commands exposing (cmdFromRoute)
 
 import Drivers.Commands exposing (getDriver, getDrivers, getDriversWithParams)
 import Manufacturing.Commands exposing (..)
@@ -7,8 +7,8 @@ import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
 
 
-routeToCmd : Model -> Cmd Msg
-routeToCmd model =
+cmdFromRoute : Model -> Cmd Msg
+cmdFromRoute model =
   let
     toDriversMsg = (\v -> Cmd.map DriversMsg <| v)
   in

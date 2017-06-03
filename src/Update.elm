@@ -3,7 +3,7 @@ module Update exposing (update)
 import Navigation exposing (newUrl)
 import UrlParser exposing (parsePath)
 
-import Commands exposing (routeToCmd)
+import Commands exposing (cmdFromRoute)
 import Drivers.Update
 import Manufacturing.Update
 import Messages exposing (..)
@@ -37,4 +37,4 @@ update msg model =
           let
             newModel = { model | currentRoute = newRoute }
           in
-            (newModel, routeToCmd newModel )
+            (newModel, cmdFromRoute newModel )
