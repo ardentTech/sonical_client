@@ -48,11 +48,15 @@ defaultModel = {
 init : Flags -> Location -> ( Model, Cmd Msg )
 init flags location =
   let
+    -- @todo initialModel
     currentRoute = parsePath route location
-    baseModel = { defaultModel | apiUrl = flags.apiUrl, currentRoute = currentRoute }
-    model = case currentRoute of
-      Just (DriverList (Just q)) -> { baseModel | driversQuery = (unpack q) }
-      _ ->  baseModel
-    cmd = routeToCmd model
+    model = { defaultModel |
+      currentRoute = currentRoute,
+      apiUrl = flags.apiUrl,
+      driversQuery =
+        case currentRoute of
+          Just (DriverList (Just q)) -> unpack q
+          _ -> ""
+    }
   in
-    (model, cmd)
+    (model, routeToCmd model)
