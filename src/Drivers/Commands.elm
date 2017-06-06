@@ -9,7 +9,7 @@ module Drivers.Commands exposing (
 import Api exposing (driverUrl, driversUrl)
 import Drivers.Decoders exposing (driverDecoder, driversDecoder)
 import Drivers.QueryParams exposing (unpack)
-import Drivers.Messages exposing (Msg (GetDriverDone, GetDriversDone))
+import Drivers.Messages exposing (..)
 import Models exposing (Model)
 import Rest exposing (getItem, getList)
 
@@ -22,7 +22,7 @@ getDriver model i =
   let
     url = driverUrl model.apiUrl i
   in
-    getItem url driverDecoder GetDriverDone
+    Cmd.map ForSelf <| getItem url driverDecoder GetDriverDone
 
 
 getDrivers : Model -> Cmd Msg
@@ -55,7 +55,7 @@ queryDrivers model =
         True -> model.driversQuery
         False -> "?" ++ model.driversQuery
   in
-    getList ((driversUrl model.apiUrl) ++ query) driversDecoder GetDriversDone
+    Cmd.map ForSelf <| getList ((driversUrl model.apiUrl) ++ query) driversDecoder GetDriversDone
 
 
 -- PRIVATE
@@ -65,4 +65,4 @@ getDriversPage : Maybe String -> Cmd Msg
 getDriversPage page =
   case page of
     Nothing -> Cmd.none
-    Just str -> getList str driversDecoder GetDriversDone
+    Just str -> Cmd.map ForSelf <| getList str driversDecoder GetDriversDone

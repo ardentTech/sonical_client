@@ -17,3 +17,11 @@ type Msg =
 childTranslator : Manufacturing.Messages.Translator Msg
 childTranslator =
   Manufacturing.Messages.translator { onInternalMessage = ManufacturingMsg }
+
+
+driversTranslator : Drivers.Messages.Translator Msg
+driversTranslator =
+  Drivers.Messages.translator {
+    onInternalMessage = DriversMsg,
+    onNewUrl = NewUrl
+  }

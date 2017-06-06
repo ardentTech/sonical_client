@@ -3,12 +3,12 @@ module Drivers.Update exposing (update)
 import Navigation exposing (newUrl)
 
 import Drivers.Commands exposing (..)
-import Drivers.Messages exposing (Msg (..))
+import Drivers.Messages exposing (..)
 import Models exposing (Model)
 import Rest exposing (httpErrorString)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : InternalMsg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
     GetDriverDone (Ok driver) ->
@@ -24,8 +24,6 @@ update msg model =
       }, Cmd.none )
     GetDriversDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
-    NewUrl url ->
-      ( model, newUrl url )
     NextPageClicked ->
       -- @todo append to model.driversQuery to maintain filters
       ( model, getDriversNextPage model )

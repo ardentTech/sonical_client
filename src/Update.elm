@@ -20,7 +20,7 @@ update msg model =
       let
         ( newModel, cmd ) = Drivers.Update.update subMsg model
       in
-        ( newModel, Cmd.map DriversMsg cmd )
+        ( newModel, Cmd.map driversTranslator cmd )
     ManufacturingMsg subMsg ->
       let
         ( newModel, cmd ) = Manufacturing.Update.update subMsg model
