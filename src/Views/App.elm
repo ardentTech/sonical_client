@@ -7,7 +7,7 @@ import Html.Events exposing (onClick)
 import Drivers.Views.DriverDetail exposing (driverDetail)
 import Drivers.Views.DriverList exposing (driverList)
 import Manufacturing.Views.ManufacturerList exposing (manufacturerList)
-import Messages exposing (Msg (ErrorDismissed, NewUrl), childTranslator)
+import Messages exposing (..)
 import Models exposing (Model)
 import Router exposing (Route (DriverDetail, DriverList, ManufacturerList))
 import Views.Alert exposing (alert)
@@ -53,9 +53,9 @@ routeToView : Maybe Route -> Model -> Html Msg
 routeToView route model =
   case route of
     Just (DriverDetail i) ->
-      Html.map Messages.DriversMsg <| driverDetail model
+      Html.map driversTranslator <| driverDetail model
     Just (DriverList _) ->
-      Html.map Messages.DriversMsg <| driverList model
+      Html.map driversTranslator <| driverList model
     Just ManufacturerList ->
       Html.map childTranslator <| manufacturerList model
     Nothing ->

@@ -1,7 +1,5 @@
 module Drivers.Update exposing (update)
 
-import Navigation exposing (newUrl)
-
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)

@@ -5,7 +5,7 @@ import Html.Attributes exposing (class, disabled, id, placeholder, type_, value)
 import Html.Events exposing (onClick)
 import Table exposing (defaultCustomizations)
 
-import Drivers.Messages exposing (Msg (..))
+import Drivers.Messages exposing (..)
 import Drivers.Models exposing (Driver)
 import Drivers.Views.QueryBuilder exposing (queryBuilder)
 import Models exposing (Model)
@@ -25,8 +25,8 @@ withDrivers : Model -> Html Msg
 withDrivers model =
   div [ class "row" ] [
     div [ class "col-12" ] [
-      queryBuilder model,
-      Table.view tableConfig model.tableState model.drivers
+      queryBuilder model
+--      Table.view tableConfig model.tableState model.drivers
     ], 
     div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
     div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
@@ -93,8 +93,8 @@ paginationControl endpoint msg txt =
 paginationControls : Model -> Html Msg
 paginationControls model =
   let
-    prev = paginationControl model.driversPreviousPage PrevPageClicked "«"
-    next = paginationControl model.driversNextPage NextPageClicked "»"
+    prev = paginationControl model.driversPreviousPage (ForSelf PrevPageClicked) "«"
+    next = paginationControl model.driversNextPage (ForSelf NextPageClicked) "»"
   in
     div [ class "btn-group float-right" ] [ prev, next ]
 
@@ -110,24 +110,24 @@ paginationInfo model =
     ]
 
 
-tableConfig : Table.Config Driver Msg
-tableConfig =
-  Table.customConfig {
-    toId = .model,
-    toMsg = SetTableState,
-    columns = [
-      modelColumn,
-      manufacturerColumn,
-      maybeFloatColumn "Diam" .nominal_diameter inches,
-      maybeFloatColumn "Fs" .resonant_frequency hertz,
-      maybeFloatColumn "SPL" .sensitivity decibels,
-      maybeIntColumn "Z"  .nominal_impedance ohms,
-      maybeIntColumn "Max P" .max_power watts,
-      maybeIntColumn "RMS P" .rms_power watts ],
-    customizations = {
-      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
-    }
-  }
+--tableConfig : Table.Config Driver Msg
+--tableConfig =
+--  Table.customConfig {
+--    toId = .model,
+--    toMsg = SetTableState,
+--    columns = [
+--      modelColumn,
+--      manufacturerColumn,
+--      maybeFloatColumn "Diam" .nominal_diameter inches,
+--      maybeFloatColumn "Fs" .resonant_frequency hertz,
+--      maybeFloatColumn "SPL" .sensitivity decibels,
+--      maybeIntColumn "Z"  .nominal_impedance ohms,
+--      maybeIntColumn "Max P" .max_power watts,
+--      maybeIntColumn "RMS P" .rms_power watts ],
+--    customizations = {
+--      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
+--    }
+--  }
 
 
 viewModel : Driver -> Table.HtmlDetails Msg
@@ -137,4 +137,4 @@ viewModel {id, model} =
     txt = (String.left limit model) ++ (if (String.length model > limit) then "..." else "")
   in
     Table.HtmlDetails [ class "col-driver-model" ] [
-      a [ onClick (NewUrl ("drivers/" ++ (toString id)))] [ text txt ]]
+      a [ onClick (ForParent (NewUrl ("drivers/" ++ (toString id))))] [ text txt ]]

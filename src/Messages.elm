@@ -8,7 +8,7 @@ import Manufacturing.Messages
 
 type Msg =
   ErrorDismissed |
-  DriversMsg Drivers.Messages.Msg |
+  DriversMsg Drivers.Messages.InternalMsg |
   ManufacturingMsg Manufacturing.Messages.InternalMsg |
   NewUrl String |
   UrlChange Location

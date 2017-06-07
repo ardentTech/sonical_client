@@ -5,7 +5,7 @@ import Html exposing (
 import Html.Attributes exposing (class, id, placeholder, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 
-import Drivers.Messages exposing (Msg (..))
+import Drivers.Messages exposing (..)
 import Models exposing (Model)
 
 
@@ -17,7 +17,7 @@ queryBuilder model =
   in
     div [ id "query-builder" ] [
       h5 [] [ text "Driver Query Builder" ],
-      Html.form [ class "clearfix", onSubmit QueryBuilderSubmitted ] [
+      Html.map ForSelf <| Html.form [ class "clearfix", onSubmit QueryBuilderSubmitted ] [
         div [ class "form-group" ] [
           textarea [
             class "form-control",
@@ -138,7 +138,7 @@ optionsTable options =
   in
     div [ class "col-md-8" ] [
       table [ class "table table-sm table-striped" ] [
-        -- @todo inclue unit column
+        -- @todo include unit column
         thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Operators", "Type"])],
         tbody [] (List.map (\o -> toRow o) options)
       ]

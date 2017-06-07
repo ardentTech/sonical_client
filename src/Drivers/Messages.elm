@@ -30,7 +30,7 @@ type alias Translator msg = Msg -> msg
 
 type alias TranslationDictionary msg = {
   onInternalMessage : InternalMsg -> msg,
-  onNewUrl : msg
+  onNewUrl : String -> msg
 }
 
 
@@ -38,6 +38,6 @@ translator : TranslationDictionary msg -> Translator msg
 translator { onInternalMessage, onNewUrl } msg =
   case msg of
     ForParent (NewUrl url) ->
-      onNewUrl
+      onNewUrl url
     ForSelf internal ->
       onInternalMessage internal
