@@ -25,8 +25,8 @@ withDrivers : Model -> Html Msg
 withDrivers model =
   div [ class "row" ] [
     div [ class "col-12" ] [
-      queryBuilder model
---      Table.view tableConfig model.tableState model.drivers
+      queryBuilder model,
+      Table.view tableConfig model.tableState model.drivers
     ], 
     div [ class "col-6", id "pagination-info" ] [ paginationInfo model ],
     div [ class "col-6", id "pagination-controls" ] [ paginationControls model ]
@@ -110,24 +110,24 @@ paginationInfo model =
     ]
 
 
---tableConfig : Table.Config Driver Msg
---tableConfig =
---  Table.customConfig {
---    toId = .model,
---    toMsg = SetTableState,
---    columns = [
---      modelColumn,
---      manufacturerColumn,
---      maybeFloatColumn "Diam" .nominal_diameter inches,
---      maybeFloatColumn "Fs" .resonant_frequency hertz,
---      maybeFloatColumn "SPL" .sensitivity decibels,
---      maybeIntColumn "Z"  .nominal_impedance ohms,
---      maybeIntColumn "Max P" .max_power watts,
---      maybeIntColumn "RMS P" .rms_power watts ],
---    customizations = {
---      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
---    }
---  }
+tableConfig : Table.Config Driver Msg
+tableConfig =
+  Table.customConfig {
+    toId = .model,
+    toMsg = ForSelf << SetTableState,
+    columns = [
+      modelColumn,
+      manufacturerColumn,
+      maybeFloatColumn "Diam" .nominal_diameter inches,
+      maybeFloatColumn "Fs" .resonant_frequency hertz,
+      maybeFloatColumn "SPL" .sensitivity decibels,
+      maybeIntColumn "Z"  .nominal_impedance ohms,
+      maybeIntColumn "Max P" .max_power watts,
+      maybeIntColumn "RMS P" .rms_power watts ],
+    customizations = {
+      defaultCustomizations | tableAttrs = [ class "table table-sm table-striped" ]
+    }
+  }
 
 
 viewModel : Driver -> Table.HtmlDetails Msg
