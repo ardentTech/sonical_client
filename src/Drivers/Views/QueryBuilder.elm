@@ -1,8 +1,7 @@
 module Drivers.Views.QueryBuilder exposing (queryBuilder)
 
-import Html exposing (
-  Html, button, code, div, h5, h6, hr, p, table, tbody, td, text, textarea, th, thead, tr)
-import Html.Attributes exposing (class, id, placeholder, style, type_, value)
+import Html exposing (..)
+import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput, onSubmit)
 
 import Drivers.Messages exposing (..)
@@ -33,11 +32,7 @@ queryBuilder model =
             ] [ text helpToggleText ]
         ],
         div [ class "float-right" ] [
-          button [
-              class "btn btn-md btn-secondary",
-              onClick QueryBuilderCleared,
-              type_ "button"
-            ] [ text "Clear" ],
+          button (clearBtnAttrs model) [ text "Clear" ],
           button [
             class "btn btn-md btn-primary", type_ "submit" ] [ text "Submit" ]
         ]
@@ -54,6 +49,18 @@ type alias QueryBuilderOption = {
   operators : String,
   dataType : String
 }
+
+
+clearBtnAttrs : Model -> List (Html.Attribute InternalMsg)
+clearBtnAttrs model =
+  let
+    disabledVal = if (String.length model.driversQuery) > 0 then False else True
+  in
+    [
+      class "btn btn-md btn-secondary",
+      disabled disabledVal,
+      onClick QueryBuilderCleared,
+      type_ "button" ]
 
 
 float : String
