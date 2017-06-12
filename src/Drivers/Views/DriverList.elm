@@ -93,8 +93,8 @@ paginationControl endpoint msg txt =
 paginationControls : Model -> Html Msg
 paginationControls model =
   let
-    prev = paginationControl model.driversPreviousPage (ForSelf PrevPageClicked) "«"
-    next = paginationControl model.driversNextPage (ForSelf NextPageClicked) "»"
+    prev = paginationControl Nothing (ForSelf PrevPageClicked) "«"
+    next = paginationControl Nothing (ForSelf NextPageClicked) "»"
   in
     div [ class "btn-group float-right" ] [ prev, next ]
 

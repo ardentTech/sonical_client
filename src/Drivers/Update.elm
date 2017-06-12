@@ -16,18 +16,18 @@ update msg model =
     GetDriversDone (Ok response) ->
       ({ model |
         drivers = response.results,
-        driversCount = response.count,
-        driversNextPage = response.next,
-        driversPreviousPage = response.previous
+        driversCount = response.count
+--        driversNextOffset = response.next,
+--        driversPreviousOffset = response.previous
       }, Cmd.none )
     GetDriversDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
     NextPageClicked ->
       -- @todo append to model.driversQuery to maintain filters
-      ( model, getDriversNextPage model )
+      ( model, Cmd.none )
     PrevPageClicked ->
       -- @todo append to model.driversQuery to maintain filters
-      ( model, getDriversPreviousPage model )
+      ( model, Cmd.none )
     QueryBuilderCleared ->
       ({ model | driversQuery = "" }, Cmd.none )
     QueryBuilderHelpClicked ->

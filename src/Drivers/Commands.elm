@@ -1,8 +1,6 @@
 module Drivers.Commands exposing (
   getDriver,
   getDrivers,
-  getDriversNextPage,
-  getDriversPreviousPage,
   getDriversWithParams,
   queryDrivers)
 
@@ -12,9 +10,6 @@ import Drivers.QueryParams exposing (unpack)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
 import Rest exposing (getItem, getList)
-
-
--- @todo explicit next/previous page commands seems a bit much...
 
 
 getDriver : Model -> Int -> Cmd Msg
@@ -33,16 +28,6 @@ getDrivers model =
 getDriversWithParams : Model -> String -> Cmd Msg
 getDriversWithParams model params =
   getDriversPage (Just <| (driversUrl model.apiUrl) ++ (unpack params))
-
-
-getDriversNextPage : Model -> Cmd Msg
-getDriversNextPage model =
-  getDriversPage model.driversNextPage
-
-
-getDriversPreviousPage : Model -> Cmd Msg
-getDriversPreviousPage model =
-  getDriversPage model.driversPreviousPage
 
 
 -- @todo convert manufacturer name to id
