@@ -7,11 +7,6 @@ import Json.Decode exposing (decodeString, int, keyValuePairs)
 import Tuple exposing (first, second)
 
 
--- @todo add
--- @todo get
--- @todo getAll
-
-
 
 offsetFromUrl : Maybe String -> Maybe Int
 offsetFromUrl url =
