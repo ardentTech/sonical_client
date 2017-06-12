@@ -16,22 +16,27 @@ update msg model =
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
       let
-        newModel = { model |
+        nextOffset = offsetFromUrl response.next
+        previousOffset = offsetFromUrl response.previous
+      in
+        ({ model |
           drivers = response.results,
           driversCount = response.count,
-          driversNextOffset = offsetFromUrl response.next,
-          driversPreviousOffset = offsetFromUrl response.previous
-        }
-      in
-        ( newModel, Cmd.none )
+          driversNextOffset = nextOffset,
+          driversPreviousOffset = previousOffset
+        }, Cmd.none )
     GetDriversDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
     NextPageClicked ->
-      -- @todo append to model.driversQuery to maintain filters
-      ( model, Cmd.none )
+      let
+        driversQuery = offsetToDriversQuery model.driversNextOffset model.driversQuery
+      in
+        ({ model | driversQuery = driversQuery }, Cmd.none )
     PrevPageClicked ->
-      -- @todo append to model.driversQuery to maintain filters
-      ( model, Cmd.none )
+      let
+        driversQuery = offsetToDriversQuery model.driversPreviousOffset model.driversQuery
+      in
+        ({ model | driversQuery = driversQuery }, Cmd.none )
     QueryBuilderCleared ->
       ({ model | driversQuery = "" }, Cmd.none )
     QueryBuilderHelpClicked ->
@@ -45,3 +50,16 @@ update msg model =
       ({ model | driversQuery = val }, Cmd.none )
     SetTableState newState ->
       ({ model | tableState = newState }, Cmd.none )
+
+
+-- PRIVATE
+
+
+offsetToDriversQuery : Maybe Int -> String -> String
+offsetToDriversQuery offset query =
+  case offset of
+    Just o ->
+      case offsetFromUrl <| Just query of
+        Just i -> "OFFSET IN QUERY, SO REPLACE"
+        Nothing -> "OFFSET NOT IN QUERY, SO ADD"
+    Nothing -> query
