@@ -2,6 +2,7 @@ module Drivers.Update exposing (update)
 
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
+import Drivers.QueryParams exposing (offsetFromUrl)
 import Models exposing (Model)
 import Rest exposing (httpErrorString)
 
@@ -14,12 +15,15 @@ update msg model =
     GetDriverDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
-      ({ model |
-        drivers = response.results,
-        driversCount = response.count
---        driversNextOffset = response.next,
---        driversPreviousOffset = response.previous
-      }, Cmd.none )
+      let
+        newModel = { model |
+          drivers = response.results,
+          driversCount = response.count,
+          driversNextOffset = offsetFromUrl response.next,
+          driversPreviousOffset = offsetFromUrl response.previous
+        }
+      in
+        ( newModel, Cmd.none )
     GetDriversDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
     NextPageClicked ->
