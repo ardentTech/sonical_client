@@ -75,13 +75,13 @@ modelColumn =
   }
 
 
-paginationControl : Maybe String -> Msg -> String -> Html Msg
-paginationControl endpoint msg txt =
+paginationControl : Maybe Int -> Msg -> String -> Html Msg
+paginationControl offset msg txt =
   let
     disabledVal =
-      case endpoint of
+      case offset of
         Nothing -> True
-        Just e -> False
+        Just o -> False
   in
     button [
       class "btn btn-secondary btn-sm text-muted",
@@ -93,8 +93,8 @@ paginationControl endpoint msg txt =
 paginationControls : Model -> Html Msg
 paginationControls model =
   let
-    prev = paginationControl Nothing (ForSelf PrevPageClicked) "«"
-    next = paginationControl Nothing (ForSelf NextPageClicked) "»"
+    prev = paginationControl model.driversPreviousOffset (ForSelf PrevPageClicked) "«"
+    next = paginationControl model.driversNextOffset (ForSelf NextPageClicked) "»"
   in
     div [ class "btn-group float-right" ] [ prev, next ]
 

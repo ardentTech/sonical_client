@@ -1,4 +1,4 @@
-module Drivers.QueryParams exposing (offsetFromUrl, unpack)
+module Drivers.QueryParams exposing (getOffset, unpack)
 
 import Regex exposing (..)
 
@@ -8,8 +8,8 @@ import Tuple exposing (first, second)
 
 
 
-offsetFromUrl : Maybe String -> Maybe Int
-offsetFromUrl url =
+getOffset : Maybe String -> Maybe Int
+getOffset url =
   case url of
     Just u -> fromParamKey "offset" u
     Nothing -> Nothing
@@ -26,6 +26,14 @@ unpack params =
     Nothing -> ""
 
 
+-- PRIVATE
+
+
+format : List (String, Int) -> String
+format raw =
+  "?" ++ (String.join "&" (List.map (\t -> (first t) ++ "=" ++ (toString <| second t)) raw))
+
+
 fromParamKey : String -> String -> Maybe Int
 fromParamKey needle haystack =
   let
@@ -37,13 +45,3 @@ fromParamKey needle haystack =
         Ok v -> Just v
         Err _ -> Nothing
       Nothing -> Nothing
-
-
-
-
--- PRIVATE
-
-
-format : List (String, Int) -> String
-format raw =
-  "?" ++ (String.join "&" (List.map (\t -> (first t) ++ "=" ++ (toString <| second t)) raw))

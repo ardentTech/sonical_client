@@ -2,7 +2,7 @@ module Drivers.Update exposing (update)
 
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
-import Drivers.QueryParams exposing (offsetFromUrl)
+import Drivers.QueryParams exposing (getOffset)
 import Models exposing (Model)
 import Rest exposing (httpErrorString)
 
@@ -16,8 +16,8 @@ update msg model =
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
       let
-        nextOffset = offsetFromUrl response.next
-        previousOffset = offsetFromUrl response.previous
+        nextOffset = getOffset response.next
+        previousOffset = getOffset response.previous
       in
         ({ model |
           drivers = response.results,
@@ -59,7 +59,7 @@ offsetToDriversQuery : Maybe Int -> String -> String
 offsetToDriversQuery offset query =
   case offset of
     Just o ->
-      case offsetFromUrl <| Just query of
+      case getOffset <| Just query of
         Just i -> "OFFSET IN QUERY, SO REPLACE"
         Nothing -> "OFFSET NOT IN QUERY, SO ADD"
     Nothing -> query
