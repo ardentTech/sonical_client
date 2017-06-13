@@ -8,7 +8,7 @@ import Api exposing (driverUrl, driversUrl)
 import Drivers.Decoders exposing (driverDecoder, driversDecoder)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
-import QueryParams exposing (unpack)
+--import QueryParams exposing (unpack)
 import Rest exposing (getItem, getList)
 
 
@@ -27,7 +27,8 @@ getDrivers model =
 
 getDriversWithParams : Model -> String -> Cmd Msg
 getDriversWithParams model params =
-  getDriversPage (Just <| (driversUrl model.apiUrl) ++ (unpack params))
+  getDriversPage (Just <| driversUrl model.apiUrl)
+--  getDriversPage (Just <| (driversUrl model.apiUrl) ++ (unpack params))
 
 
 -- @todo convert manufacturer name to id
