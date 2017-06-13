@@ -1,24 +1,46 @@
-module QueryParams exposing (..)
+module QueryParams exposing (unpack)
 
-import Http exposing (decodeUri)
+import Http exposing (decodeUri, encodeUri)
 import Json.Decode exposing (decodeString, int, keyValuePairs)
 import Tuple exposing (first, second)
 
 
+type alias QueryParam = { key : String, value : Int }
+
+
+-- why not just store a List QueryParam in the model instead of an actual URL query string??
 unpack : String -> String
 unpack params =
-  let
-    formatForUrl = (
-      \v -> "?" ++ (String.join "&" (List.map (
-        \t -> (first t) ++ "=" ++ (toString <| second t)) v)))
-  in
-    case (decodeUri params) of
-      Just v ->
-        -- @todo is this only unpacking ints and not floats?
-        case (decodeString (keyValuePairs int) v) of  
-          Ok raw -> formatForUrl raw
-          Err _ -> ""
-      Nothing -> ""
+  fromEncodedUri params |> join
+
+
+-- PRIVATE
+
+
+formatAsKeyEqualsValue : QueryParam -> String
+formatAsKeyEqualsValue qp = 
+  qp.key ++ "=" ++ (toString qp.value)
+
+
+join : List QueryParam -> String
+join queryParams =
+  String.join "&" (List.map formatAsKeyEqualsValue queryParams)
+
+
+fromEncodedUri : String -> List QueryParam
+fromEncodedUri uri =
+  case (decodeUri uri) of
+    Just d ->
+      case (decodeString (keyValuePairs int) d) of
+        Ok pairs -> List.map (\p -> QueryParam (first p) (second p)) pairs
+        Err _ -> []  -- @todo this should do something different
+    Nothing -> []  -- @todo this should do something different
+
+
+-- @todo
+--toEncodedUri : List QueryParam -> String
+--toEncodedUri queryParams =
+--  String.join "&" (List.map formatAsKeyEqualsValue queryParams)
 
 
 -- PRIVATE
