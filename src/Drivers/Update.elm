@@ -4,7 +4,6 @@ import Regex exposing (..)
 
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
-import Drivers.QueryParams exposing (getOffset)
 import Models exposing (Model)
 import Rest exposing (httpErrorString)
 
@@ -38,7 +37,6 @@ update msg model =
         nextOffset = extractOffset response.next
         previousOffset = extractOffset response.previous
       in
-        Debug.log(toString nextOffset)
         ({ model |
           drivers = response.results,
           driversCount = response.count,
@@ -48,15 +46,11 @@ update msg model =
     GetDriversDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
     NextPageClicked ->
-      let
-        driversQuery = offsetToDriversQuery model.driversNextOffset model.driversQuery
-      in
-        ({ model | driversQuery = driversQuery }, Cmd.none )
+      -- @todo
+        ( model, Cmd.none )
     PrevPageClicked ->
-      let
-        driversQuery = offsetToDriversQuery model.driversPreviousOffset model.driversQuery
-      in
-        ({ model | driversQuery = driversQuery }, Cmd.none )
+      -- @todo
+      ( model, Cmd.none )
     QueryBuilderCleared ->
       ({ model | driversQuery = "" }, Cmd.none )
     QueryBuilderHelpClicked ->
@@ -70,16 +64,3 @@ update msg model =
       ({ model | driversQuery = val }, Cmd.none )
     SetTableState newState ->
       ({ model | tableState = newState }, Cmd.none )
-
-
--- PRIVATE
-
-
-offsetToDriversQuery : Maybe Int -> String -> String
-offsetToDriversQuery offset query =
-  case offset of
-    Just o ->
-      case getOffset <| Just query of
-        Just i -> "OFFSET IN QUERY, SO REPLACE"
-        Nothing -> "OFFSET NOT IN QUERY, SO ADD"
-    Nothing -> query

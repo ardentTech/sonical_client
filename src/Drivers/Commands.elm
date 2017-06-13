@@ -6,9 +6,9 @@ module Drivers.Commands exposing (
 
 import Api exposing (driverUrl, driversUrl)
 import Drivers.Decoders exposing (driverDecoder, driversDecoder)
-import Drivers.QueryParams exposing (unpack)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
+import QueryParams exposing (unpack)
 import Rest exposing (getItem, getList)
 
 

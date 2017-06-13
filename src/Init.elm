@@ -5,9 +5,9 @@ import Table exposing (initialSort)
 import UrlParser exposing (parsePath)
 
 import Commands exposing (cmdFromRoute)
-import Drivers.QueryParams exposing (unpack)
 import Messages exposing (Msg)
 import Models exposing (Model)
+import QueryParams exposing (unpack)
 import Router exposing (Route (DriverList), route)
 
 
