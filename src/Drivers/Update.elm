@@ -1,29 +1,10 @@
 module Drivers.Update exposing (update)
 
-import Regex exposing (..)
-
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
-import QueryParams exposing (QueryParam, add)
+import QueryParams exposing (QueryParam, add, extractFromUrl)
 import Rest exposing (httpErrorString)
-
-
-extractOffset : Maybe String -> Maybe Int
-extractOffset haystack =
-  let
-    matcher = (\h ->
-      List.head <| List.map .match (find (AtMost 1) (regex ("offset=(\\d+)")) h))
-  in
-    case haystack of
-      Just h -> case (matcher h) of
-        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
-          Just t -> case String.toInt t of
-            Ok i -> Just i
-            Err _ -> Nothing
-          Nothing -> Nothing
-        Nothing -> Nothing
-      Nothing -> Nothing
 
 
 update : InternalMsg -> Model -> ( Model, Cmd Msg )
@@ -35,14 +16,13 @@ update msg model =
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
       let
-        nextOffset = extractOffset response.next
+        nextOffset = extractFromUrl "offset" response.next
         previousOffset = case nextOffset of
           Just n -> case n of
-            -- @todo don't hardcode API limit * 2
-            50 -> Just 0
-            _ -> extractOffset response.previous
+            50 -> Just 0  -- @todo don't hardcode API limit * 2
+            _ -> extractFromUrl "offset" response.previous
           Nothing ->
-            extractOffset response.previous
+            extractFromUrl "offset" response.previous
       in
         Debug.log (toString previousOffset)
         ({ model |
@@ -79,6 +59,7 @@ update msg model =
     QueryBuilderSubmitted ->
       ( model, queryDrivers model )
     QueryBuilderUpdated val ->
+      -- @todo needs to play nicely with model.queryParams
       ({ model | driversQuery = val }, Cmd.none )
     SetTableState newState ->
       ({ model | tableState = newState }, Cmd.none )
