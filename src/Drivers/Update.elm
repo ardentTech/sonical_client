@@ -1,10 +1,29 @@
 module Drivers.Update exposing (update)
 
+import Regex exposing (..)
+
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Drivers.QueryParams exposing (getOffset)
 import Models exposing (Model)
 import Rest exposing (httpErrorString)
+
+
+extractOffset : Maybe String -> Maybe Int
+extractOffset haystack =
+  let
+    matcher = (\h ->
+      List.head <| List.map .match (find (AtMost 1) (regex ("offset=(\\d+)")) h))
+  in
+    case haystack of
+      Just h -> case (matcher h) of
+        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
+          Just t -> case String.toInt t of
+            Ok i -> Just i
+            Err _ -> Nothing
+          Nothing -> Nothing
+        Nothing -> Nothing
+      Nothing -> Nothing
 
 
 update : InternalMsg -> Model -> ( Model, Cmd Msg )
@@ -16,9 +35,10 @@ update msg model =
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
       let
-        nextOffset = getOffset response.next
-        previousOffset = getOffset response.previous
+        nextOffset = extractOffset response.next
+        previousOffset = extractOffset response.previous
       in
+        Debug.log(toString nextOffset)
         ({ model |
           drivers = response.results,
           driversCount = response.count,
