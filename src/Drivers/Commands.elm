@@ -8,7 +8,7 @@ import Api exposing (driverUrl, driversUrl)
 import Drivers.Decoders exposing (driverDecoder, driversDecoder)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
---import QueryParams exposing (unpack)
+import QueryParams exposing (formatForUrl)
 import Rest exposing (getItem, getList)
 
 
@@ -22,7 +22,7 @@ getDriver model i =
 
 getDrivers : Model -> Cmd Msg
 getDrivers model =
-  getDriversPage (Just (driversUrl model.apiUrl))
+  getDriversPage (Just <| (driversUrl model.apiUrl) ++ (formatForUrl model.queryParams))
 
 
 getDriversWithParams : Model -> String -> Cmd Msg
@@ -41,7 +41,8 @@ queryDrivers model =
         True -> model.driversQuery
         False -> "?" ++ model.driversQuery
   in
-    Cmd.map ForSelf <| getList ((driversUrl model.apiUrl) ++ query) driversDecoder GetDriversDone
+    Cmd.map ForSelf <| getList (
+      (driversUrl model.apiUrl) ++ query) driversDecoder GetDriversDone
 
 
 -- PRIVATE

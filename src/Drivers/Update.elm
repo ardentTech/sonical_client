@@ -5,6 +5,7 @@ import Regex exposing (..)
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
+import QueryParams exposing (QueryParam, add)
 import Rest exposing (httpErrorString)
 
 
@@ -35,8 +36,15 @@ update msg model =
     GetDriversDone (Ok response) ->
       let
         nextOffset = extractOffset response.next
-        previousOffset = extractOffset response.previous
+        previousOffset = case nextOffset of
+          Just n -> case n of
+            -- @todo don't hardcode API limit * 2
+            50 -> Just 0
+            _ -> extractOffset response.previous
+          Nothing ->
+            extractOffset response.previous
       in
+        Debug.log (toString previousOffset)
         ({ model |
           drivers = response.results,
           driversCount = response.count,
@@ -46,11 +54,21 @@ update msg model =
     GetDriversDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
     NextPageClicked ->
-      -- @todo
-        ( model, Cmd.none )
+      let
+        queryParams = case model.driversNextOffset of
+          Just n -> add (QueryParam "offset" n) model.queryParams
+          Nothing -> model.queryParams
+        newModel = { model | queryParams = queryParams }
+      in
+        ( newModel, getDrivers newModel )
     PrevPageClicked ->
-      -- @todo
-      ( model, Cmd.none )
+      let
+        queryParams = case model.driversPreviousOffset of
+          Just n -> add (QueryParam "offset" n) model.queryParams
+          Nothing -> model.queryParams
+        newModel = { model | queryParams = queryParams }
+      in
+        ( newModel, getDrivers newModel )
     QueryBuilderCleared ->
       ({ model | driversQuery = "" }, Cmd.none )
     QueryBuilderHelpClicked ->

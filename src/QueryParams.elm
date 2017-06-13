@@ -1,4 +1,4 @@
-module QueryParams exposing (unpack)
+module QueryParams exposing (QueryParam, add, formatForUrl)
 
 import Http exposing (decodeUri, encodeUri)
 import Json.Decode exposing (decodeString, int, keyValuePairs)
@@ -8,10 +8,16 @@ import Tuple exposing (first, second)
 type alias QueryParam = { key : String, value : Int }
 
 
--- why not just store a List QueryParam in the model instead of an actual URL query string??
-unpack : String -> String
-unpack params =
-  fromEncodedUri params |> join
+add : QueryParam -> List QueryParam -> List QueryParam
+add param params =
+  case get param params of
+    Just p -> replace param params
+    Nothing -> param :: params
+
+
+formatForUrl : List QueryParam -> String
+formatForUrl queryParams =
+  if (List.length queryParams > 0) then "?" ++ (join queryParams) else ""
 
 
 -- PRIVATE
@@ -22,11 +28,6 @@ formatAsKeyEqualsValue qp =
   qp.key ++ "=" ++ (toString qp.value)
 
 
-join : List QueryParam -> String
-join queryParams =
-  String.join "&" (List.map formatAsKeyEqualsValue queryParams)
-
-
 fromEncodedUri : String -> List QueryParam
 fromEncodedUri uri =
   case (decodeUri uri) of
@@ -35,6 +36,21 @@ fromEncodedUri uri =
         Ok pairs -> List.map (\p -> QueryParam (first p) (second p)) pairs
         Err _ -> []  -- @todo this should do something different
     Nothing -> []  -- @todo this should do something different
+
+
+get : QueryParam -> List QueryParam -> Maybe QueryParam
+get param params =
+  List.head <| List.filter (\p -> p.key == param.key) params 
+
+
+join : List QueryParam -> String
+join queryParams =
+  String.join "&" (List.map formatAsKeyEqualsValue queryParams)
+
+
+replace : QueryParam -> List QueryParam -> List QueryParam
+replace param params =
+  param :: List.filter (\qp -> qp.key /= param.key) params
 
 
 -- @todo
