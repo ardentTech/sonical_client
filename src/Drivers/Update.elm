@@ -3,7 +3,7 @@ module Drivers.Update exposing (update)
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
-import QueryParams exposing (QueryParam, add, extractFromUrl)
+import QueryParams exposing (QueryParam, add, extractFromUrl, fromUri)
 import Rest exposing (httpErrorString)
 
 
@@ -57,9 +57,11 @@ update msg model =
       in
         ({ model | driversQueryBuilderHelp = showHelp }, Cmd.none )
     QueryBuilderSubmitted ->
-      ( model, queryDrivers model )
+      let
+        newModel = { model | queryParams = fromUri model.driversQuery }
+      in
+        ( newModel, getDrivers newModel )
     QueryBuilderUpdated val ->
-      -- @todo needs to play nicely with model.queryParams
       ({ model | driversQuery = val }, Cmd.none )
     SetTableState newState ->
       ({ model | tableState = newState }, Cmd.none )

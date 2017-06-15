@@ -1,6 +1,6 @@
 module Commands exposing (cmdFromRoute)
 
-import Drivers.Commands exposing (getDriver, getDrivers, getDriversWithParams)
+import Drivers.Commands exposing (getDriver, getDrivers)
 import Manufacturing.Commands exposing (..)
 import Messages exposing (..)
 import Models exposing (Model)
@@ -13,10 +13,8 @@ cmdFromRoute model =
     toDriversMsg = (\v -> Cmd.map DriversMsg <| v)
   in
     case model.currentRoute of
-      Just (DriverList Nothing) ->
+      Just (DriverList _) ->
         Cmd.map driversTranslator (getDrivers model)
-      Just (DriverList (Just q)) ->
-        Cmd.map driversTranslator (getDriversWithParams model q)
       Just (DriverDetail i) ->
         Cmd.map driversTranslator (getDriver model i)
       Just ManufacturerList ->

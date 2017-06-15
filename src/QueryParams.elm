@@ -1,4 +1,5 @@
-module QueryParams exposing (QueryParam, add, extractFromUrl, formatForUrl, fromRoute)
+module QueryParams exposing (
+  QueryParam, add, extractFromUrl, formatForUrl, fromRoute, fromUri)
 
 import Http exposing (decodeUri, encodeUri)
 import Json.Decode exposing (decodeString, int, keyValuePairs)
@@ -63,11 +64,15 @@ formatAsKeyEqualsValue qp =
 fromEncodedUri : String -> List QueryParam
 fromEncodedUri uri =
   case (decodeUri uri) of
-    Just d ->
-      case (decodeString (keyValuePairs int) d) of
-        Ok pairs -> List.map (\p -> QueryParam (first p) (second p)) pairs
-        Err _ -> []
+    Just d -> fromUri d
     Nothing -> []
+
+
+fromUri : String -> List QueryParam
+fromUri uri =
+  case (decodeString (keyValuePairs int) uri) of
+    Ok pairs -> List.map (\p -> QueryParam (first p) (second p)) pairs
+    Err _ -> []
 
 
 get : QueryParam -> List QueryParam -> Maybe QueryParam
