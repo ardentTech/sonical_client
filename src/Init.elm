@@ -7,7 +7,7 @@ import UrlParser exposing (parsePath)
 import Commands exposing (cmdFromRoute)
 import Messages exposing (Msg)
 import Models exposing (Model)
-import QueryParams exposing (unpack)
+--import QueryParams exposing (unpack)
 import Router exposing (Route (DriverList), route)
 
 
@@ -30,10 +30,7 @@ initialModel flags location =
   let
     apiUrl = flags.apiUrl
     currentRoute = parsePath route location
-    driversQuery =
-      case currentRoute of
-        Just (DriverList (Just q)) -> unpack q
-        _ -> ""
+    -- @todo populate queryParams
   in
     {
       apiUrl = apiUrl,
@@ -44,9 +41,10 @@ initialModel flags location =
       driversCount = 0,
       driversNextOffset = Nothing,
       driversPreviousOffset = Nothing,
-      driversQuery = driversQuery,
+      driversQuery = "",
       driversQueryBuilderHelp = False,
       error = "",
       manufacturers = [],
+      queryParams = [],
       tableState = (initialSort "Manufacturer")
     }

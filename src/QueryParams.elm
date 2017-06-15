@@ -1,4 +1,6 @@
-module QueryParams exposing (unpack)
+module QueryParams exposing (QueryParam, add, extractFromUrl, formatForUrl)
+
+import Regex exposing (HowMany(AtMost), find, regex)
 
 import Http exposing (decodeUri, encodeUri)
 import Json.Decode exposing (decodeString, int, keyValuePairs)
@@ -8,10 +10,34 @@ import Tuple exposing (first, second)
 type alias QueryParam = { key : String, value : Int }
 
 
--- why not just store a List QueryParam in the model instead of an actual URL query string??
-unpack : String -> String
-unpack params =
-  fromEncodedUri params |> join
+add : QueryParam -> List QueryParam -> List QueryParam
+add param params =
+  case get param params of
+    Just p -> replace param params
+    Nothing -> param :: params
+
+
+-- @todo this only handles numbers for now
+extractFromUrl : String -> Maybe String -> Maybe Int
+extractFromUrl key haystack =
+  let
+    matcher = (\h ->
+      List.head <| List.map .match (find (AtMost 1) (regex (key ++ "=(\\d+)")) h))
+  in
+    case haystack of
+      Just h -> case (matcher h) of
+        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
+          Just t -> case String.toInt t of
+            Ok i -> Just i
+            Err _ -> Nothing
+          Nothing -> Nothing
+        Nothing -> Nothing
+      Nothing -> Nothing
+
+
+formatForUrl : List QueryParam -> String
+formatForUrl queryParams =
+  if (List.length queryParams > 0) then "?" ++ (join queryParams) else ""
 
 
 -- PRIVATE
@@ -20,11 +46,6 @@ unpack params =
 formatAsKeyEqualsValue : QueryParam -> String
 formatAsKeyEqualsValue qp = 
   qp.key ++ "=" ++ (toString qp.value)
-
-
-join : List QueryParam -> String
-join queryParams =
-  String.join "&" (List.map formatAsKeyEqualsValue queryParams)
 
 
 fromEncodedUri : String -> List QueryParam
@@ -37,47 +58,16 @@ fromEncodedUri uri =
     Nothing -> []  -- @todo this should do something different
 
 
--- @todo
---toEncodedUri : List QueryParam -> String
---toEncodedUri queryParams =
---  String.join "&" (List.map formatAsKeyEqualsValue queryParams)
+get : QueryParam -> List QueryParam -> Maybe QueryParam
+get param params =
+  List.head <| List.filter (\p -> p.key == param.key) params 
 
 
--- PRIVATE
+join : List QueryParam -> String
+join queryParams =
+  String.join "&" (List.map formatAsKeyEqualsValue queryParams)
 
 
---formatForUrl : List (String, Int) -> String
---formatForUrl raw =
---  "?" ++ (String.join "&" (List.map (\t -> (first t) ++ "=" ++ (toString <| second t)) raw))
-
---import List exposing (filter, filterMap, head)
---
---
---type alias QueryParam = { key : String, value : Int }
---
---
----- @todo should this just overwrite the existing value? or have a 'force' parameter with default?
---add : QueryParam -> List QueryParam -> List QueryParam
---add param params =
---  case get param.key params of
---    Just p -> replace param params
---    Nothing -> param :: params
---
---
---get : QueryParam -> List QueryParam -> Maybe QueryParam
---get param params =
---  head <| filter (\p -> p.key == param.key) params 
---
---
----- @todo is 'swap' a better name?
---replace : QueryParam -> List QueryParam -> List QueryParam
---replace param params =
---  param :: filterMap (\qp -> qp.key != param.key) params
---
---
---forUrl : List QueryParam -> String
---forUrl params =
---  let
---    assemble = param.key ++ "=" ++ (toString param.value) ++ "&"
---  in
---    String.dropRight 1 <| "?" ++ String.join "" (List.map assemble params)
+replace : QueryParam -> List QueryParam -> List QueryParam
+replace param params =
+  param :: List.filter (\qp -> qp.key /= param.key) params

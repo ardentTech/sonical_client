@@ -1,28 +1,10 @@
 module Drivers.Update exposing (update)
 
-import Regex exposing (..)
-
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
+import QueryParams exposing (QueryParam, add, extractFromUrl)
 import Rest exposing (httpErrorString)
-
-
-extractOffset : Maybe String -> Maybe Int
-extractOffset haystack =
-  let
-    matcher = (\h ->
-      List.head <| List.map .match (find (AtMost 1) (regex ("offset=(\\d+)")) h))
-  in
-    case haystack of
-      Just h -> case (matcher h) of
-        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
-          Just t -> case String.toInt t of
-            Ok i -> Just i
-            Err _ -> Nothing
-          Nothing -> Nothing
-        Nothing -> Nothing
-      Nothing -> Nothing
 
 
 update : InternalMsg -> Model -> ( Model, Cmd Msg )
@@ -34,9 +16,15 @@ update msg model =
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
       let
-        nextOffset = extractOffset response.next
-        previousOffset = extractOffset response.previous
+        nextOffset = extractFromUrl "offset" response.next
+        previousOffset = case nextOffset of
+          Just n -> case n of
+            50 -> Just 0  -- @todo don't hardcode API limit * 2
+            _ -> extractFromUrl "offset" response.previous
+          Nothing ->
+            extractFromUrl "offset" response.previous
       in
+        Debug.log (toString previousOffset)
         ({ model |
           drivers = response.results,
           driversCount = response.count,
@@ -46,11 +34,21 @@ update msg model =
     GetDriversDone (Err error) ->
       ({ model | error = httpErrorString error }, Cmd.none )
     NextPageClicked ->
-      -- @todo
-        ( model, Cmd.none )
+      let
+        queryParams = case model.driversNextOffset of
+          Just n -> add (QueryParam "offset" n) model.queryParams
+          Nothing -> model.queryParams
+        newModel = { model | queryParams = queryParams }
+      in
+        ( newModel, getDrivers newModel )
     PrevPageClicked ->
-      -- @todo
-      ( model, Cmd.none )
+      let
+        queryParams = case model.driversPreviousOffset of
+          Just n -> add (QueryParam "offset" n) model.queryParams
+          Nothing -> model.queryParams
+        newModel = { model | queryParams = queryParams }
+      in
+        ( newModel, getDrivers newModel )
     QueryBuilderCleared ->
       ({ model | driversQuery = "" }, Cmd.none )
     QueryBuilderHelpClicked ->
@@ -61,6 +59,7 @@ update msg model =
     QueryBuilderSubmitted ->
       ( model, queryDrivers model )
     QueryBuilderUpdated val ->
+      -- @todo needs to play nicely with model.queryParams
       ({ model | driversQuery = val }, Cmd.none )
     SetTableState newState ->
       ({ model | tableState = newState }, Cmd.none )
