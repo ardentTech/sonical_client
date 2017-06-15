@@ -6,6 +6,7 @@ import Html.Events exposing (onClick, onInput, onSubmit)
 
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
+import Units exposing (..)
 
 
 -- @todo would be awesome to allow clicks on table cells and dynamically fill in the text box
@@ -47,7 +48,8 @@ queryBuilder model =
 type alias QueryBuilderOption = {
   key : String,
   operators : String,
-  dataType : String
+  dataType : String,
+  unit : String
 }
 
 
@@ -87,24 +89,24 @@ stringOperators = String.join ", " ["=", "__contains=", "__icontains"]
 options : List QueryBuilderOption
 options =
   [
-    QueryBuilderOption "bl_product" numericalOperators float,
-    QueryBuilderOption "compliance_equivalent_volume" numericalOperators float,
-    QueryBuilderOption "cone_surface_area" numericalOperators float,
-    QueryBuilderOption "dc_resistance" numericalOperators float,
-    QueryBuilderOption "diaphragm_mass_including_airload" numericalOperators float,
-    QueryBuilderOption "electromagnetic_q" numericalOperators float,
-    QueryBuilderOption "max_linear_excursion" numericalOperators float,
-    QueryBuilderOption "max_power" numericalOperators integer,
-    QueryBuilderOption "mechanical_compliance_of_suspension" numericalOperators float,
-    QueryBuilderOption "mechanical_q" numericalOperators float,
-    QueryBuilderOption "model" stringOperators string,
-    QueryBuilderOption "nominal_diameter" numericalOperators float,
-    QueryBuilderOption "nominal_impedance" numericalOperators integer,
-    QueryBuilderOption "resonant_frequency" numericalOperators float,
-    QueryBuilderOption "rms_power" numericalOperators integer,
-    QueryBuilderOption "sensitivity" numericalOperators float,
-    QueryBuilderOption "voice_coil_diameter" numericalOperators float,
-    QueryBuilderOption "voice_coil_inductance" numericalOperators float]
+    QueryBuilderOption "bl_product" numericalOperators float tesla_meters,
+    QueryBuilderOption "compliance_equivalent_volume" numericalOperators float feet_cubed,
+    QueryBuilderOption "cone_surface_area" numericalOperators float centimeters_squared,
+    QueryBuilderOption "dc_resistance" numericalOperators float ohms,
+    QueryBuilderOption "diaphragm_mass_including_airload" numericalOperators float grams,
+    QueryBuilderOption "electromagnetic_q" numericalOperators float "-",
+    QueryBuilderOption "max_linear_excursion" numericalOperators float millimeters,
+    QueryBuilderOption "max_power" numericalOperators integer watts,
+    QueryBuilderOption "mechanical_compliance_of_suspension" numericalOperators float millimeters_newton,
+    QueryBuilderOption "mechanical_q" numericalOperators float "-",
+    QueryBuilderOption "model" stringOperators string "-",
+    QueryBuilderOption "nominal_diameter" numericalOperators float inches,
+    QueryBuilderOption "nominal_impedance" numericalOperators integer ohms,
+    QueryBuilderOption "resonant_frequency" numericalOperators float hertz,
+    QueryBuilderOption "rms_power" numericalOperators integer watts,
+    QueryBuilderOption "sensitivity" numericalOperators float decibels,
+    QueryBuilderOption "voice_coil_diameter" numericalOperators float inches,
+    QueryBuilderOption "voice_coil_inductance" numericalOperators float millihenries]
 
 
 help : Bool -> Html Msg
@@ -141,12 +143,12 @@ optionsTable options =
   let
     toTextCell = \t -> td [] [ text t ]
     toRow = \qbo -> tr [] (
-      List.map (\q -> toTextCell q) [qbo.key, qbo.operators, qbo.dataType])
+      List.map (\q -> toTextCell q) [qbo.key, qbo.operators, qbo.dataType, qbo.unit])
   in
     div [ class "col-md-8" ] [
       table [ class "table table-sm table-striped" ] [
-        -- @todo include unit column
-        thead [] [ tr [] (List.map (\v -> th [] [ text v ]) ["Name", "Operators", "Type"])],
+        thead [] [ tr [] (
+          List.map (\v -> th [] [ text v ]) ["Name", "Operators", "Type", "Unit"])],
         tbody [] (List.map (\o -> toRow o) options)
       ]
     ]
