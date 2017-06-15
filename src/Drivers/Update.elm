@@ -24,7 +24,6 @@ update msg model =
           Nothing ->
             extractFromUrl "offset" response.previous
       in
-        Debug.log (toString previousOffset)
         ({ model |
           drivers = response.results,
           driversCount = response.count,

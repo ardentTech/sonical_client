@@ -2,9 +2,7 @@ module QueryParams exposing (
   QueryParam, add, extractFromUrl, formatForUrl, fromRoute, fromUri)
 
 import Http exposing (decodeUri, encodeUri)
-import Json.Decode exposing (decodeString, int, keyValuePairs)
 import Regex exposing (HowMany(AtMost), find, regex)
-import Tuple exposing (first, second)
 
 import Router exposing (Route (DriverList))
 
@@ -70,9 +68,8 @@ fromEncodedUri uri =
 
 fromUri : String -> List QueryParam
 fromUri uri =
-  case (decodeString (keyValuePairs int) uri) of
-    Ok pairs -> List.map (\p -> QueryParam (first p) (second p)) pairs
-    Err _ -> []
+  List.map (
+    \p -> String.split "=" p |> toQueryParam) <| String.split "&" uri
 
 
 get : QueryParam -> List QueryParam -> Maybe QueryParam
@@ -88,3 +85,20 @@ join queryParams =
 replace : QueryParam -> List QueryParam -> List QueryParam
 replace param params =
   param :: List.filter (\qp -> qp.key /= param.key) params
+
+
+toQueryParam : List String -> QueryParam
+toQueryParam pair =
+  let
+    key = case List.head pair of
+      Just k -> k
+      Nothing -> ""
+    valueStr = case List.reverse pair |> List.head of
+      Just v -> v
+      Nothing -> ""
+    -- @todo handle floats too! and strings!
+    valueInt = case String.toInt valueStr of
+      Ok i -> i
+      Err _ -> 0
+  in
+    QueryParam key valueInt 
