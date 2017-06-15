@@ -1,10 +1,11 @@
-module QueryParams exposing (QueryParam, add, extractFromUrl, formatForUrl)
-
-import Regex exposing (HowMany(AtMost), find, regex)
+module QueryParams exposing (QueryParam, add, extractFromUrl, formatForUrl, fromRoute)
 
 import Http exposing (decodeUri, encodeUri)
 import Json.Decode exposing (decodeString, int, keyValuePairs)
+import Regex exposing (HowMany(AtMost), find, regex)
 import Tuple exposing (first, second)
+
+import Router exposing (Route (DriverList))
 
 
 type alias QueryParam = { key : String, value : Int }
@@ -40,6 +41,17 @@ formatForUrl queryParams =
   if (List.length queryParams > 0) then "?" ++ (join queryParams) else ""
 
 
+fromRoute : Maybe Route -> List QueryParam
+fromRoute route =
+  case route of
+    Just (DriverList q) ->
+      case q of
+        Just q -> fromEncodedUri q
+        Nothing -> []
+    Nothing -> []
+    _ -> []
+
+
 -- PRIVATE
 
 
@@ -54,8 +66,8 @@ fromEncodedUri uri =
     Just d ->
       case (decodeString (keyValuePairs int) d) of
         Ok pairs -> List.map (\p -> QueryParam (first p) (second p)) pairs
-        Err _ -> []  -- @todo this should do something different
-    Nothing -> []  -- @todo this should do something different
+        Err _ -> []
+    Nothing -> []
 
 
 get : QueryParam -> List QueryParam -> Maybe QueryParam

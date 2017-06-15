@@ -7,8 +7,8 @@ import UrlParser exposing (parsePath)
 import Commands exposing (cmdFromRoute)
 import Messages exposing (Msg)
 import Models exposing (Model)
---import QueryParams exposing (unpack)
-import Router exposing (Route (DriverList), route)
+import QueryParams exposing (fromRoute)
+import Router exposing (route)
 
 
 type alias Flags = { apiUrl: String }
@@ -30,7 +30,7 @@ initialModel flags location =
   let
     apiUrl = flags.apiUrl
     currentRoute = parsePath route location
-    -- @todo populate queryParams
+    queryParams = fromRoute currentRoute
   in
     {
       apiUrl = apiUrl,
@@ -45,6 +45,6 @@ initialModel flags location =
       driversQueryBuilderHelp = False,
       error = "",
       manufacturers = [],
-      queryParams = [],
+      queryParams = queryParams,
       tableState = (initialSort "Manufacturer")
     }
