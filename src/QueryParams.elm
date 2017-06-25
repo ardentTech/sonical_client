@@ -102,3 +102,22 @@ toQueryParam pair =
       Err _ -> 0
   in
     QueryParam key valueInt 
+
+
+-- NEW
+
+
+type QueryParamz =
+  FloatQueryParamz String Float |
+  StringQueryParamz String String
+
+
+toQueryParamz : List String -> QueryParamz
+toQueryParamz kvPair =
+  let
+    key = Maybe.withDefault "" (List.head kvPair)
+    valRaw = Maybe.withDefault "" (List.reverse kvPair |> List.head)
+  in
+    case String.toFloat valRaw of
+      Ok f -> FloatQueryParamz key f
+      Err _ -> StringQueryParamz key valRaw
