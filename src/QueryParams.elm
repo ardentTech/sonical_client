@@ -1,38 +1,56 @@
 module QueryParams exposing (
-  QueryParam, add, extractFromUrl, formatForUrl, fromRoute, fromUri)
+  QueryParam(..), add, extractFromUrl, formatForUrl, fromRoute, fromUri)
 
 import Http exposing (decodeUri, encodeUri)
-import Regex exposing (HowMany(AtMost), find, regex)
+--import Regex exposing (HowMany(AtMost), find, regex)
 
 import Router exposing (Route (DriverList))
 
 
-type alias QueryParam = { key : String, value : Int }
+type QueryParam =
+  FloatQueryParam String Float |
+  IntQueryParam String Int |
+  StringQueryParam String String
+
+
+-- @todo unpack
 
 
 add : QueryParam -> List QueryParam -> List QueryParam
 add param params =
-  case get param params of
-    Just p -> replace param params
-    Nothing -> param :: params
+  if (List.member param params) then replace param params else param :: params 
 
 
--- @todo this only handles numbers for now
+replace : QueryParam -> List QueryParam -> List QueryParam
+replace param params =
+  let
+    getKey = \qp -> case qp of
+      FloatQueryParam k v -> k
+      IntQueryParam k v -> k
+      StringQueryParam k v -> k
+    paramKey = getKey param
+    mismatch = \qp -> getKey qp /= paramKey
+  in
+    param :: List.filter mismatch params
+
+
+-- @todo
 extractFromUrl : String -> Maybe String -> Maybe Int
 extractFromUrl key haystack =
-  let
-    matcher = (\h ->
-      List.head <| List.map .match (find (AtMost 1) (regex (key ++ "=(\\d+)")) h))
-  in
-    case haystack of
-      Just h -> case (matcher h) of
-        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
-          Just t -> case String.toInt t of
-            Ok i -> Just i
-            Err _ -> Nothing
-          Nothing -> Nothing
-        Nothing -> Nothing
-      Nothing -> Nothing
+  Nothing
+--  let
+--    matcher = (\h ->
+--      List.head <| List.map .match (find (AtMost 1) (regex (key ++ "=(\\d+)")) h))
+--  in
+--    case haystack of
+--      Just h -> case (matcher h) of
+--        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
+--          Just t -> case String.toInt t of
+--            Ok i -> Just i
+--            Err _ -> Nothing
+--          Nothing -> Nothing
+--        Nothing -> Nothing
+--      Nothing -> Nothing
 
 
 formatForUrl : List QueryParam -> String
@@ -51,12 +69,25 @@ fromRoute route =
     _ -> []
 
 
+-- @todo handle leading '?'
+fromUri : String -> List QueryParam
+fromUri uri =
+  List.map (
+    \p -> String.split "=" p |> toQueryParam) <| String.split "&" uri
+
+
 -- PRIVATE
 
 
 formatAsKeyEqualsValue : QueryParam -> String
 formatAsKeyEqualsValue qp = 
-  qp.key ++ "=" ++ (toString qp.value)
+  case qp of
+    FloatQueryParam key val ->
+      key ++ "=" ++ (toString val)
+    IntQueryParam key val ->
+      key ++ "=" ++ (toString val)
+    StringQueryParam key val ->
+      key ++ "=" ++ val
 
 
 fromEncodedUri : String -> List QueryParam
@@ -66,15 +97,9 @@ fromEncodedUri uri =
     Nothing -> []
 
 
-fromUri : String -> List QueryParam
-fromUri uri =
-  List.map (
-    \p -> String.split "=" p |> toQueryParam) <| String.split "&" uri
-
-
-get : QueryParam -> List QueryParam -> Maybe QueryParam
-get param params =
-  List.head <| List.filter (\p -> p.key == param.key) params 
+--get : QueryParam -> List QueryParam -> Maybe QueryParam
+--get param params =
+--  List.head <| List.filter (\p -> p.key == param.key) params 
 
 
 join : List QueryParam -> String
@@ -82,42 +107,12 @@ join queryParams =
   String.join "&" (List.map formatAsKeyEqualsValue queryParams)
 
 
-replace : QueryParam -> List QueryParam -> List QueryParam
-replace param params =
-  param :: List.filter (\qp -> qp.key /= param.key) params
-
-
 toQueryParam : List String -> QueryParam
-toQueryParam pair =
-  let
-    key = case List.head pair of
-      Just k -> k
-      Nothing -> ""
-    valueStr = case List.reverse pair |> List.head of
-      Just v -> v
-      Nothing -> ""
-    -- @todo handle floats too! and strings!
-    valueInt = case String.toInt valueStr of
-      Ok i -> i
-      Err _ -> 0
-  in
-    QueryParam key valueInt 
-
-
--- NEW
-
-
-type QueryParamz =
-  FloatQueryParamz String Float |
-  StringQueryParamz String String
-
-
-toQueryParamz : List String -> QueryParamz
-toQueryParamz kvPair =
+toQueryParam kvPair =
   let
     key = Maybe.withDefault "" (List.head kvPair)
     valRaw = Maybe.withDefault "" (List.reverse kvPair |> List.head)
   in
     case String.toFloat valRaw of
-      Ok f -> FloatQueryParamz key f
-      Err _ -> StringQueryParamz key valRaw
+      Ok f -> FloatQueryParam key f
+      Err _ -> StringQueryParam key valRaw

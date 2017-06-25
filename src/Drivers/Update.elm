@@ -3,7 +3,7 @@ module Drivers.Update exposing (update)
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
-import QueryParams exposing (QueryParam, add, extractFromUrl, fromUri)
+import QueryParams exposing (QueryParam(..), add, extractFromUrl, fromUri)
 import Rest exposing (httpErrorString)
 
 
@@ -35,7 +35,7 @@ update msg model =
     NextPageClicked ->
       let
         queryParams = case model.driversNextOffset of
-          Just n -> add (QueryParam "offset" n) model.queryParams
+          Just n -> add (IntQueryParam "offset" n) model.queryParams
           Nothing -> model.queryParams
         newModel = { model | queryParams = queryParams }
       in
@@ -43,7 +43,7 @@ update msg model =
     PrevPageClicked ->
       let
         queryParams = case model.driversPreviousOffset of
-          Just n -> add (QueryParam "offset" n) model.queryParams
+          Just n -> add (IntQueryParam "offset" n) model.queryParams
           Nothing -> model.queryParams
         newModel = { model | queryParams = queryParams }
       in
