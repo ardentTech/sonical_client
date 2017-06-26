@@ -4,7 +4,7 @@ import Api exposing (driverUrl, driversUrl)
 import Drivers.Decoders exposing (driverDecoder, driversDecoder)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
-import QueryParams exposing (formatForUrl)
+import QueryParams exposing (toUrl)
 import Rest exposing (getItem, getList)
 
 
@@ -22,6 +22,6 @@ getDriver model i =
 getDrivers : Model -> Cmd Msg
 getDrivers model =
   let
-    url = driversUrl model.apiUrl ++ (formatForUrl model.queryParams)
+    url = driversUrl model.apiUrl ++ (toUrl model.queryParams)
   in
     Cmd.map ForSelf <| getList url driversDecoder GetDriversDone

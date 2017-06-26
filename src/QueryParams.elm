@@ -1,5 +1,5 @@
 module QueryParams exposing (
-  QueryParam(..), add, extractFromUrl, formatForUrl, fromRoute, fromUri)
+  QueryParam(..), add, valueForKey, toUrl, fromRoute, fromUrl)
 
 import Http exposing (decodeUri, encodeUri)
 --import Regex exposing (HowMany(AtMost), find, regex)
@@ -8,54 +8,14 @@ import Router exposing (Route (DriverList))
 
 
 type QueryParam =
-  FloatQueryParam String Float |
-  IntQueryParam String Int |
-  StringQueryParam String String
-
-
--- @todo unpack
+  FloatType { key : String, value : Float } |
+  IntType { key : String, value : Int } |
+  StringType { key : String, value : String }
 
 
 add : QueryParam -> List QueryParam -> List QueryParam
 add param params =
   if (List.member param params) then replace param params else param :: params 
-
-
-replace : QueryParam -> List QueryParam -> List QueryParam
-replace param params =
-  let
-    getKey = \qp -> case qp of
-      FloatQueryParam k v -> k
-      IntQueryParam k v -> k
-      StringQueryParam k v -> k
-    paramKey = getKey param
-    mismatch = \qp -> getKey qp /= paramKey
-  in
-    param :: List.filter mismatch params
-
-
--- @todo
-extractFromUrl : String -> Maybe String -> Maybe Int
-extractFromUrl key haystack =
-  Nothing
---  let
---    matcher = (\h ->
---      List.head <| List.map .match (find (AtMost 1) (regex (key ++ "=(\\d+)")) h))
---  in
---    case haystack of
---      Just h -> case (matcher h) of
---        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
---          Just t -> case String.toInt t of
---            Ok i -> Just i
---            Err _ -> Nothing
---          Nothing -> Nothing
---        Nothing -> Nothing
---      Nothing -> Nothing
-
-
-formatForUrl : List QueryParam -> String
-formatForUrl queryParams =
-  if (List.length queryParams > 0) then "?" ++ (join queryParams) else ""
 
 
 fromRoute : Maybe Route -> List QueryParam
@@ -69,37 +29,54 @@ fromRoute route =
     _ -> []
 
 
--- @todo handle leading '?'
-fromUri : String -> List QueryParam
-fromUri uri =
+fromUrl : String -> List QueryParam
+fromUrl uri =
   List.map (
     \p -> String.split "=" p |> toQueryParam) <| String.split "&" uri
+
+
+valueForKey : String -> Maybe String -> Maybe Int
+valueForKey key haystack =
+  Nothing
+----  let
+----    matcher = (\h ->
+----      List.head <| List.map .match (find (AtMost 1) (regex (key ++ "=(\\d+)")) h))
+----  in
+----    case haystack of
+----      Just h -> case (matcher h) of
+----        Just v -> case (List.head <| List.reverse <| String.split "=" v) of
+----          Just t -> case String.toInt t of
+----            Ok i -> Just i
+----            Err _ -> Nothing
+----          Nothing -> Nothing
+----        Nothing -> Nothing
+----      Nothing -> Nothing
 
 
 -- PRIVATE
 
 
+toUrl : List QueryParam -> String
+toUrl queryParams =
+  if (List.length queryParams > 0) then "?" ++ (join queryParams) else ""
+
+
 formatAsKeyEqualsValue : QueryParam -> String
 formatAsKeyEqualsValue qp = 
   case qp of
-    FloatQueryParam key val ->
-      key ++ "=" ++ (toString val)
-    IntQueryParam key val ->
-      key ++ "=" ++ (toString val)
-    StringQueryParam key val ->
-      key ++ "=" ++ val
+    FloatType { key, value } ->
+      key ++ "=" ++ (toString value)
+    IntType { key, value } ->
+      key ++ "=" ++ (toString value)
+    StringType { key, value } ->
+      key ++ "=" ++ value
 
 
 fromEncodedUri : String -> List QueryParam
 fromEncodedUri uri =
   case (decodeUri uri) of
-    Just d -> fromUri d
+    Just d -> fromUrl d
     Nothing -> []
-
-
---get : QueryParam -> List QueryParam -> Maybe QueryParam
---get param params =
---  List.head <| List.filter (\p -> p.key == param.key) params 
 
 
 join : List QueryParam -> String
@@ -107,12 +84,26 @@ join queryParams =
   String.join "&" (List.map formatAsKeyEqualsValue queryParams)
 
 
+replace : QueryParam -> List QueryParam -> List QueryParam
+replace param params =
+  let
+    getKey = \qp -> case qp of
+      FloatType { key, value } -> key
+      IntType { key, value } -> key
+      StringType { key, value } -> key
+    paramKey = getKey param
+    mismatch = \qp -> qp.key /= getKey param
+  in
+--    param :: List.filter mismatch params
+    param :: []
+
+
 toQueryParam : List String -> QueryParam
 toQueryParam kvPair =
   let
-    key = Maybe.withDefault "" (List.head kvPair)
+    keyRaw = Maybe.withDefault "" (List.head kvPair)
     valRaw = Maybe.withDefault "" (List.reverse kvPair |> List.head)
   in
     case String.toFloat valRaw of
-      Ok f -> FloatQueryParam key f
-      Err _ -> StringQueryParam key valRaw
+      Ok f -> FloatType { key = keyRaw, value = f }
+      Err _ -> StringType { key = keyRaw, value = valRaw }

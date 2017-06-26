@@ -3,7 +3,7 @@ module Drivers.Update exposing (update)
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
-import QueryParams exposing (QueryParam(..), add, extractFromUrl, fromUri)
+import QueryParams exposing (QueryParam(..), add, valueForKey, fromUrl)
 import Rest exposing (httpErrorString)
 
 
@@ -16,13 +16,13 @@ update msg model =
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
       let
-        nextOffset = extractFromUrl "offset" response.next
+        nextOffset = valueForKey "offset" response.next
         previousOffset = case nextOffset of
           Just n -> case n of
             50 -> Just 0  -- @todo don't hardcode API limit * 2
-            _ -> extractFromUrl "offset" response.previous
+            _ -> valueForKey "offset" response.previous
           Nothing ->
-            extractFromUrl "offset" response.previous
+            valueForKey "offset" response.previous
       in
         ({ model |
           drivers = response.results,
@@ -35,7 +35,7 @@ update msg model =
     NextPageClicked ->
       let
         queryParams = case model.driversNextOffset of
-          Just n -> add (IntQueryParam "offset" n) model.queryParams
+          Just n -> add (IntType { key = "offset", value = n }) model.queryParams
           Nothing -> model.queryParams
         newModel = { model | queryParams = queryParams }
       in
@@ -43,7 +43,7 @@ update msg model =
     PrevPageClicked ->
       let
         queryParams = case model.driversPreviousOffset of
-          Just n -> add (IntQueryParam "offset" n) model.queryParams
+          Just n -> add (IntType { key = "offset", value = n }) model.queryParams
           Nothing -> model.queryParams
         newModel = { model | queryParams = queryParams }
       in
@@ -57,7 +57,7 @@ update msg model =
         ({ model | driversQueryBuilderHelp = showHelp }, Cmd.none )
     QueryBuilderSubmitted ->
       let
-        newModel = { model | queryParams = fromUri model.driversQuery }
+        newModel = { model | queryParams = fromUrl model.driversQuery }
       in
         ( newModel, getDrivers newModel )
     QueryBuilderUpdated val ->
