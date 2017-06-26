@@ -3,7 +3,8 @@ module Drivers.Update exposing (update)
 import Drivers.Commands exposing (..)
 import Drivers.Messages exposing (..)
 import Models exposing (Model)
-import QueryParams exposing (QueryParam(..), add, valueForKey, fromUrl)
+import Query.Param exposing (QueryParam(..))
+import QueryParams exposing (add, numberFromUrl, fromUrl)
 import Rest exposing (httpErrorString)
 
 
@@ -16,13 +17,13 @@ update msg model =
       ({ model | error = httpErrorString error }, Cmd.none )
     GetDriversDone (Ok response) ->
       let
-        nextOffset = valueForKey "offset" response.next
+        nextOffset = numberFromUrl "offset" response.next
         previousOffset = case nextOffset of
           Just n -> case n of
             50 -> Just 0  -- @todo don't hardcode API limit * 2
-            _ -> valueForKey "offset" response.previous
+            _ -> numberFromUrl "offset" response.previous
           Nothing ->
-            valueForKey "offset" response.previous
+            numberFromUrl "offset" response.previous
       in
         ({ model |
           drivers = response.results,

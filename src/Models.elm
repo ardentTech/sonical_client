@@ -5,7 +5,7 @@ import Table
 import Drivers.Models exposing (Driver)
 import DriverGroups.Models exposing (DriverGroup)
 import Manufacturing.Models exposing (Manufacturer)
-import QueryParams exposing (QueryParam)
+import Query.Param exposing (QueryParam)
 import Router exposing (Route (DriverList))
 
 
